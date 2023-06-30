@@ -142,13 +142,13 @@ const LoginPage = ({fetchLogin, loading, error}) => {
             <InputIcon>
               <MdEmail />
             </InputIcon>
-            <Input type="email" placeholder="Email Address" {...register('email')} />
+            <Input type="email" placeholder="Email" {...register('email')} />
           </InputContainer>
           <InputContainer>
             <InputIcon>
               <MdLockPerson />
             </InputIcon>
-            <Input type="password" placeholder="Password" {...register('password')} />
+            <Input type="password" placeholder="Senha" {...register('password')} />
           </InputContainer>
           <InputContainer>
             <Button type='submit'>Login</Button>

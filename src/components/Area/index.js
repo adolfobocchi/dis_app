@@ -81,7 +81,8 @@ const Area = ({ loading, areas, error, page, listarAreas, criarAreas, updateArea
             {...register('id')}
           />
           <Styled.Label>Nome</Styled.Label>
-          <Styled.Input
+          <Styled.Input 
+            placeholder='Nome da area'
             {...register('nome', { required: true })}
           />
           {errors.nome && <span>Campo obrigatório</span>}

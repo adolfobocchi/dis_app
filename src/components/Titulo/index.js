@@ -18,7 +18,8 @@ const TituloBar = styled.div`
 `
 
 const TituloTexto = styled.h1`
-
+    font-weight: 400;
+    font-size: 2em;
 `
 
 const Titulo = ({ titulo }) => {

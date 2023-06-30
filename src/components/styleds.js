@@ -15,7 +15,8 @@ export const FormArea = styled.div`
 
 export const Form = styled.form`
   display: flex;
-  align-items: center;
+  flex: 1;
+  flex-direction: column;
 `;
 
 
@@ -114,6 +115,16 @@ const ColunaValor = styled.div`
     padding: 10px;
     flex: 1;
 `
+
+export const AreaFlex = styled.div`
+  flex: 1;
+  display: flex;
+`
+
+export const AreaWidth = styled.div`
+  display: flex;
+`
+
 
 export const Ativo = () => (
     <ColunaValor><AtivoItem><MdCircle />Ativo</AtivoItem></ColunaValor>

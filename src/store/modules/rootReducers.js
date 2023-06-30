@@ -13,6 +13,7 @@ import probabilidade from './Probabilidade/reducers';
 import severidade from './Severidade/reducers';
 import nivelrisco from './NivelRisco/reducers';
 import proposta from './Proposta/reducers';
+import dis from './Dis/reducers';
 
 const rootReducer = combineReducers({
     usuario,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
     severidade,
     nivelrisco,
     proposta,
+    dis,
 })
 
 export default rootReducer;
