@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { Controller } from 'react-hook-form';
 
 const Container = styled.div`
   position: relative;
@@ -32,21 +33,17 @@ const DropdownItem = styled.li`
   }
 `;
 
-
-
-const InputSearch = ({
+const InputListSearch = ({
   items,
-  onSelect,
-  valueSelected,
+  control,
+  name,
+  setValue
 }) => {
   const searchTimerRef = useRef(null);
   const [searchResults, setSearchResults] = useState([]);
-  const [itemSelected, setItemSelected] = useState('');
-  useEffect(() => {
-    setItemSelected(valueSelected);
-  }, [valueSelected])
+  const [selectedItem, setSelectedItem] = useState('');
+
   const handleSearch = (event) => {
-    setItemSelected(event.target.value);
     const searchTerm = event.target.value.toLowerCase();
     clearTimeout(searchTimerRef.current);
     if (searchTerm.length >= 2) {
@@ -61,19 +58,29 @@ const InputSearch = ({
         }
       }, 2000);
     }
-  
+
   };
 
   const handleSelectItem = (item) => {
-    onSelect(item);
-    setItemSelected(item.nome)
+    setSelectedItem(item.nome);
     setSearchResults([]);
   };
   return (
     <Container>
-      <form style={{ width: '100%' }} >
-        <Input type='search' placeholder="Pesquisar" onChange={handleSearch} value={itemSelected} />
-      </form>
+      <Controller style={{ width: '100%' }}
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <Input type='search'
+            placeholder="Pesquisar"
+            value={field.value || selectedItem || ''}
+            onChange={(e) => {
+              field.onChange(e);
+              handleSearch(e);
+            }}
+          />
+        )}
+      />
       {searchResults.length > 0 && (
         <Dropdown>
           {searchResults.map((item, index) => (
@@ -87,4 +94,4 @@ const InputSearch = ({
   );
 };
 
-export default InputSearch;
+export default InputListSearch;

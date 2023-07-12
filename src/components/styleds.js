@@ -7,7 +7,6 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
-
 export const FormArea = styled.div`
   display: flex;
 `;
@@ -19,12 +18,10 @@ export const Form = styled.form`
   flex-direction: column;
 `;
 
-
 export const Input = styled.input`
   padding: 8px;
   margin-right: 10px;
 `;
-
 
 export const Button = styled.button`
   padding: 8px 16px;
@@ -34,12 +31,12 @@ export const Button = styled.button`
   cursor: pointer;
 `;
 
-
 export const ListArea = styled.div`
   display: flex;
   flex-direction: column;
+  width: auto;
+  overflow-x: auto;
 `;
-
 
 export const List = styled.ul`
   list-style: none;
@@ -47,8 +44,8 @@ export const List = styled.ul`
   display: flex;
   flex-direction: column;
   flex: 1;
+  width: auto;
 `;
-
 
 export const ListItem = styled.li`
   display: flex;
@@ -56,17 +53,16 @@ export const ListItem = styled.li`
   margin-bottom: 10px;
   border-bottom: 4px solid #f8f9fd;
   cursor: pointer;
+  width: auto;
 `;
-
 
 export const ListHeader = styled.li`
   display: flex;
   align-items: center;
   margin-bottom: 10px;
   border-bottom: 4px solid #eceffa;
-  
+  width: auto;
 `;
-
 
 export const Label = styled.label`
   margin-bottom: 0.5rem;
@@ -125,6 +121,18 @@ export const AreaWidth = styled.div`
   display: flex;
 `
 
+export const ImagemArea = styled.div`
+  width: 90%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+export const Imagem = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+`
 
 export const Ativo = () => (
     <ColunaValor><AtivoItem><MdCircle />Ativo</AtivoItem></ColunaValor>
@@ -143,4 +151,12 @@ export const Coluna = ({label=''}) => {
 
 export const CampoValor = ({children}) => (
     <ColunaValor>{children}</ColunaValor>
+)
+
+export const CampoImg = ({src}) => (
+  <ColunaValor>
+    <ImagemArea>
+      <Imagem src={src}  />
+    </ImagemArea>
+  </ColunaValor>
 )

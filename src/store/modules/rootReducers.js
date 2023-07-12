@@ -14,6 +14,7 @@ import severidade from './Severidade/reducers';
 import nivelrisco from './NivelRisco/reducers';
 import proposta from './Proposta/reducers';
 import dis from './Dis/reducers';
+import atividade from './Atividade/reducers'
 
 const rootReducer = combineReducers({
     usuario,
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
     nivelrisco,
     proposta,
     dis,
+    atividade,
 })
 
 export default rootReducer;

@@ -19,6 +19,7 @@ import Dis from '../../components/Dis';
 import { MdDashboard, MdDescription, MdDocumentScanner, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowRight, MdLock, MdLogout } from 'react-icons/md';
 import NavBar from '../../components/Navbar';
 import { AreaFlex, AreaWidth } from '../../components/styleds';
+import Atividade from '../../components/Atividade';
 
 const Container = styled.div`
   background: #FFF;
@@ -89,9 +90,9 @@ function PainelPage({ usuario }) {
       { key: 14, label: "Sair", component: <Logout /> },
     ]*/
   const [menuItems, setMenuItems] = useState([
-    { id: 1, label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard /> },
+    { id: 'm1', label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard /> },
     {
-      id: 2,
+      id: 'm2',
       label: 'Cadastros',
       expanded: false,
       icon: <MdEdit />,
@@ -99,28 +100,29 @@ function PainelPage({ usuario }) {
         { id: 1, label: 'Areas', expanded: false, component: <Area /> },
         { id: 2, label: 'Setores', expanded: false, component: <Setor /> },
         { id: 3, label: 'Funções', expanded: false, component: <Funcao /> },
-        { id: 4, label: 'Processos', expanded: false, component: <Processo /> },
-        { id: 5, label: 'Recursos', expanded: false, component: <Recurso /> },
-        { id: 6, label: 'Riscos', expanded: false, component: <Risco /> },
-        { id: 7, label: 'Causas', expanded: false, component: <Causa /> },
-        { id: 8, label: 'Medidas', expanded: false, component: <Medida /> },
-        { id: 9, label: 'Probabilidades', expanded: false, component: <Probabilidade /> },
-        { id: 10, label: 'Severidades', expanded: false, component: <Severidade /> },
-        { id: 11, label: 'Niveis Risco', expanded: false, component: <NivelRisco /> },
-        { id: 12, label: 'Propostas Controle', expanded: false, component: <Proposta /> },
+        { id: 5, label: 'Processos', expanded: false, component: <Processo /> },
+        { id: 4, label: 'Atividades', expanded: false, component: <Atividade /> },
+        { id: 6, label: 'Recursos', expanded: false, component: <Recurso /> },
+        { id: 7, label: 'Riscos', expanded: false, component: <Risco /> },
+        { id: 8, label: 'Causas', expanded: false, component: <Causa /> },
+        { id: 9, label: 'Medidas', expanded: false, component: <Medida /> },
+        { id: 10, label: 'Probabilidades', expanded: false, component: <Probabilidade /> },
+        { id: 11, label: 'Severidades', expanded: false, component: <Severidade /> },
+        { id: 12, label: 'Niveis Risco', expanded: false, component: <NivelRisco /> },
+        { id: 13, label: 'Propostas Controle', expanded: false, component: <Proposta /> },
       ],
     },
 
-    { id: 3, label: 'D.I.S', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
-    { id: 4, label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
+    { id: 'm3', label: 'D.I.S', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
+    { id: 'm4', label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
     {
-      id: 5, label: 'Segurança', expanded: false,
+      id: 'm5', label: 'Segurança', expanded: false,
       sections: [
-        { id: 1, label: 'Usuários', expanded: false, component: <Area /> },
+        { id: 14, label: 'Usuários', expanded: false, component: <Area /> },
       ],
       icon: <MdLock />
     },
-    { id: 6, label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
+    { id: 'm6', label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
   ]);
   const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems[0]);
 

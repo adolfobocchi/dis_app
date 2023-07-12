@@ -24,8 +24,8 @@ import api from '../../../services/api';
 function* listarDis(action) {
   try {
     const response = yield call(() => api.get(`/dis/${action.payload.page}/${action.payload.ativo}`));
-    const area = response.data;
-    yield put({ type: LISTAR_DIS_SUCCESS, payload: area});
+    const dis = response.data;
+    yield put({ type: LISTAR_DIS_SUCCESS, payload: dis});
   } catch (error) {
     yield put({ type: LISTAR_DIS_FAILURE, payload: error.message });
   }
@@ -34,8 +34,8 @@ function* listarDis(action) {
 function* showDis(action) {
   try {
     const response = yield call(() => api.get(`/dis/${action.payload}`));
-    const area = response.data;
-    yield put({ type: SHOW_DIS_SUCCESS, payload: area });
+    const dis = response.data;
+    yield put({ type: SHOW_DIS_SUCCESS, payload: dis });
   } catch (error) {
     yield put({ type: SHOW_DIS_FAILURE, payload: error.message });
   }
@@ -44,9 +44,9 @@ function* showDis(action) {
 
 function* criarDis(action) {
   try {
-    const response = yield call(() => api.post('/dis', action.payload.area));
-    const area = response.data;
-    yield put({ type: CRIAR_DIS_SUCCESS, payload: area });
+    const response = yield call(() => api.post('/dis', action.payload.dis));
+    const dis = response.data;
+    yield put({ type: CRIAR_DIS_SUCCESS, payload: dis });
   } catch (error) {
     yield put({ type: CRIAR_DIS_FAILURE, payload: error.message });
   }
@@ -56,10 +56,9 @@ function* criarDis(action) {
 
 function* updateDis(action) {
   try {
-    console.log(action.payload);
-    const response = yield call(() => api.put(`/dis/${action.payload.id}`, action.payload.area));
-    const area = response.data;
-    yield put({ type: UPDATE_DIS_SUCCESS, payload: area });
+    const response = yield call(() => api.put(`/dis/${action.payload.id}`, action.payload.dis));
+    const dis = response.data;
+    yield put({ type: UPDATE_DIS_SUCCESS, payload: dis });
   } catch (error) {
     yield put({ type: UPDATE_DIS_FAILURE, payload: error.message });
   }

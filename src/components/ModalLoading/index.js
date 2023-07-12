@@ -43,7 +43,7 @@ const Spinner = styled.div`
   animation: ${rotate} 0.8s linear infinite;
 `;
 
-const ModalLoading = ({ show }) => {
+const ModalInfo = ({ show }) => {
   return (
     <ModalWrapper>
       <ModalContent>
@@ -55,4 +55,4 @@ const ModalLoading = ({ show }) => {
   );
 };
 
-export default ModalLoading;
+export default ModalInfo;

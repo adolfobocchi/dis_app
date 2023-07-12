@@ -13,6 +13,7 @@ import severidade from './Severidade/sagas';
 import nivelrisco from './NivelRisco/sagas';
 import proposta from './Proposta/sagas';
 import dis from './Dis/sagas';
+import atividade from './Atividade/sagas';
 
 export default function* rootSaga() {
     return yield all([
@@ -29,6 +30,7 @@ export default function* rootSaga() {
         severidade,
         nivelrisco,
         proposta,
-        dis
+        dis,
+        atividade
     ]);
 };
