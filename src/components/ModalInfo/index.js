@@ -15,7 +15,7 @@ const ModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   z-index: 9999;
-  
+  overflow-y: scroll;
 `;
 
 const ModalContent = styled.div`
@@ -52,17 +52,20 @@ const ContentInfoSetor = styled.div`
   margin: 8px;
   flex: 1;
   min-width: 300px;
-
+  padding: 20px;
 `;
 
 const ContentInfoSeparador = styled.div`
   border-bottom: 2px solid #000;
   width: 100%;
+  margin-bottom: 10px;
 `;
 
 const ContentInfoText = styled.div`
   color: #000;
-  font-weight: 700;
+  font-weight: 500;
+  margin-bottom: 6px;
+  font-size: 1em;
 `;
 
 const ContentInfoArea = styled.div`
@@ -102,19 +105,24 @@ const ModalInfo = ({ dados, close }) => {
         <ContentInfoText>{`E-mail: ${dadosState.email}`}</ContentInfoText>
         <ContentInfoText>{`Local: ${dadosState.localizacao}`}</ContentInfoText>
         <ContentInfoText>{`Ramo de atividade: ${dadosState?.area?.nome}`}</ContentInfoText>
-        <ContentInfoText>{`Descrição do ambiente: ${dadosState?.ambiente}`}</ContentInfoText>
-        <ContentInfoText>{`Observações: ${dadosState?.observacao}`}</ContentInfoText>
+        
           </div>
-        
+          
         </ContentInfoBasic>
-        
-        <h2>DIAGNOSTICO</h2>
+        <h3>Descrição do ambiente</h3>
+        <ContentInfoSeparador />
+          <ContentInfoText>{` ${dadosState?.ambiente}`}</ContentInfoText>
+          <h3>Observações</h3>
+          <ContentInfoSeparador />
+        <ContentInfoText>{`${dadosState?.observacao}`}</ContentInfoText>
+        <h3>Diagnostico</h3>
+        <ContentInfoSeparador />  
         <ContentInfoSetorizacao>
 
         
         {dadosState?.setores.map((setor, index) => (
         <ContentInfoSetor key={index}>
-          <ContentInfoSeparador><ContentInfoText>{setor.setor.nome}</ContentInfoText></ContentInfoSeparador>
+          <ContentInfoText style={{fontSize: 20, fontWeight: 700}}>{setor.setor.nome}</ContentInfoText>
           {setor?.funcoes.map((funcao, index) => (
             <ContentInfoArea key={index}>
               <ContentInfoText>{funcao.funcao.nome}</ContentInfoText>
