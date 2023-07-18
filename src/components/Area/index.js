@@ -8,6 +8,7 @@ import { criarAreasRequest, deleteAreasRequest, listarAreasRequest, updateAreasR
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { MdHighlightOff } from 'react-icons/md';
 import * as Styled from '../styleds';
+import Paginacao from '../Paginacao';
 
 const Area = ({ loading, areas, error, page, listarAreas, criarAreas, updateAreas, deleteAreas, confirmacao }) => {
   const formEmpty = {
@@ -97,6 +98,7 @@ const Area = ({ loading, areas, error, page, listarAreas, criarAreas, updateArea
         </Styled.Form>
 
       </Styled.FormArea>
+      <Paginacao page={page} ativo={0} listagem={listarAreas} />
       <Styled.ListArea>
 
         <Styled.ListHeader>

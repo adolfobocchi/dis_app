@@ -8,6 +8,7 @@ import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { MdHighlightOff } from 'react-icons/md';
 
 import * as Styled from '../styleds';
+import Paginacao from '../Paginacao';
 
 const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilidades, criarProbabilidades, updateProbabilidades, deleteProbabilidades, confirmacao }) => {
   const formEmpty = {
@@ -96,6 +97,7 @@ const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilid
         </Styled.Form>
 
       </Styled.FormArea>
+      <Paginacao page={page} ativo={0} listagem={listarProbabilidades} />
       <Styled.ListArea>
 
         <Styled.ListHeader>

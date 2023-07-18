@@ -8,6 +8,7 @@ import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { MdHighlightOff } from 'react-icons/md';
 
 import * as Styled from '../styleds';
+import Paginacao from '../Paginacao';
 
 const Setor = ({ loading, setores, error, page, listarSetores, criarSetores, updateSetores, deleteSetores, confirmacao }) => {
   const formEmpty = {
@@ -58,7 +59,6 @@ const Setor = ({ loading, setores, error, page, listarSetores, criarSetores, upd
     setSetorSelected({ ...formEmpty })
   }
 
-
   const onSubmit = (data) => {
     if (data._id) {
       updateSetores(data._id, data);
@@ -94,10 +94,9 @@ const Setor = ({ loading, setores, error, page, listarSetores, criarSetores, upd
 
           <Styled.Button type="submit">Salvar</Styled.Button>
         </Styled.Form>
-
       </Styled.FormArea>
+      <Paginacao page={page} ativo={0} listagem={listarSetores} />
       <Styled.ListArea>
-
         <Styled.ListHeader>
           {
             Object.keys(formEmpty).map((key, index) => {
@@ -108,7 +107,6 @@ const Setor = ({ loading, setores, error, page, listarSetores, criarSetores, upd
           <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
-
           {setoresState?.length > 0 && setoresState?.map((setor, index) => (
             <>
               <Styled.ListItem key={setor._id} onClick={(event) => handleSelect(event, index)}>
@@ -122,15 +120,11 @@ const Setor = ({ loading, setores, error, page, listarSetores, criarSetores, upd
                       return (<Styled.CampoValor>{setor[field]}</Styled.CampoValor>)
                     }
                   }
-
-
                 })
                 }
-
                 <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, setor._id)} style={{ height: '1em', width: '1em' }} />
                 </div>
-
               </Styled.ListItem>
             </>
           ))}

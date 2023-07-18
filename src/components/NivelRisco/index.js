@@ -8,6 +8,7 @@ import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { MdHighlightOff } from 'react-icons/md';
 
 import * as Styled from '../styleds';
+import Paginacao from '../Paginacao';
 
 const Nivelriscos = ({ loading, nivelriscos, error, page, listarNivelriscos, criarNivelriscos, updateNivelriscos, deleteNivelriscos, confirmacao }) => {
   const formEmpty = {
@@ -96,6 +97,7 @@ const Nivelriscos = ({ loading, nivelriscos, error, page, listarNivelriscos, cri
         </Styled.Form>
 
       </Styled.FormArea>
+      <Paginacao page={page} ativo={0} listagem={listarNivelriscos} />
       <Styled.ListArea>
 
         <Styled.ListHeader>

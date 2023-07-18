@@ -8,6 +8,7 @@ import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { MdHighlightOff } from 'react-icons/md';
 
 import * as Styled from '../styleds';
+import Paginacao from '../Paginacao';
 
 const Recursos= ({ loading, recursos, error, page, listarRecursos, criarRecursos, updateRecursos, deleteRecursos, confirmacao }) => {
   const formEmpty = {
@@ -96,6 +97,7 @@ const Recursos= ({ loading, recursos, error, page, listarRecursos, criarRecursos
         </Styled.Form>
 
       </Styled.FormArea>
+      <Paginacao page={page} ativo={0} listagem={listarRecursos} />
       <Styled.ListArea>
 
         <Styled.ListHeader>

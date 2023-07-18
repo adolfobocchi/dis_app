@@ -140,7 +140,7 @@ const ModalInfo = ({ dados, close }) => {
                               <ContentInfoText>{risco.risco.nome}</ContentInfoText>
                               {risco?.causas.map((causa, index) => (
                                 <ContentInfoArea key={index}>
-                                  <ContentInfoText>{causa.causa.nome}</ContentInfoText>
+                                  <ContentInfoText>{causa?.causa.nome}</ContentInfoText>
                                   {causa?.medidas.map((medida, index) => (
                                     <ContentInfoArea key={index}>
                                       <ContentInfoText>{medida.medida.nome}</ContentInfoText>

@@ -7,7 +7,7 @@ import ModalLoading from '../ModalLoading';
 import { addAtividade, addCausa, addFuncao, addMedida, addNivel, addProbabilidade, addProcesso, addProposta, addRecurso, addRisco, addSetor, addSeveridade, criarDisRequest, deleteDisRequest, listarDisRequest, removeAtividade, removeCausa, removeFuncao, removeMedida, removeNivel, removeProbabilidade, removeProcesso, removeProposta, removeRecurso, removeRisco, removeSetor, removeSeveridade, setDis, updateDisRequest } from '../../store/modules/Dis/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 
-import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSearch, MdViewList } from 'react-icons/md';
+import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdList, MdSearch, MdViewList } from 'react-icons/md';
 
 import * as Styled from '../styleds';
 import styled from 'styled-components';
@@ -28,6 +28,9 @@ import { criarNivelriscosRequest, listarNivelriscosRequest } from '../../store/m
 import { criarMedidasRequest, listarMedidasRequest } from '../../store/modules/Medida/actions';
 import { criarAtividadesRequest, listarAtividadesRequest } from '../../store/modules/Atividade/actions';
 import ModalInfo from '../ModalInfo';
+import Paginacao from '../Paginacao';
+import DataPicker from '../DataPicker';
+import ModalListSelect from '../ModalListSelect';
 
 //riscos,probabilidade e severidade = marcar/selecionar/ticar
 
@@ -80,6 +83,13 @@ const DignosticoItemSelectedArea = styled.div`
   }
   cursor: pointer;
 `;
+
+const DiagnosticoSearchArea = styled.div`
+  display: flex;
+  height: 40px;
+  align-items: center;
+
+`
 
 const Dis = ({
   loading,
@@ -209,6 +219,18 @@ const Dis = ({
   }
 
   const [showModalInfoState, setShowModalInfoState] = useState(false);
+  const [showModalSetoresListSelect, setShowModalSetoresListSelect] = useState(false);
+  const [showModalFuncoesListSelect, setShowModalFuncoesListSelect] = useState(false);
+  const [showModalProcessosListSelect, setShowModalProcessosListSelect] = useState(false);
+  const [showModalAtividadesListSelect, setShowModalAtividadesListSelect] = useState(false);
+  const [showModalRecursosListSelect, setShowModalRecursosListSelect] = useState(false);
+  const [showModalRiscosListSelect, setShowModalRiscosListSelect] = useState(false);
+  const [showModalCausasListSelect, setShowModalCausasListSelect] = useState(false);
+  const [showModalMedidasListSelect, setShowModalMedidasListSelect] = useState(false);
+  const [showModalProbabilidadesListSelect, setShowModalProbabilidadesListSelect] = useState(false);
+  const [showModalSeveridadesListSelect, setShowModalSeveridadesListSelect] = useState(false);
+  const [showModalNiveisRiscoListSelect, setShowModalNiveisRiscoListSelect] = useState(false);
+  const [showModalPropostasListSelect, setShowModalPropostasListSelect] = useState(false);
 
   const [disListState, setDisListState] = useState([]);
 
@@ -254,7 +276,7 @@ const Dis = ({
   const [propostaSelectedIndex, setPropostaSelectedIndex] = useState(-1);
 
   const [disSelected, setDisSelected] = useState(formEmpty);
-  const { register, control, formState: { errors }, handleSubmit, reset } = useForm({
+  const { register, control, setValue, formState: { errors }, handleSubmit, reset } = useForm({
     defaultValues: disSelected
       ? {
         _id: disSelected._id,
@@ -358,19 +380,19 @@ const Dis = ({
 
   useEffect(() => {
     listarDis(page, 1);
-    listarAreas(page, 1);
-    listarSetores(page, 1);
-    listarFuncoes(page, 1);
-    listarProcessos(page, 1);
-    listarAtividades(page, 1);
-    listarRecursos(page, 1);
-    listarRiscos(page, 1);
-    listarCausas(page, 1);
-    listarMedidas(page, 1);
-    listarProbabilidades(page, 1);
-    listarSeveridades(page, 1);
-    listarNivelriscos(page, 1);
-    listarPropostas(page, 1);
+    listarAreas(0, 1);
+    listarSetores(0, 1);
+    listarFuncoes(0, 1);
+    listarProcessos(0, 1);
+    listarAtividades(0, 1);
+    listarRecursos(0, 1);
+    listarRiscos(0, 1);
+    listarCausas(0, 1);
+    listarMedidas(0, 1);
+    listarProbabilidades(0, 1);
+    listarSeveridades(0, 1);
+    listarNivelriscos(0, 1);
+    listarPropostas(0, 1);
   }, []);
 
   useEffect(() => {
@@ -439,117 +461,129 @@ const Dis = ({
         onSelect: (item) => addSetor({ setor: item }),
         onSelected: (event, index) => { setSetorSelected(setoresDis[index].setor); setSetorSelectedIndex(index) },
         onDelete: (event, id) => { removeSetor(id) },
-        selectedIndex: setorSelectedIndex
+        selectedIndex: setorSelectedIndex,
+        handleListSelect: () => {  setShowModalSetoresListSelect(true);  }
       },
       {
         id: 2,
         label: 'Funções',
         list: funcoesState,
         items: setorSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes.map(funcao => funcao?.funcao) : setoresDis.flatMap(setor => setor?.funcoes).map(funcao => funcao?.funcao) || [],
-        onSelect: (item) => addFuncao(setorSelectedIndex, { funcao: item }),
+        onSelect: (item) => setorSelectedIndex >= 0 && addFuncao(setorSelectedIndex, { funcao: item }),
         onSelected: (event, index) => { setFuncaoSelected(setoresDis[setorSelectedIndex].funcoes[index]); setFuncaoSelectedIndex(index) },
         onDelete: (event, id) => { removeFuncao(setorSelectedIndex, id) },
-        selectedIndex: funcaoSelectedIndex
+        selectedIndex: funcaoSelectedIndex,
+        handleListSelect: () => { setorSelectedIndex >= 0 && setShowModalFuncoesListSelect(true);  }
       },
       {
         id: 3,
         label: 'Processos',
         list: processosState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos.map(processo => processo?.processo) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).map(processo => processo?.processo) || [],
-        onSelect: (item) => addProcesso(setorSelectedIndex, funcaoSelectedIndex, { processo: item }),
+        onSelect: (item) => funcaoSelectedIndex >= 0 && addProcesso(setorSelectedIndex, funcaoSelectedIndex, { processo: item }),
         onSelected: (event, index) => { setProcessoSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[index]); setProcessoSelectedIndex(index) },
         onDelete: (event, id) => removeProcesso(setorSelectedIndex, funcaoSelectedIndex, id),
-        selectedIndex: processoSelectedIndex
+        selectedIndex: processoSelectedIndex,
+        handleListSelect: () => { funcaoSelectedIndex >= 0 && setShowModalProcessosListSelect(true);  }
       },
       {
         id: 4,
         label: 'Atividades',
         list: atividadesState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && processoSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos[processoSelectedIndex]?.atividades.map(atividade => atividade?.atividade) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).flatMap(processo => processo?.atividades).map(atividade => atividade?.atividade) || [],
-        onSelect: (item) => addAtividade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, { atividade: item }),
+        onSelect: (item) => processoSelectedIndex >= 0 && addAtividade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, { atividade: item }),
         onSelected: (event, index) => { setAtividadeSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[processoSelectedIndex].atividades[index]); setAtividadeSelectedIndex(index) },
         onDelete: (event, id) => removeAtividade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, id),
-        selectedIndex: atividadeSelectedIndex
+        selectedIndex: atividadeSelectedIndex,
+        handleListSelect: () => { processoSelectedIndex >= 0 && setShowModalAtividadesListSelect(true);  }
       },
       {
         id: 5,
         label: 'Maquinas/Equipamentos',
         list: recursosState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && processoSelectedIndex >= 0 && atividadeSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos[processoSelectedIndex]?.atividades[atividadeSelectedIndex]?.recursos.map(recurso => recurso?.recurso) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).flatMap(processo => processo?.atividades).flatMap(atividade => atividade?.recursos).map(recurso => recurso?.recurso) || [],
-        onSelect: (item) => addRecurso(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, { recurso: item }),
+        onSelect: (item) => atividadeSelectedIndex >= 0 && addRecurso(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, { recurso: item }),
         onSelected: (event, index) => { setRecursoSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[processoSelectedIndex].atividades[atividadeSelectedIndex].recursos[index]); setRecursoSelectedIndex(index) },
         onDelete: (event, id) => removeRecurso(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, id),
-        selectedIndex: recursoSelectedIndex
+        selectedIndex: recursoSelectedIndex,
+        handleListSelect: () => {atividadeSelectedIndex >= 0 && setShowModalRecursosListSelect(true);  }
       },
       {
         id: 6,
         label: 'Riscos',
         list: riscosState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && processoSelectedIndex >= 0 && atividadeSelectedIndex >= 0 && recursoSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos[processoSelectedIndex]?.atividades[atividadeSelectedIndex]?.recursos[recursoSelectedIndex]?.riscos.map(risco => risco?.risco) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).flatMap(processo => processo?.atividades).flatMap(atividade => atividade?.recursos).flatMap(recurso => recurso?.riscos).map(risco => risco?.risco) || [],
-        onSelect: (item) => addRisco(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, { risco: item }),
+        onSelect: (item) => recursoSelectedIndex >= 0 && addRisco(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, { risco: item }),
         onSelected: (event, index) => { setRiscoSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[processoSelectedIndex].atividades[atividadeSelectedIndex].recursos[recursoSelectedIndex].riscos[index]); setRiscoSelectedIndex(index) },
         onDelete: (event, id) => removeRisco(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, id),
-        selectedIndex: riscoSelectedIndex
+        selectedIndex: riscoSelectedIndex,
+        handleListSelect: () => {recursoSelectedIndex >= 0 && setShowModalRiscosListSelect(true);  }
       },
       {
         id: 7,
         label: 'Causas',
         list: causasState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && processoSelectedIndex >= 0 && atividadeSelectedIndex >= 0 && recursoSelectedIndex >= 0 && riscoSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos[processoSelectedIndex]?.atividades[atividadeSelectedIndex]?.recursos[recursoSelectedIndex]?.riscos[riscoSelectedIndex]?.causas.map(causa => causa?.causa) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).flatMap(processo => processo?.atividades).flatMap(atividade => atividade?.recursos).flatMap(recurso => recurso?.riscos).flatMap(risco => risco?.causas).map(causa => causa?.causa) || [],
-        onSelect: (item) => addCausa(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, { causa: item }),
+        onSelect: (item) => riscoSelectedIndex >= 0 && addCausa(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, { causa: item }),
         onSelected: (event, index) => { setCausaSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[processoSelectedIndex].atividades[atividadeSelectedIndex].recursos[recursoSelectedIndex].riscos[riscoSelectedIndex].causas[index]); setCausaSelectedIndex(index) },
         onDelete: (event, id) => removeCausa(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, id),
-        selectedIndex: causaSelectedIndex
+        selectedIndex: causaSelectedIndex,
+        handleListSelect: () => {riscoSelectedIndex >= 0 && setShowModalCausasListSelect(true);  }
       },
       {
         id: 8,
         label: 'Medidas',
         list: medidasState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && processoSelectedIndex >= 0 && atividadeSelectedIndex >= 0 && recursoSelectedIndex >= 0 && riscoSelectedIndex >= 0 && causaSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos[processoSelectedIndex]?.atividades[atividadeSelectedIndex]?.recursos[recursoSelectedIndex]?.riscos[riscoSelectedIndex]?.causas[causaSelectedIndex]?.medidas.map(medida => medida?.medida) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).flatMap(processo => processo?.atividades).flatMap(atividade => atividade?.recursos).flatMap(recurso => recurso?.riscos).flatMap(risco => risco?.causas).flatMap(causa => causa?.medidas).map(medida => medida?.medida) || [],
-        onSelect: (item) => addMedida(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, { medida: item }),
+        onSelect: (item) => causaSelectedIndex >= 0 && addMedida(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, { medida: item }),
         onSelected: (event, index) => { setMedidaSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[processoSelectedIndex].atividades[atividadeSelectedIndex].recursos[recursoSelectedIndex].riscos[riscoSelectedIndex].causas[causaSelectedIndex].medidas[index]); setMedidaSelectedIndex(index) },
         onDelete: (event, id) => removeMedida(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, id),
-        selectedIndex: medidaSelectedIndex
+        selectedIndex: medidaSelectedIndex,
+        handleListSelect: () => {causaSelectedIndex >= 0 && setShowModalMedidasListSelect(true);  }
       },
       {
         id: 9,
         label: 'Probabilidades',
         list: probabilidadesState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && processoSelectedIndex >= 0 && atividadeSelectedIndex >= 0 && recursoSelectedIndex >= 0 && riscoSelectedIndex >= 0 && causaSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos[processoSelectedIndex]?.atividades[atividadeSelectedIndex]?.recursos[recursoSelectedIndex]?.riscos[riscoSelectedIndex]?.causas[causaSelectedIndex]?.medidas[medidaSelectedIndex]?.probabilidades.map(probabilidade => probabilidade?.probabilidade) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).flatMap(processo => processo?.atividades).flatMap(atividade => atividade?.recursos).flatMap(recurso => recurso?.riscos).flatMap(risco => risco?.causas).flatMap(causa => causa?.medidas).flatMap(medida => medida?.probabilidades).map(probabilidade => probabilidade?.probabilidade) || [],
-        onSelect: (item) => addProbabilidade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, { probabilidade: item }),
+        onSelect: (item) => medidaSelectedIndex >= 0 && addProbabilidade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, { probabilidade: item }),
         onSelected: (event, index) => { setProbabilidadeSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[processoSelectedIndex].atividades[atividadeSelectedIndex].recursos[recursoSelectedIndex].riscos[riscoSelectedIndex].causas[causaSelectedIndex].medidas[medidaSelectedIndex].probabilidades[index]); setProbabilidadeSelectedIndex(index) },
         onDelete: (event, id) => removeProbabilidade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, id),
-        selectedIndex: probabilidadeSelectedIndex
+        selectedIndex: probabilidadeSelectedIndex,
+        handleListSelect: () => {medidaSelectedIndex >= 0 && setShowModalProbabilidadesListSelect(true);  }
       },
       {
         id: 10,
         label: 'Severidades',
         list: severidadesState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && processoSelectedIndex >= 0 && atividadeSelectedIndex >= 0 && recursoSelectedIndex >= 0 && riscoSelectedIndex >= 0 && causaSelectedIndex >= 0 && probabilidadeSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos[processoSelectedIndex]?.atividades[atividadeSelectedIndex]?.recursos[recursoSelectedIndex]?.riscos[riscoSelectedIndex]?.causas[causaSelectedIndex]?.medidas[medidaSelectedIndex]?.probabilidades[probabilidadeSelectedIndex]?.severidades.map(severidade => severidade?.severidade) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).flatMap(processo => processo?.atividades).flatMap(atividade => atividade?.recursos).flatMap(recurso => recurso?.riscos).flatMap(risco => risco?.causas).flatMap(causa => causa?.medidas).flatMap(medida => medida?.probabilidades).flatMap(probabilidade => probabilidade?.severidades).map(severidade => severidade?.severidade) || [],
-        onSelect: (item) => addSeveridade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, { severidade: item }),
+        onSelect: (item) => probabilidadeSelectedIndex >= 0 && addSeveridade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, { severidade: item }),
         onSelected: (event, index) => { setSeveridadeSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[processoSelectedIndex].atividades[atividadeSelectedIndex].recursos[recursoSelectedIndex].riscos[riscoSelectedIndex].causas[causaSelectedIndex].medidas[medidaSelectedIndex].probabilidades[probabilidadeSelectedIndex].severidades[index]); setSeveridadeSelectedIndex(index) },
         onDelete: (event, id) => removeSeveridade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, id),
-        selectedIndex: severidadeSelectedIndex
+        selectedIndex: severidadeSelectedIndex,
+        handleListSelect: () => {probabilidadeSelectedIndex >= 0 && setShowModalSeveridadesListSelect(true);  }
       },
       {
         id: 11,
         label: 'Niveis de Risco',
         list: niveisRiscoState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && processoSelectedIndex >= 0 && atividadeSelectedIndex >= 0 && recursoSelectedIndex >= 0 && riscoSelectedIndex >= 0 && causaSelectedIndex >= 0 && probabilidadeSelectedIndex >= 0 && severidadeSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos[processoSelectedIndex]?.atividades[atividadeSelectedIndex]?.recursos[recursoSelectedIndex]?.riscos[riscoSelectedIndex]?.causas[causaSelectedIndex]?.medidas[medidaSelectedIndex]?.probabilidades[probabilidadeSelectedIndex]?.severidades[severidadeSelectedIndex]?.niveisRisco.map(nivelRisco => nivelRisco?.nivelRisco) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).flatMap(processo => processo?.atividades).flatMap(atividade => atividade?.recursos).flatMap(recurso => recurso?.riscos).flatMap(risco => risco?.causas).flatMap(causa => causa?.medidas).flatMap(medida => medida?.probabilidades).flatMap(probabilidade => probabilidade?.severidades).flatMap(severidade => severidade?.niveisRisco).map(nivelRisco => nivelRisco?.nivelRisco) || [],
-        onSelect: (item) => addNivel(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, severidadeSelectedIndex, { nivelRisco: item }),
+        onSelect: (item) => severidadeSelectedIndex >= 0 && addNivel(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, severidadeSelectedIndex, { nivelRisco: item }),
         onSelected: (event, index) => { setNivelSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[processoSelectedIndex].atividades[atividadeSelectedIndex].recursos[recursoSelectedIndex].riscos[riscoSelectedIndex].causas[causaSelectedIndex].medidas[medidaSelectedIndex].probabilidades[probabilidadeSelectedIndex].severidades[severidadeSelectedIndex].niveisRisco[index]); setNivelSelectedIndex(index) },
         onDelete: (event, id) => removeNivel(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, severidadeSelectedIndex, id),
-        selectedIndex: nivelSelectedIndex
+        selectedIndex: nivelSelectedIndex,
+        handleListSelect: () => { severidadeSelectedIndex >= 0 && setShowModalNiveisRiscoListSelect(true);  }
       },
       {
         id: 12,
         label: 'Propostas',
         list: propostasState,
         items: setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && processoSelectedIndex >= 0 && atividadeSelectedIndex >= 0 && recursoSelectedIndex >= 0 && riscoSelectedIndex >= 0 && causaSelectedIndex >= 0 && probabilidadeSelectedIndex >= 0 && severidadeSelectedIndex >= 0 && nivelSelectedIndex >= 0 ? setoresDis[setorSelectedIndex]?.funcoes[funcaoSelectedIndex]?.processos[processoSelectedIndex]?.atividades[atividadeSelectedIndex]?.recursos[recursoSelectedIndex]?.riscos[riscoSelectedIndex]?.causas[causaSelectedIndex]?.medidas[medidaSelectedIndex]?.probabilidades[probabilidadeSelectedIndex]?.severidades[severidadeSelectedIndex]?.niveisRisco[nivelSelectedIndex]?.propostas.map(proposta => proposta?.proposta) : setoresDis.flatMap(setor => setor?.funcoes).flatMap(funcao => funcao?.processos).flatMap(processo => processo?.atividades).flatMap(atividade => atividade?.recursos).flatMap(recurso => recurso?.riscos).flatMap(risco => risco?.causas).flatMap(causa => causa?.medidas).flatMap(medida => medida?.probabilidades).flatMap(probabilidade => probabilidade?.severidades).flatMap(severidade => severidade?.niveisRisco).flatMap(nivelRisco => nivelRisco?.propostas).map(proposta => proposta?.proposta) || [],
-        onSelect: (item) => addProposta(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, severidadeSelectedIndex, nivelSelectedIndex, { proposta: item }),
+        onSelect: (item) => nivelSelectedIndex >= 0 && addProposta(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, severidadeSelectedIndex, nivelSelectedIndex, { proposta: item }),
         onSelected: (event, index) => { setPropostaSelected(setoresDis[setorSelectedIndex].funcoes[funcaoSelectedIndex].processos[processoSelectedIndex].atividades[atividadeSelectedIndex].recursos[recursoSelectedIndex].riscos[riscoSelectedIndex].causas[causaSelectedIndex].medidas[medidaSelectedIndex].probabilidades[probabilidadeSelectedIndex].severidades[severidadeSelectedIndex].niveisRisco[nivelSelectedIndex].propostas[index]); setPropostaSelectedIndex(index) },
         onDelete: (event, id) => removeProposta(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, severidadeSelectedIndex, nivelSelectedIndex, id),
-        selectedIndex: propostaSelectedIndex
+        selectedIndex: propostaSelectedIndex,
+        handleListSelect: () => {nivelSelectedIndex >= 0 && setShowModalPropostasListSelect(true);  }
       }
     ]);
   },
@@ -580,10 +614,10 @@ const Dis = ({
     setSetorSelected(null);
   }
 
-  const handleShowDis = (event,index) => {
+  const handleShowDis = (event, index) => {
     event.preventDefault();
     event.stopPropagation();
-    handleSelect(event,index)
+    handleSelect(event, index)
     setShowModalInfoState(true);
   }
 
@@ -629,9 +663,48 @@ const Dis = ({
     return <ModalLoading />
   }
 
-  if(showModalInfoState) {
+  if (showModalInfoState) {
     return <ModalInfo dados={disSelected} close={setShowModalInfoState} />
   }
+
+  if (showModalSetoresListSelect) {
+    return <ModalListSelect dados={setoresState} close={setShowModalSetoresListSelect} setItensSelected={(items) => items.map(item => addSetor({setor: item}))} />
+  }
+  if (showModalFuncoesListSelect) {
+    return <ModalListSelect dados={funcoesState} close={setShowModalFuncoesListSelect} setItensSelected={(items) => items.map(item => addFuncao(setorSelectedIndex, { funcao: item }))} />
+  }
+  if (showModalProcessosListSelect) {
+    return <ModalListSelect dados={processosState} close={setShowModalProcessosListSelect} setItensSelected={(items) => items.map(item => addProcesso(setorSelectedIndex, funcaoSelectedIndex, { processo: item }))} />
+  }
+  if (showModalAtividadesListSelect) {
+    return <ModalListSelect dados={atividadesState} close={setShowModalAtividadesListSelect} setItensSelected={(items) => items.map(item => addAtividade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, { atividade: item }))} />
+  }
+  if (showModalRecursosListSelect) {
+    return <ModalListSelect dados={recursosState} close={setShowModalRecursosListSelect} setItensSelected={(items) => items.map(item => addRecurso(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, { recurso: item }))} />
+  }
+  if (showModalRiscosListSelect) {
+    return <ModalListSelect dados={riscosState} close={setShowModalRiscosListSelect} setItensSelected={(items) => items.map(item => addRisco(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, { risco: item }))} />
+  }
+  if (showModalCausasListSelect) {
+    return <ModalListSelect dados={causasState} close={setShowModalCausasListSelect} setItensSelected={(items) => items.map(item => addCausa(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, { causa: item }))} />
+  }
+  if (showModalMedidasListSelect) {
+    return <ModalListSelect dados={medidasState} close={setShowModalMedidasListSelect} setItensSelected={(items) => items.map(item => addMedida(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, { medida: item }))} />
+  }
+  if (showModalProbabilidadesListSelect) {
+    return <ModalListSelect dados={probabilidadesState} close={setShowModalProbabilidadesListSelect} setItensSelected={(items) => items.map(item => addProbabilidade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, { probabilidade: item }))} />
+  }
+  if (showModalSeveridadesListSelect) {
+    return <ModalListSelect dados={severidadesState} close={setShowModalSeveridadesListSelect} setItensSelected={(items) => items.map(item => addSeveridade(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, { severidade: item }))} />
+  }
+  if (showModalNiveisRiscoListSelect) {
+    return <ModalListSelect dados={niveisRiscoState} close={setShowModalNiveisRiscoListSelect} setItensSelected={(items) => items.map(item => addNivel(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, severidadeSelectedIndex, { nivelRisco: item }))} />
+  }
+  if (showModalPropostasListSelect) {
+    return <ModalListSelect dados={propostasState} close={setShowModalPropostasListSelect} setItensSelected={(items) => items.map(item => addProposta(setorSelectedIndex, funcaoSelectedIndex, processoSelectedIndex, atividadeSelectedIndex, recursoSelectedIndex, riscoSelectedIndex, causaSelectedIndex, medidaSelectedIndex, probabilidadeSelectedIndex, severidadeSelectedIndex, nivelSelectedIndex, { proposta: item }))} />
+  }
+
+
   return (
     <Styled.Container>
       {sectionItems.map((sectionItem) => (
@@ -664,10 +737,7 @@ const Dis = ({
                       {errors.empresa && <span>Campo obrigatório</span>}
 
                       <Styled.Label>Data</Styled.Label>
-                      <Styled.Input
-                        type='date'
-                        {...register('data', { required: true })}
-                      />
+                      <DataPicker name="data" control={control} setValue={setValue} defaultValue={disSelected?.data} showTimeSelect={false}/>
                       {errors.data && <span>Campo obrigatório</span>}
 
                       <Styled.Label>Foto da Fachada</Styled.Label>
@@ -726,7 +796,10 @@ const Dis = ({
                             <DiagnosticoItemArea key={diagnosticoItem.id} >
                               <h3>{diagnosticoItem.label}</h3>
                               <DiagnosticoItem>
-                                <InputSearch items={diagnosticoItem.list} onSelect={diagnosticoItem.onSelect} />
+                                <DiagnosticoSearchArea>
+                                <InputSearch items={diagnosticoItem.list} onSelect={diagnosticoItem.onSelect} /> <MdList  onClick={diagnosticoItem.handleListSelect} style={{height: '2em', width: '2em', cursor: 'pointer'}} />
+                                </DiagnosticoSearchArea>
+                                
                                 {
 
                                   diagnosticoItem.items && diagnosticoItem.items.map((item, index) =>
@@ -777,6 +850,7 @@ const Dis = ({
               }
               if (section.component === 'listagem') {
                 return (<Styled.ListArea>
+                  <Paginacao page={page} ativo={0} listagem={listarDis} />
                   <Styled.ListHeader>
                     {
                       Object.keys(listFields).map((key, index) => {
@@ -788,7 +862,7 @@ const Dis = ({
                   <Styled.List>
                     {disListState?.length > 0 && disListState?.map((dis, index) => (
                       <>
-                        <Styled.ListItem key={dis._id} onClick={(event)=> handleShowDis(event, index)}>
+                        <Styled.ListItem key={dis._id} onClick={(event) => handleShowDis(event, index)}>
                           {
                             Object.keys(dis).map((field, index) => {
                               if (field !== '_id' && listFields.hasOwnProperty(field)) {
@@ -803,10 +877,10 @@ const Dis = ({
                           }
 
                           <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
-                            <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, dis._id)} style={{ height: '1.4em', width: '1.4em' }} />
+                            <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, dis._id)} style={{ height: '1.2em', width: '1.2em' }} />
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
-                            <MdEditNote color='#005' onClick={(event) => {toggleSectionExpand(1, event); handleSelect(event, index)}} style={{ height: '1.4em', width: '1.4em' }} />
+                            <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
                           </div>
 
                         </Styled.ListItem>
@@ -898,7 +972,7 @@ const mapDispatchToProps = dispatch => {
 
     addFuncao: (setorIndex, funcao) => dispatch(addFuncao(setorIndex, funcao)),
     removeFuncao: (setorIndex, funcao) => dispatch(removeFuncao(setorIndex, funcao)),
-    
+
     addProcesso: (setorIndex, funcaoIndex, processo) => dispatch(addProcesso(setorIndex, funcaoIndex, processo)),
     removeProcesso: (setorIndex, funcaoIndex, processo) => dispatch(removeProcesso(setorIndex, funcaoIndex, processo)),
 

@@ -64,18 +64,14 @@ const Section = styled.div`
 `;
 
 const SectionItem = styled.div`
-
-padding-left: 30px;
+  padding-left: 30px;
   padding-top: 5px;
   padding-bottom: 5px;
   cursor: pointer;
   &:hover {
     background: #666666;
   }
-`
-
-
-
+`;
 
 const HomePainel = () => {
   return (
@@ -84,15 +80,10 @@ const HomePainel = () => {
 }
 
 function PainelPage({ usuario }) {
-
-  /*const menuItems = [
-      { key: 0, label: "Painel", component: <HomePainel /> },
-      { key: 14, label: "Sair", component: <Logout /> },
-    ]*/
   const [menuItems, setMenuItems] = useState([
-    { id: 'm1', label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard /> },
+    { id: 101, label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard /> },
     {
-      id: 'm2',
+      id: 102,
       label: 'Cadastros',
       expanded: false,
       icon: <MdEdit />,
@@ -100,8 +91,8 @@ function PainelPage({ usuario }) {
         { id: 1, label: 'Areas', expanded: false, component: <Area /> },
         { id: 2, label: 'Setores', expanded: false, component: <Setor /> },
         { id: 3, label: 'Funções', expanded: false, component: <Funcao /> },
-        { id: 5, label: 'Processos', expanded: false, component: <Processo /> },
-        { id: 4, label: 'Atividades', expanded: false, component: <Atividade /> },
+        { id: 4, label: 'Processos', expanded: false, component: <Processo /> },
+        { id: 5, label: 'Atividades', expanded: false, component: <Atividade /> },
         { id: 6, label: 'Recursos', expanded: false, component: <Recurso /> },
         { id: 7, label: 'Riscos', expanded: false, component: <Risco /> },
         { id: 8, label: 'Causas', expanded: false, component: <Causa /> },
@@ -113,16 +104,16 @@ function PainelPage({ usuario }) {
       ],
     },
 
-    { id: 'm3', label: 'D.I.S', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
-    { id: 'm4', label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
+    { id: 103, label: 'D.I.S', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
+    { id: 104, label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
     {
-      id: 'm5', label: 'Segurança', expanded: false,
+      id: 105, label: 'Segurança', expanded: false,
       sections: [
         { id: 14, label: 'Usuários', expanded: false, component: <Area /> },
       ],
       icon: <MdLock />
     },
-    { id: 'm6', label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
+    { id: 106, label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
   ]);
   const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems[0]);
 
@@ -155,19 +146,15 @@ function PainelPage({ usuario }) {
               <MenuItem
                 key={menuItem.id}
                 onClick={(event) => { (menuItem.sections && menuItem.sections.length > 0) ? toggleSection(menuItem.id, event) : handleMenuItemClick(menuItem, event) }}
-
               >
                 <AreaWidth style={{ width: 20 }}>{menuItem.icon}</AreaWidth>  <AreaFlex>{menuItem.label}</AreaFlex> <AreaWidth style={{ width: 20, justifyContent: 'flex-end' }} >{menuItem.expanded ? <MdKeyboardArrowDown /> : <MdKeyboardArrowRight />}</AreaWidth>
-
-
               </MenuItem>
               {menuItem.sections && menuItem.sections.length > 0 && (
                 <Section>
                   {menuItem.expanded &&
-                    menuItem.sections.map((section) => (
+                    menuItem.sections.sort((a, b) => a.label.localeCompare(b.label)).map((section) => (
                       <SectionItem key={section.id}>
                         <div onClick={(event) => handleMenuItemClick(section, event)}>{section.label}</div>
-
                       </SectionItem>
                     ))}
                 </Section>

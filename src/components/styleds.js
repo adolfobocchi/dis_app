@@ -106,8 +106,8 @@ const ColunaValor = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 17px;
-    font-weight: 500;
+    font-size: 0.8em;
+    font-weight: 400;
     padding: 10px;
     flex: 1;
 `
