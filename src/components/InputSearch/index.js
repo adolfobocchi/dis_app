@@ -22,6 +22,7 @@ const Dropdown = styled.ul`
   list-style: none;
   padding: 0;
   margin-top: 4px;
+  z-index: 2;
 `;
 
 const DropdownItem = styled.li`
@@ -38,6 +39,7 @@ const InputSearch = ({
   items,
   onSelect,
   valueSelected,
+  field = 'nome',
 }) => {
   const searchTimerRef = useRef(null);
   const [searchResults, setSearchResults] = useState([]);
@@ -53,7 +55,7 @@ const InputSearch = ({
       searchTimerRef.current = setTimeout(() => {
         if (items.length > 0) {
           const filteredItems = items.filter((item) =>
-            item.nome.toLowerCase().includes(searchTerm)
+            item[field].toLowerCase().includes(searchTerm)
           );
           setSearchResults(filteredItems);
         } else {
@@ -66,7 +68,7 @@ const InputSearch = ({
 
   const handleSelectItem = (item) => {
     onSelect(item);
-    setItemSelected(item.nome)
+    setItemSelected(item[field])
     setSearchResults([]);
   };
   return (
@@ -78,7 +80,7 @@ const InputSearch = ({
         <Dropdown>
           {searchResults.map((item, index) => (
             <DropdownItem key={index} onClick={() => handleSelectItem(item)}>
-              {item.nome}
+              {item[field]}
             </DropdownItem>
           ))}
         </Dropdown>

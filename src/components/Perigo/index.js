@@ -3,69 +3,69 @@ import { connect } from 'react-redux';
 import ModalLoading from '../ModalLoading';
 
 import { useForm } from 'react-hook-form';
-import { criarProcessosRequest, deleteProcessosRequest, listarProcessosRequest, updateProcessosRequest } from '../../store/modules/Processo/actions';
+import { criarPerigosRequest, deletePerigosRequest, listarPerigosRequest, updatePerigosRequest } from '../../store/modules/Perigo/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { MdHighlightOff } from 'react-icons/md';
 
 import * as Styled from '../styleds';
 import Paginacao from '../Paginacao';
 
-const Processo = ({ loading, processos, error, page, listarProcessos, criarProcessos, updateProcessos, deleteProcessos, confirmacao }) => {
+const Perigo = ({ loading, perigos, error, page, listarPerigos, criarPerigos, updatePerigos, deletePerigos, confirmacao }) => {
   const formEmpty = {
     _id: '',
     nome: '',
     ativo: true,
   }
 
-  const [processosState, setProcessosState] = useState([]);
-  const [processoSelected, setProcessoSelected] = useState(formEmpty);
+  const [perigosState, setPerigosState] = useState([]);
+  const [perigoSelected, setPerigoSelected] = useState(formEmpty);
   const { register, formState: { errors }, handleSubmit, reset } = useForm({
-    defaultValues: processoSelected
+    defaultValues: perigoSelected
       ? {
-        _id: processoSelected._id,
-        nome: processoSelected.nome
+        _id: perigoSelected._id,
+        nome: perigoSelected.nome
       } :
       {}
   });
 
   useEffect(() => {
-    listarProcessos(page, 0);
+    listarPerigos(page, 0);
   }, []);
 
   useEffect(() => {
-    setProcessosState(processos);
-  }, [processos]);
+    setPerigosState(perigos);
+  }, [perigos]);
 
 
   useEffect(() => {
-    reset({ ...processoSelected });
-  }, [reset, processoSelected])
+    reset({ ...perigoSelected });
+  }, [reset, perigoSelected])
 
 
   const handleSelect = (event, index) => {
     event.preventDefault();
     event.stopPropagation();
-    setProcessoSelected(processos[index]);
+    setPerigoSelected(perigos[index]);
 
   }
 
   const handleDelete = (event, index) => {
     event.preventDefault();
     event.stopPropagation();
-    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR A PROCESSO?', () => { deleteProcessos(index) });
+    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR A PERIGO?', () => { deletePerigos(index) });
   }
 
   const handleClear = () => {
-    setProcessoSelected({ ...formEmpty })
+    setPerigoSelected({ ...formEmpty })
   }
 
 
   const onSubmit = (data) => {
     if (data._id) {
-      updateProcessos(data._id, data);
+      updatePerigos(data._id, data);
 
     } else {
-      criarProcessos(data);
+      criarPerigos(data);
     }
     handleClear();
   };
@@ -97,7 +97,7 @@ const Processo = ({ loading, processos, error, page, listarProcessos, criarProce
         </Styled.Form>
 
       </Styled.FormArea>
-      <Paginacao page={page} ativo={0} listagem={listarProcessos} />
+      <Paginacao page={page} ativo={0} listagem={listarPerigos} />
       <Styled.ListArea>
 
         <Styled.ListHeader>
@@ -111,17 +111,17 @@ const Processo = ({ loading, processos, error, page, listarProcessos, criarProce
         </Styled.ListHeader>
         <Styled.List>
 
-          {processosState?.length > 0 && processosState?.map((processo, index) => (
+          {perigosState?.length > 0 && perigosState?.map((perigo, index) => (
             <>
-              <Styled.ListItem key={processo._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(processo).map((field, index) => {
+              <Styled.ListItem key={perigo._id} onClick={(event) => handleSelect(event, index)}>
+                {Object.keys(perigo).map((field, index) => {
                   if (field !== '_id' && field !== '__v') {
-                    if (typeof (processo[field]) === 'boolean') {
+                    if (typeof (perigo[field]) === 'boolean') {
                       return (<>
-                        {processo[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                        {perigo[field] ? <Styled.Ativo /> : <Styled.Inativo />}
                       </>)
                     } else {
-                      return (<Styled.CampoValor>{processo[field]}</Styled.CampoValor>)
+                      return (<Styled.CampoValor>{perigo[field]}</Styled.CampoValor>)
                     }
                   }
 
@@ -130,7 +130,7 @@ const Processo = ({ loading, processos, error, page, listarProcessos, criarProce
                 }
 
                 <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
-                  <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, processo._id)} style={{ height: '1em', width: '1em' }} />
+                  <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, perigo._id)} style={{ height: '1em', width: '1em' }} />
                 </div>
 
               </Styled.ListItem>
@@ -144,21 +144,21 @@ const Processo = ({ loading, processos, error, page, listarProcessos, criarProce
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.processo.loading,
-    processos: state.processo.processos,
-    error: state.processo.error,
-    page: state.processo.page,
+    loading: state.perigo.loading,
+    perigos: state.perigo.perigos,
+    error: state.perigo.error,
+    page: state.perigo.page,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    listarProcessos: (page, ativo) => dispatch(listarProcessosRequest(page, ativo)),
-    criarProcessos: (processo) => dispatch(criarProcessosRequest(processo)),
-    updateProcessos: (id, processo) => dispatch(updateProcessosRequest(id, processo)),
-    deleteProcessos: (id) => dispatch(deleteProcessosRequest(id)),
+    listarPerigos: (page, ativo) => dispatch(listarPerigosRequest(page, ativo)),
+    criarPerigos: (perigo) => dispatch(criarPerigosRequest(perigo)),
+    updatePerigos: (id, perigo) => dispatch(updatePerigosRequest(id, perigo)),
+    deletePerigos: (id) => dispatch(deletePerigosRequest(id)),
     confirmacao: (title, text, onConfirm) => dispatch(showConfirmation(title, text, onConfirm))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Processo);
+export default connect(mapStateToProps, mapDispatchToProps)(Perigo);

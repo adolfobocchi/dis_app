@@ -14,7 +14,12 @@ const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilid
   const formEmpty = {
     _id: '',
     nome: '',
+    valor: 0,
     ativo: true,
+  }
+
+  const listFields = {
+    nome: 'texto'
   }
 
   const [probabilidadesState, setProbabilidadesState] = useState([]);
@@ -23,7 +28,8 @@ const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilid
     defaultValues: probabilidadeSelected
       ? {
         _id: probabilidadeSelected._id,
-        nome: probabilidadeSelected.nome
+        nome: probabilidadeSelected.nome,
+        valor: probabilidadeSelected.valor
       } :
       {}
   });
@@ -81,11 +87,16 @@ const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilid
             hidden
             {...register('id')}
           />
-          <Styled.Label>Nome</Styled.Label>
+          <Styled.Label>Nome:</Styled.Label>
           <Styled.Input
             {...register('nome', { required: true })}
           />
           {errors.nome && <span>Campo obrigatório</span>}
+          <Styled.Label>Valor: </Styled.Label>
+          <Styled.Input type='number'
+            {...register('valor', { required: true })}
+          />
+          {errors.valor && <span>Campo obrigatório</span>}
           <Styled.Label>Ativo</Styled.Label>
           <Styled.Input
             type='checkbox'
@@ -102,9 +113,8 @@ const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilid
 
         <Styled.ListHeader>
           {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
+            Object.keys(listFields).map((key, index) => {
+              return <Styled.Coluna label={key} key={index} />
             })
           }
           <Styled.Coluna label='' />
@@ -114,19 +124,12 @@ const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilid
           {probabilidadesState?.length > 0 && probabilidadesState?.map((probabilidade, index) => (
             <>
               <Styled.ListItem key={probabilidade._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(probabilidade).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (probabilidade[field]) === 'boolean') {
-                      return (<>
-                        {probabilidade[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
-                      return (<Styled.CampoValor>{probabilidade[field]}</Styled.CampoValor>)
+                {
+                  Object.keys(probabilidade).map((field, index) => {
+                    if (field !== '_id' && listFields.hasOwnProperty(field)) {
+                      return (<Styled.CampoValor>{`(${probabilidade.valor}) ${probabilidade[field]}`}</Styled.CampoValor>)
                     }
-                  }
-
-
-                })
+                  })
                 }
 
                 <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >

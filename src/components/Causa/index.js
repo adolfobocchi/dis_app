@@ -9,13 +9,24 @@ import { MdHighlightOff } from 'react-icons/md';
 
 import * as Styled from '../styleds';
 import Paginacao from '../Paginacao';
+import InputSearch from '../InputSearch';
+import { listarRiscosRequest } from '../../store/modules/Risco/actions';
 
-const Causas = ({ loading, causas, error, page, listarCausas, criarCausas, updateCausas, deleteCausas, confirmacao }) => {
+const Causas = ({ loading, causas, listarRiscos, riscos, error, page, listarCausas, criarCausas, updateCausas, deleteCausas, confirmacao }) => {
+  
+  const listFields = {
+    nome: 'texto',
+    risco: 'json',
+    ativo: 'boolean',
+  }
   const formEmpty = {
     _id: '',
     nome: '',
+    risco: '',
     ativo: true,
   }
+  const [riscosState, setRiscosState] = useState([]);
+  const [riscoSelected, setRiscoSelected] = useState({});
 
   const [causasState, setCausasState] = useState([]);
   const [causaSelected, setCausaselected] = useState(formEmpty);
@@ -30,7 +41,12 @@ const Causas = ({ loading, causas, error, page, listarCausas, criarCausas, updat
 
   useEffect(() => {
     listarCausas(page, 0);
+    listarRiscos(0, 1);
   }, []);
+
+  useEffect(() => {
+    setRiscosState(riscos);
+  }, [riscos]);
 
   useEffect(() => {
     setCausasState(causas);
@@ -46,7 +62,7 @@ const Causas = ({ loading, causas, error, page, listarCausas, criarCausas, updat
     event.preventDefault();
     event.stopPropagation();
     setCausaselected(causas[index]);
-
+    setRiscoSelected(causas[index].risco)
   }
 
   const handleDelete = (event, index) => {
@@ -61,6 +77,7 @@ const Causas = ({ loading, causas, error, page, listarCausas, criarCausas, updat
 
 
   const onSubmit = (data) => {
+    data.risco = riscoSelected;
     if (data._id) {
       updateCausas(data._id, data);
 
@@ -77,6 +94,9 @@ const Causas = ({ loading, causas, error, page, listarCausas, criarCausas, updat
     <Styled.Container>
       <Styled.FormArea>
         <Styled.Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+          <Styled.Label>Risco: </Styled.Label>
+          <InputSearch items={riscosState} onSelect={(item) => setRiscoSelected(item)} valueSelected={riscoSelected?.nome} field={'nome'} />
+
           <Styled.Input
             hidden
             {...register('id')}
@@ -95,44 +115,39 @@ const Causas = ({ loading, causas, error, page, listarCausas, criarCausas, updat
 
           <Styled.Button type="submit">Salvar</Styled.Button>
         </Styled.Form>
-
       </Styled.FormArea>
       <Paginacao page={page} ativo={0} listagem={listarCausas} />
       <Styled.ListArea>
-
         <Styled.ListHeader>
           {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
+            
+            Object.keys(listFields).map((key, index) => {
+              return <Styled.Coluna label={key} key={index} />
             })
           }
           <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
-
           {causasState?.length > 0 && causasState?.map((causa, index) => (
             <>
               <Styled.ListItem key={causa._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(causa).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (causa[field]) === 'boolean') {
-                      return (<>
-                        {causa[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
+                {
+                  Object.keys(causa).map((field, index) => {
+                    if (field !== '_id' && listFields.hasOwnProperty(field)) {
+                      if (listFields[field] === 'json')
+                        return (<Styled.CampoValor>{causa[field].nome}</Styled.CampoValor>);
+                      if (listFields[field] === 'boolean') 
+                        return (<>
+                          {causa[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                        </>);
                       return (<Styled.CampoValor>{causa[field]}</Styled.CampoValor>)
+
                     }
-                  }
-
-
-                })
+                  })
                 }
-
                 <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, causa._id)} style={{ height: '1em', width: '1em' }} />
                 </div>
-
               </Styled.ListItem>
             </>
           ))}
@@ -148,6 +163,7 @@ const mapStateToProps = (state) => {
     causas: state.causa.causas,
     error: state.causa.error,
     page: state.causa.page,
+    riscos: state.risco.riscos,
   };
 };
 
@@ -157,7 +173,8 @@ const mapDispatchToProps = dispatch => {
     criarCausas: (causa) => dispatch(criarCausasRequest(causa)),
     updateCausas: (id, causa) => dispatch(updateCausasRequest(id, causa)),
     deleteCausas: (id) => dispatch(deleteCausasRequest(id)),
-    confirmacao: (title, text, onConfirm) => dispatch(showConfirmation(title, text, onConfirm))
+    confirmacao: (title, text, onConfirm) => dispatch(showConfirmation(title, text, onConfirm)),
+    listarRiscos: (page, ativo) => dispatch(listarRiscosRequest(page, ativo)),
   };
 };
 

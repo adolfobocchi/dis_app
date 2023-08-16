@@ -20,7 +20,6 @@ export const Form = styled.form`
 
 export const Input = styled.input`
   padding: 8px;
-  margin-right: 10px;
 `;
 
 export const Button = styled.button`
@@ -133,6 +132,19 @@ export const Imagem = styled.img`
   height: 80px;
   border-radius: 50%;
 `
+
+export const SectionArea = styled.div`
+  background: #EBF0F7;
+  display: flex;
+  height: 40px;
+  font-size: 1.3em;
+  font-weight: 400;
+  align-items: center;
+  margin-bottom: 12px;
+  margin-top: 12px;
+  padding: 6px;
+`;
+
 
 export const Ativo = () => (
     <ColunaValor><AtivoItem><MdCircle />Ativo</AtivoItem></ColunaValor>

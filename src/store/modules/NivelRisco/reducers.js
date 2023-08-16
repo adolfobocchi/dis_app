@@ -73,6 +73,7 @@ const nivelriscoReducer = (state = initialState, action) => {
         error: '',
       };
     case UPDATE_NIVELRISCOS_SUCCESS:
+      console.log(action.payload);
       var index = state.nivelriscos.findIndex((nivelrisco) => nivelrisco._id === action.payload._id);
       state.nivelriscos[index]= action.payload;
       return {

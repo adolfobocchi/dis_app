@@ -6,20 +6,22 @@ import Titulo from '../../components/Titulo';
 import Area from '../../components/Area';
 import Setor from '../../components/Setor';
 import Funcao from '../../components/Funcao';
-import Processo from '../../components/Processo';
-import Recurso from '../../components/Recurso';
+import Perigo from '../../components/Perigo';
+import Monitoramento from '../../components/Monitoramento';
 import Risco from '../../components/Risco';
 import Causa from '../../components/Causa';
 import Medida from '../../components/Medida';
 import Probabilidade from '../../components/Probabilidade';
 import NivelRisco from '../../components/NivelRisco';
 import Severidade from '../../components/Severidade';
-import Proposta from '../../components/Proposta';
+import PlanoAcao from '../../components/PlanoAcao';
 import Dis from '../../components/Dis';
-import { MdDashboard, MdDescription, MdDocumentScanner, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowRight, MdLock, MdLogout } from 'react-icons/md';
+import { MdDashboard, MdDescription, MdDocumentScanner, MdEdit, MdHomeWork, MdKeyboardArrowDown, MdKeyboardArrowRight, MdLock, MdLogout } from 'react-icons/md';
 import NavBar from '../../components/Navbar';
 import { AreaFlex, AreaWidth } from '../../components/styleds';
 import Atividade from '../../components/Atividade';
+import Usuario from '../../components/Usuario';
+import Empresa from '../../components/Empresa';
 
 const Container = styled.div`
   background: #FFF;
@@ -67,6 +69,7 @@ const SectionItem = styled.div`
   padding-left: 30px;
   padding-top: 5px;
   padding-bottom: 5px;
+  font-size: 0.9em;
   cursor: pointer;
   &:hover {
     background: #666666;
@@ -82,34 +85,35 @@ const HomePainel = () => {
 function PainelPage({ usuario }) {
   const [menuItems, setMenuItems] = useState([
     { id: 101, label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard /> },
+    { id: 102, label: 'Empresas', expanded: false, sections: [], component: <Empresa />, icon: <MdHomeWork /> },
     {
-      id: 102,
+      id: 103,
       label: 'Cadastros',
       expanded: false,
       icon: <MdEdit />,
       sections: [
-        { id: 1, label: 'Areas', expanded: false, component: <Area /> },
+        { id: 1, label: 'Ramo de Atividade', expanded: false, component: <Area /> },
         { id: 2, label: 'Setores', expanded: false, component: <Setor /> },
         { id: 3, label: 'Funções', expanded: false, component: <Funcao /> },
-        { id: 4, label: 'Processos', expanded: false, component: <Processo /> },
-        { id: 5, label: 'Atividades', expanded: false, component: <Atividade /> },
-        { id: 6, label: 'Recursos', expanded: false, component: <Recurso /> },
-        { id: 7, label: 'Riscos', expanded: false, component: <Risco /> },
-        { id: 8, label: 'Causas', expanded: false, component: <Causa /> },
-        { id: 9, label: 'Medidas', expanded: false, component: <Medida /> },
-        { id: 10, label: 'Probabilidades', expanded: false, component: <Probabilidade /> },
-        { id: 11, label: 'Severidades', expanded: false, component: <Severidade /> },
-        { id: 12, label: 'Niveis Risco', expanded: false, component: <NivelRisco /> },
-        { id: 13, label: 'Propostas Controle', expanded: false, component: <Proposta /> },
+        { id: 4, label: 'Atividades realizadas', expanded: false, component: <Atividade /> },
+        { id: 5, label: 'Condição de perigo', expanded: false, component: <Perigo /> },
+        { id: 6, label: 'Riscos', expanded: false, component: <Risco /> },
+        { id: 7, label: 'Possíveis lesões', expanded: false, component: <Causa /> },
+        { id: 8, label: 'Medidas de controle ', expanded: false, component: <Medida /> },
+        { id: 9, label: 'Probabilidades', expanded: false, component: <Probabilidade /> },
+        { id: 10, label: 'Severidades', expanded: false, component: <Severidade /> },
+        { id: 11, label: 'Niveis Risco', expanded: false, component: <NivelRisco /> },
+        { id: 12, label: 'Planos de ação', expanded: false, component: <PlanoAcao /> },
+        { id: 13, label: 'Formas de monitoramento', expanded: false, component: <Monitoramento /> },
       ],
     },
 
-    { id: 103, label: 'D.I.S', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
-    { id: 104, label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
+    { id: 104, label: 'D.I.S', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
+    { id: 105, label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
     {
-      id: 105, label: 'Segurança', expanded: false,
+      id: 106, label: 'Segurança', expanded: false,
       sections: [
-        { id: 14, label: 'Usuários', expanded: false, component: <Area /> },
+        { id: 14, label: 'Usuários', expanded: false, component: <Usuario /> },
       ],
       icon: <MdLock />
     },

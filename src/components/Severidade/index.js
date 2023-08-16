@@ -14,7 +14,12 @@ const Severidades = ({ loading, severidades, error, page, listarSeveridades, cri
   const formEmpty = {
     _id: '',
     nome: '',
+    valor: 0,
     ativo: true,
+  }
+
+  const listFields = {
+    nome: 'texto'
   }
 
   const [severidadesState, setSeveridadesState] = useState([]);
@@ -23,7 +28,8 @@ const Severidades = ({ loading, severidades, error, page, listarSeveridades, cri
     defaultValues: severidadeSelected
       ? {
         _id: severidadeSelected._id,
-        nome: severidadeSelected.nome
+        nome: severidadeSelected.nome,
+        valor: severidadeSelected.valor,
       } :
       {}
   });
@@ -81,11 +87,16 @@ const Severidades = ({ loading, severidades, error, page, listarSeveridades, cri
             hidden
             {...register('id')}
           />
-          <Styled.Label>Nome</Styled.Label>
+          <Styled.Label>Nome: </Styled.Label>
           <Styled.Input
             {...register('nome', { required: true })}
           />
           {errors.nome && <span>Campo obrigatório</span>}
+          <Styled.Label>Valor: </Styled.Label>
+          <Styled.Input type='number'
+            {...register('valor', { required: true })}
+          />
+          {errors.valor && <span>Campo obrigatório</span>}
           <Styled.Label>Ativo</Styled.Label>
           <Styled.Input
             type='checkbox'
@@ -102,9 +113,8 @@ const Severidades = ({ loading, severidades, error, page, listarSeveridades, cri
 
         <Styled.ListHeader>
           {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
+            Object.keys(listFields).map((key, index) => {
+              return <Styled.Coluna label={key} key={index} />
             })
           }
           <Styled.Coluna label='' />
@@ -114,20 +124,14 @@ const Severidades = ({ loading, severidades, error, page, listarSeveridades, cri
           {severidadesState?.length > 0 && severidadesState?.map((severidade, index) => (
             <>
               <Styled.ListItem key={severidade._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(severidade).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (severidade[field]) === 'boolean') {
-                      return (<>
-                        {severidade[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
-                      return (<Styled.CampoValor>{severidade[field]}</Styled.CampoValor>)
+                {
+                  Object.keys(severidade).map((field, index) => {
+                    if (field !== '_id' && listFields.hasOwnProperty(field)) {
+                      return (<Styled.CampoValor>{`(${severidade.valor}) ${severidade[field]}`}</Styled.CampoValor>)
                     }
-                  }
-
-
-                })
+                  })
                 }
+                
 
                 <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, severidade._id)} style={{ height: '1em', width: '1em' }} />

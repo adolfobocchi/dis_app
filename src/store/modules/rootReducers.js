@@ -4,17 +4,18 @@ import confirmation from './Confirmation/reducers';
 import area from './Area/reducers';
 import setor from './Setor/reducers';
 import funcao from './Funcao/reducers';
-import processo from './Processo/reducers';
-import recurso from './Recurso/reducers';
+import perigo from './Perigo/reducers';
+import monitoramento from './Monitoramento/reducers';
 import risco from './Risco/reducers';
 import causa from './Causa/reducers';
 import medida from './Medida/reducers';
 import probabilidade from './Probabilidade/reducers';
 import severidade from './Severidade/reducers';
 import nivelrisco from './NivelRisco/reducers';
-import proposta from './Proposta/reducers';
+import planoAcao from './PlanoAcao/reducers';
 import dis from './Dis/reducers';
 import atividade from './Atividade/reducers'
+import empresa from './Empresa/reducers'
 
 const rootReducer = combineReducers({
     usuario,
@@ -22,17 +23,18 @@ const rootReducer = combineReducers({
     area,
     setor,
     funcao,
-    processo,
-    recurso,
+    perigo,
+    monitoramento,
     risco,
     causa,
     medida,
     probabilidade,
     severidade,
     nivelrisco,
-    proposta,
+    planoAcao,
     dis,
     atividade,
+    empresa,
 })
 
 export default rootReducer;

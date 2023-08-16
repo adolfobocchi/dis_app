@@ -52,7 +52,7 @@ const Area = ({ loading, areas, error, page, listarAreas, criarAreas, updateArea
   const handleDelete = (event, index) => {
     event.preventDefault();
     event.stopPropagation();
-    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR A AREA?', () => { deleteAreas(index) });
+    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR O RAMO DE ATIVIDADE?', () => { deleteAreas(index) });
   }
 
   const handleClear = () => {
@@ -83,7 +83,7 @@ const Area = ({ loading, areas, error, page, listarAreas, criarAreas, updateArea
           />
           <Styled.Label>Nome</Styled.Label>
           <Styled.Input 
-            placeholder='Nome da area'
+            placeholder='Nome: '
             {...register('nome', { required: true })}
           />
           {errors.nome && <span>Campo obrigatório</span>}

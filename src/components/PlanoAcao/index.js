@@ -3,69 +3,69 @@ import { connect } from 'react-redux';
 import ModalLoading from '../ModalLoading';
 
 import { useForm } from 'react-hook-form';
-import { criarPropostasRequest, deletePropostasRequest, listarPropostasRequest, updatePropostasRequest } from '../../store/modules/Proposta/actions';
+import { criarPlanosAcaoRequest, deletePlanosAcaoRequest, listarPlanosAcaoRequest, updatePlanosAcaoRequest } from '../../store/modules/PlanoAcao/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { MdHighlightOff } from 'react-icons/md';
 
 import * as Styled from '../styleds';
 import Paginacao from '../Paginacao';
 
-const Proposta = ({ loading, propostas, error, page, listarPropostas, criarPropostas, updatePropostas, deletePropostas, confirmacao }) => {
+const PlanoAcao = ({ loading, planosAcao, error, page, listarPlanosAcao, criarPlanosAcao, updatePlanosAcao, deletePlanosAcao, confirmacao }) => {
   const formEmpty = {
     _id: '',
     nome: '',
     ativo: true,
   }
 
-  const [propostasState, setPropostasState] = useState([]);
-  const [propostaSelected, setPropostaSelected] = useState(formEmpty);
+  const [planosAcaoState, setPlanosAcaoState] = useState([]);
+  const [planoAcaoSelected, setPlanoAcaoSelected] = useState(formEmpty);
   const { register, formState: { errors }, handleSubmit, reset } = useForm({
-    defaultValues: propostaSelected
+    defaultValues: planoAcaoSelected
       ? {
-        _id: propostaSelected._id,
-        nome: propostaSelected.nome
+        _id: planoAcaoSelected._id,
+        nome: planoAcaoSelected.nome
       } :
       {}
   });
 
   useEffect(() => {
-    listarPropostas(page, 0);
+    listarPlanosAcao(page, 0);
   }, []);
 
   useEffect(() => {
-    setPropostasState(propostas);
-  }, [propostas]);
+    setPlanosAcaoState(planosAcao);
+  }, [planosAcao]);
 
 
   useEffect(() => {
-    reset({ ...propostaSelected });
-  }, [reset, propostaSelected])
+    reset({ ...planoAcaoSelected });
+  }, [reset, planoAcaoSelected])
 
 
   const handleSelect = (event, index) => {
     event.preventDefault();
     event.stopPropagation();
-    setPropostaSelected(propostas[index]);
+    setPlanoAcaoSelected(planosAcao[index]);
 
   }
 
   const handleDelete = (event, index) => {
     event.preventDefault();
     event.stopPropagation();
-    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR A PROCESSO?', () => { deletePropostas(index) });
+    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR A PROCESSO?', () => { deletePlanosAcao(index) });
   }
 
   const handleClear = () => {
-    setPropostaSelected({ ...formEmpty })
+    setPlanoAcaoSelected({ ...formEmpty })
   }
 
 
   const onSubmit = (data) => {
     if (data._id) {
-      updatePropostas(data._id, data);
+      updatePlanosAcao(data._id, data);
 
     } else {
-      criarPropostas(data);
+      criarPlanosAcao(data);
     }
     handleClear();
   };
@@ -97,7 +97,7 @@ const Proposta = ({ loading, propostas, error, page, listarPropostas, criarPropo
         </Styled.Form>
 
       </Styled.FormArea>
-      <Paginacao page={page} ativo={0} listagem={listarPropostas} />
+      <Paginacao page={page} ativo={0} listagem={listarPlanosAcao} />
       <Styled.ListArea>
 
         <Styled.ListHeader>
@@ -111,17 +111,17 @@ const Proposta = ({ loading, propostas, error, page, listarPropostas, criarPropo
         </Styled.ListHeader>
         <Styled.List>
 
-          {propostasState?.length > 0 && propostasState?.map((proposta, index) => (
+          {planosAcaoState?.length > 0 && planosAcaoState?.map((planoAcao, index) => (
             <>
-              <Styled.ListItem key={proposta._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(proposta).map((field, index) => {
+              <Styled.ListItem key={planoAcao._id} onClick={(event) => handleSelect(event, index)}>
+                {Object.keys(planoAcao).map((field, index) => {
                   if (field !== '_id' && field !== '__v') {
-                    if (typeof (proposta[field]) === 'boolean') {
+                    if (typeof (planoAcao[field]) === 'boolean') {
                       return (<>
-                        {proposta[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                        {planoAcao[field] ? <Styled.Ativo /> : <Styled.Inativo />}
                       </>)
                     } else {
-                      return (<Styled.CampoValor>{proposta[field]}</Styled.CampoValor>)
+                      return (<Styled.CampoValor>{planoAcao[field]}</Styled.CampoValor>)
                     }
                   }
 
@@ -130,7 +130,7 @@ const Proposta = ({ loading, propostas, error, page, listarPropostas, criarPropo
                 }
 
                 <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
-                  <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, proposta._id)} style={{ height: '1em', width: '1em' }} />
+                  <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, planoAcao._id)} style={{ height: '1em', width: '1em' }} />
                 </div>
 
               </Styled.ListItem>
@@ -144,21 +144,21 @@ const Proposta = ({ loading, propostas, error, page, listarPropostas, criarPropo
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.proposta.loading,
-    propostas: state.proposta.propostas,
-    error: state.proposta.error,
-    page: state.proposta.page,
+    loading: state.planoAcao.loading,
+    planosAcao: state.planoAcao.planosAcao,
+    error: state.planoAcao.error,
+    page: state.planoAcao.page,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    listarPropostas: (page, ativo) => dispatch(listarPropostasRequest(page, ativo)),
-    criarPropostas: (proposta) => dispatch(criarPropostasRequest(proposta)),
-    updatePropostas: (id, proposta) => dispatch(updatePropostasRequest(id, proposta)),
-    deletePropostas: (id) => dispatch(deletePropostasRequest(id)),
+    listarPlanosAcao: (page, ativo) => dispatch(listarPlanosAcaoRequest(page, ativo)),
+    criarPlanosAcao: (planoAcao) => dispatch(criarPlanosAcaoRequest(planoAcao)),
+    updatePlanosAcao: (id, planoAcao) => dispatch(updatePlanosAcaoRequest(id, planoAcao)),
+    deletePlanosAcao: (id) => dispatch(deletePlanosAcaoRequest(id)),
     confirmacao: (title, text, onConfirm) => dispatch(showConfirmation(title, text, onConfirm))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Proposta);
+export default connect(mapStateToProps, mapDispatchToProps)(PlanoAcao);

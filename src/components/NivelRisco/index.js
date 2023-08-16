@@ -14,7 +14,13 @@ const Nivelriscos = ({ loading, nivelriscos, error, page, listarNivelriscos, cri
   const formEmpty = {
     _id: '',
     nome: '',
+    probabilidadeValor: 0,
+    severidadeValor: 0,
     ativo: true,
+  }
+
+  const listFields = {
+    nome: 'texto'
   }
 
   const [nivelriscosState, setNivelriscosState] = useState([]);
@@ -23,7 +29,9 @@ const Nivelriscos = ({ loading, nivelriscos, error, page, listarNivelriscos, cri
     defaultValues: nivelriscoSelected
       ? {
         _id: nivelriscoSelected._id,
-        nome: nivelriscoSelected.nome
+        nome: nivelriscoSelected.nome,
+        severidadeValor: nivelriscoSelected.severidadeValor,
+        probabilidadeValor: nivelriscoSelected.probabilidadeValor,
       } :
       {}
   });
@@ -86,6 +94,14 @@ const Nivelriscos = ({ loading, nivelriscos, error, page, listarNivelriscos, cri
             {...register('nome', { required: true })}
           />
           {errors.nome && <span>Campo obrigatório</span>}
+          <Styled.Label>{`Probabilidade (Valor):`} </Styled.Label>
+          <Styled.Input type='number'
+            {...register('probabilidadeValor', { required: true })}
+          />
+          <Styled.Label>{`Severidade (Valor):`}</Styled.Label>
+          <Styled.Input type='number'
+            {...register('severidadeValor', { required: true })}
+          />
           <Styled.Label>Ativo</Styled.Label>
           <Styled.Input
             type='checkbox'
@@ -102,9 +118,8 @@ const Nivelriscos = ({ loading, nivelriscos, error, page, listarNivelriscos, cri
 
         <Styled.ListHeader>
           {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
+            Object.keys(listFields).map((key, index) => {
+              return <Styled.Coluna label={key} key={index} />
             })
           }
           <Styled.Coluna label='' />
@@ -114,19 +129,12 @@ const Nivelriscos = ({ loading, nivelriscos, error, page, listarNivelriscos, cri
           {nivelriscosState?.length > 0 && nivelriscosState?.map((nivelrisco, index) => (
             <>
               <Styled.ListItem key={nivelrisco._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(nivelrisco).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (nivelrisco[field]) === 'boolean') {
-                      return (<>
-                        {nivelrisco[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
-                      return (<Styled.CampoValor>{nivelrisco[field]}</Styled.CampoValor>)
+                {
+                  Object.keys(nivelrisco).map((field, index) => {
+                    if (field !== '_id' && listFields.hasOwnProperty(field)) {
+                      return (<Styled.CampoValor>{`(${nivelrisco.probabilidadeValor} X ${nivelrisco.severidadeValor}) ${nivelrisco[field]}`}</Styled.CampoValor>)
                     }
-                  }
-
-
-                })
+                  })
                 }
 
                 <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >

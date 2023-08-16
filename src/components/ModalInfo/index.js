@@ -79,7 +79,7 @@ const ModalInfo = ({ dados, close }) => {
   useEffect(() => {
     setDadosState(dados);
   }, [dados])
-
+  console.log(dadosState);
   if(!dadosState) {
     return <ModalLoading />
   }
@@ -99,12 +99,12 @@ const ModalInfo = ({ dados, close }) => {
           </Styled.ImagemArea>
           </div>
           <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
-          <h2 style={{textTransform: 'uppercase'}}>{dadosState.empresa}</h2>
+          <h2 style={{textTransform: 'uppercase'}}>{dadosState.empresa.razaoSocial}</h2>
         <ContentInfoText>{`Data: ${dadosState.data}`}</ContentInfoText>
         <ContentInfoText>{`Responsavel: ${dadosState.responsavel}`}</ContentInfoText>
         <ContentInfoText>{`E-mail: ${dadosState.email}`}</ContentInfoText>
-        <ContentInfoText>{`Local: ${dadosState.localizacao}`}</ContentInfoText>
-        <ContentInfoText>{`Ramo de atividade: ${dadosState?.area?.nome}`}</ContentInfoText>
+        <ContentInfoText>{`Local: ${dadosState.empresa?.endereco}, ${dadosState.empresa?.numero} - ${dadosState.empresa?.cidade}`}</ContentInfoText>
+        <ContentInfoText>{`Ramo de atividade: ${dadosState?.empresa.area.nome}`}</ContentInfoText>
         
           </div>
           
@@ -114,7 +114,7 @@ const ModalInfo = ({ dados, close }) => {
           <ContentInfoText>{` ${dadosState?.ambiente}`}</ContentInfoText>
           <h3>Observações</h3>
           <ContentInfoSeparador />
-        <ContentInfoText>{`${dadosState?.observacao}`}</ContentInfoText>
+        <ContentInfoText>{`${dadosState?.observacaoAmbiente}`}</ContentInfoText>
         <h3>Diagnostico</h3>
         <ContentInfoSeparador />  
         <ContentInfoSetorizacao>
@@ -126,46 +126,66 @@ const ModalInfo = ({ dados, close }) => {
           {setor?.funcoes.map((funcao, index) => (
             <ContentInfoArea key={index}>
               <ContentInfoText>{funcao.funcao.nome}</ContentInfoText>
-              {funcao?.processos.map((processo, index) => (
+              {funcao?.atividades.map((atividade, index) => (
                 <ContentInfoArea key={index}>
-                  <ContentInfoText>{processo.processo.nome}</ContentInfoText>
-                  {processo?.atividades.map((atividade, index) => (
+                  <ContentInfoText>{atividade.atividade.nome}</ContentInfoText>
+                  {atividade?.perigos.map((perigo, index) => (
                     <ContentInfoArea key={index}>
-                      <ContentInfoText>{atividade.atividade.nome}</ContentInfoText>
-                      {atividade?.recursos.map((recurso, index) => (
+                      <ContentInfoText>{perigo.perigo.nome}</ContentInfoText>
+                      {perigo?.agentesRisco.map((agenteRisco, index) => (
                         <ContentInfoArea key={index}>
-                          <ContentInfoText>{recurso.recurso.nome}</ContentInfoText>
-                          {recurso?.riscos.map((risco, index) => (
+                          <ContentInfoText>{agenteRisco.agenteRisco.nome}</ContentInfoText>
+                          {agenteRisco?.riscos.map((risco, index) => (
                             <ContentInfoArea key={index}>
                               <ContentInfoText>{risco.risco.nome}</ContentInfoText>
-                              {risco?.causas.map((causa, index) => (
+                              {risco?.viaAbsorcao.map((viaAbsorcao, index) => (
+                                <ContentInfoText>{viaAbsorcao.nome}</ContentInfoText>
+                              ))}
+                               {risco?.frequenciaExposicao.map((frequenciaExposicao, index) => (
+                                <ContentInfoText>{frequenciaExposicao.nome}</ContentInfoText>
+                              ))}
+                              {risco?.duracaoExposicao.map((duracaoExposicao, index) => (
+                                <ContentInfoText>{duracaoExposicao.nome}</ContentInfoText>
+                              ))}
+                              {risco?.causa.map((causa, index) => (
+                                  <ContentInfoText>{causa.causa.nome}</ContentInfoText>
+                                
+                              ))}
+                              {risco?.medida.map((medida, index) => (
+                                <ContentInfoText>{medida.medida.nome}</ContentInfoText>
+                              ))}
+                              {risco?.avaliacao.map((avaliacao, index) => (
+                                <ContentInfoText>{avaliacao.nome}</ContentInfoText>
+                              ))}
+                              {risco?.probabilidade.map((probabilidade, index) => (
+                                <ContentInfoText>{probabilidade.probabilidade.nome}</ContentInfoText>
+                              ))}
+                              {risco?.severidade.map((severidade, index) => (
+                                <ContentInfoText>{severidade.severidade.nome}</ContentInfoText>
+                              ))}
+                              {risco?.nivelRisco.map((nivelRisco, index) => (
+                                <ContentInfoText>{nivelRisco.nivelRisco.nome}</ContentInfoText>
+                              ))}
+                              {risco?.planosAcao.map((planoAcao, index) => (
                                 <ContentInfoArea key={index}>
-                                  <ContentInfoText>{causa?.causa.nome}</ContentInfoText>
-                                  {causa?.medidas.map((medida, index) => (
-                                    <ContentInfoArea key={index}>
-                                      <ContentInfoText>{medida.medida.nome}</ContentInfoText>
-                                      {medida?.probabilidades.map((probabilidade, index) => (
-                                        <ContentInfoArea key={index}>
-                                          <ContentInfoText>{probabilidade.probabilidade.nome}</ContentInfoText>
-                                          {probabilidade?.severidades.map((severidade, index) => (
-                                            <ContentInfoArea key={index}>
-                                              <ContentInfoText>{severidade.severidade.nome}</ContentInfoText>
-                                              {severidade?.niveisRisco.map((nivelRisco, index) => (
-                                                <ContentInfoArea key={index}>
-                                                  <ContentInfoText>{nivelRisco.nivelRisco.nome}</ContentInfoText>
-                                                  {nivelRisco?.propostas.map((proposta, index) => (
-                                                    <ContentInfoArea key={index}>
-                                                      <ContentInfoText>{proposta.proposta.nome}</ContentInfoText>
-                                                    </ContentInfoArea>
-                                                  ))}
-                                                </ContentInfoArea>
-                                              ))}
-                                            </ContentInfoArea>
-                                          ))}
-                                        </ContentInfoArea>
-                                      ))}
-                                    </ContentInfoArea>
-                                  ))}
+                                <ContentInfoText>{planoAcao.planoAcao.nome}</ContentInfoText>
+                                
+                                {planoAcao?.intencao.map((intencao, index) => (
+                                  <ContentInfoText>{intencao.nome}</ContentInfoText>
+                                ))}
+                                {planoAcao?.prioridade.map((prioridade, index) => (
+                                  <ContentInfoText>{prioridade.nome}</ContentInfoText>
+                                ))}
+                                {planoAcao?.prazo.map((prazo, index) => (
+                                  <ContentInfoText>{prazo.nome}</ContentInfoText>
+                                ))}
+                                
+                                {planoAcao?.monitoramento.map((monitoramento, index) => (
+                                  <ContentInfoText>{monitoramento.monitoramento.nome}</ContentInfoText>
+                                ))}
+                                {planoAcao?.status.map((status, index) => (
+                                  <ContentInfoText>{status.nome}</ContentInfoText>
+                                ))}
                                 </ContentInfoArea>
                               ))}
                             </ContentInfoArea>
