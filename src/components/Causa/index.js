@@ -16,16 +16,13 @@ const Causas = ({ loading, causas, listarRiscos, riscos, error, page, listarCaus
   
   const listFields = {
     nome: 'texto',
-    risco: 'json',
     ativo: 'boolean',
   }
   const formEmpty = {
     _id: '',
     nome: '',
-    risco: '',
     ativo: true,
   }
-  const [riscosState, setRiscosState] = useState([]);
   const [riscoSelected, setRiscoSelected] = useState({});
 
   const [causasState, setCausasState] = useState([]);
@@ -43,10 +40,6 @@ const Causas = ({ loading, causas, listarRiscos, riscos, error, page, listarCaus
     listarCausas(page, 0);
     listarRiscos(0, 1);
   }, []);
-
-  useEffect(() => {
-    setRiscosState(riscos);
-  }, [riscos]);
 
   useEffect(() => {
     setCausasState(causas);
@@ -94,9 +87,6 @@ const Causas = ({ loading, causas, listarRiscos, riscos, error, page, listarCaus
     <Styled.Container>
       <Styled.FormArea>
         <Styled.Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
-          <Styled.Label>Risco: </Styled.Label>
-          <InputSearch items={riscosState} onSelect={(item) => setRiscoSelected(item)} valueSelected={riscoSelected?.nome} field={'nome'} />
-
           <Styled.Input
             hidden
             {...register('id')}
@@ -163,7 +153,6 @@ const mapStateToProps = (state) => {
     causas: state.causa.causas,
     error: state.causa.error,
     page: state.causa.page,
-    riscos: state.risco.riscos,
   };
 };
 
@@ -174,7 +163,6 @@ const mapDispatchToProps = dispatch => {
     updateCausas: (id, causa) => dispatch(updateCausasRequest(id, causa)),
     deleteCausas: (id) => dispatch(deleteCausasRequest(id)),
     confirmacao: (title, text, onConfirm) => dispatch(showConfirmation(title, text, onConfirm)),
-    listarRiscos: (page, ativo) => dispatch(listarRiscosRequest(page, ativo)),
   };
 };
 

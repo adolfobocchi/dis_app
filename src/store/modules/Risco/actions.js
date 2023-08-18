@@ -93,5 +93,3 @@ export const showRiscosRequest = (riscoId) => ({
     type: DELETE_RISCOS_FAILURE,
     payload: { error },
   });
-  
-  

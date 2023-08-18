@@ -14,7 +14,6 @@ import {
   DELETE_RISCOS_REQUEST,
   DELETE_RISCOS_SUCCESS,
   DELETE_RISCOS_FAILURE,
-  
 } from './actions'
 
 const initialState = {
