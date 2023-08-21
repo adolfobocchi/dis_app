@@ -76,7 +76,7 @@ const ModalInput = ({dados, close, setItensSelected }) => {
   }
 
   return (
-    <ModalWrapper>
+    <ModalWrapper className="element-to-keep-selected">
       <ModalHeader>
 
         <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}><h2>SELECIONAR ITENS DA LISTA</h2></div>

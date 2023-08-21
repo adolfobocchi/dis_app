@@ -29,6 +29,8 @@ const ModalContent = styled.div`
   flex: 1;
   flex-wrap: wrap;
   justify-content: center;
+  
+  overflow-y: auto;
 `;
 
 const ModalHeader = styled.div`
@@ -76,14 +78,14 @@ const ModalListSelect = ({ dados, close, setItensSelected }) => {
     return <ModalLoading />
   }
   return (
-    <ModalWrapper>
+    <ModalWrapper className="element-to-keep-selected">
       <ModalHeader>
 
         <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}><h2>SELECIONAR ITENS DA LISTA</h2></div>
         
         <MdClose onClick={() => {setItensSelected(selectedItems); close(false)}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em' }} />
       </ModalHeader>
-      <ModalContent>
+      <ModalContent >
       {dadosState && dadosState.length > 0 && dadosState.map((item, index) => {
         
         return (
