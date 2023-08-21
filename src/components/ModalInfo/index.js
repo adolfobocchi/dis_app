@@ -45,6 +45,7 @@ const ContentInfoBasic = styled.div`
 const ContentInfoSetorizacao = styled.div`
   width: 100vw;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
 `;
@@ -80,126 +81,168 @@ const ModalInfo = ({ dados, close }) => {
     setDadosState(dados);
   }, [dados])
   console.log(dadosState);
-  if(!dadosState) {
+  if (!dadosState) {
     return <ModalLoading />
   }
   return (
     <ModalWrapper>
       <ModalHeader>
 
-        <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}><h2>DETALHES</h2></div>
-        
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><h2>DETALHES</h2></div>
+
         <MdClose onClick={() => close(false)} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em' }} />
       </ModalHeader>
       <ModalContent>
         <ContentInfoBasic>
-          <div style={{width: 120, display: 'flex', justifyContent: 'center'}}>
-          <Styled.ImagemArea style={{width: 80, height: 80}}>
-            <Styled.Imagem src={`${API_URL}/images/${dadosState?.fachada}`}/>
-          </Styled.ImagemArea>
+          <div style={{ width: 120, display: 'flex', justifyContent: 'center' }}>
+            <Styled.ImagemArea style={{ width: 80, height: 80 }}>
+              <Styled.Imagem src={`${API_URL}/images/${dadosState?.fachada}`} />
+            </Styled.ImagemArea>
           </div>
-          <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
-          <h2 style={{textTransform: 'uppercase'}}>{dadosState.empresa.razaoSocial}</h2>
-        <ContentInfoText>{`Data: ${dadosState.data}`}</ContentInfoText>
-        <ContentInfoText>{`Responsavel: ${dadosState.responsavel}`}</ContentInfoText>
-        <ContentInfoText>{`E-mail: ${dadosState.email}`}</ContentInfoText>
-        <ContentInfoText>{`Local: ${dadosState.empresa?.endereco}, ${dadosState.empresa?.numero} - ${dadosState.empresa?.cidade}`}</ContentInfoText>
-        <ContentInfoText>{`Ramo de atividade: ${dadosState?.empresa.area.nome}`}</ContentInfoText>
-        
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <h2 style={{ textTransform: 'uppercase' }}>{dadosState.empresa.razaoSocial}</h2>
+            <ContentInfoText>{`Data: ${dadosState.data}`}</ContentInfoText>
+            <ContentInfoText>{`Responsavel: ${dadosState.responsavel}`}</ContentInfoText>
+            <ContentInfoText>{`E-mail: ${dadosState.email}`}</ContentInfoText>
+            <ContentInfoText>{`Local: ${dadosState.empresa?.endereco}, ${dadosState.empresa?.numero} - ${dadosState.empresa?.cidade}`}</ContentInfoText>
+            <ContentInfoText>{`Ramo de atividade: ${dadosState?.empresa.area.nome}`}</ContentInfoText>
+
           </div>
-          
+
         </ContentInfoBasic>
         <h3>Descrição do ambiente</h3>
         <ContentInfoSeparador />
-          <ContentInfoText>{` ${dadosState?.ambiente}`}</ContentInfoText>
-          <h3>Observações</h3>
-          <ContentInfoSeparador />
+        <ContentInfoText>{` ${dadosState?.ambiente}`}</ContentInfoText>
+        <h3>Observações</h3>
+        <ContentInfoSeparador />
         <ContentInfoText>{`${dadosState?.observacaoAmbiente}`}</ContentInfoText>
         <h3>Diagnostico</h3>
-        <ContentInfoSeparador />  
+        <ContentInfoSeparador />
         <ContentInfoSetorizacao>
 
-        
-        {dadosState?.setores.map((setor, index) => (
-        <ContentInfoSetor key={index}>
-          <ContentInfoText style={{fontSize: 20, fontWeight: 700}}>{setor.setor.nome}</ContentInfoText>
-          {setor?.funcoes.map((funcao, index) => (
-            <ContentInfoArea key={index}>
-              <ContentInfoText>{funcao.funcao.nome}</ContentInfoText>
-              {funcao?.atividades.map((atividade, index) => (
-                <ContentInfoArea key={index}>
-                  <ContentInfoText>{atividade.atividade.nome}</ContentInfoText>
-                  {atividade?.perigos.map((perigo, index) => (
-                    <ContentInfoArea key={index}>
-                      <ContentInfoText>{perigo.perigo.nome}</ContentInfoText>
-                      {perigo?.agentesRisco.map((agenteRisco, index) => (
+
+          {dadosState?.setores.map((setor, index) => (
+            <ContentInfoSetor key={index}>
+              <ContentInfoText style={{ fontSize: 20, fontWeight: 700 }}>{setor.nome}</ContentInfoText>
+              {dadosState?.funcoes.filter(el => el.setor === setor?._id).map(el =>               
+                (
+                  <ContentInfoArea key={index}>
+                    Funções:
+                    <ContentInfoText>{el.funcao.nome}</ContentInfoText>
+                    {dadosState?.atividades.filter(el => el.setor === setor?._id).map(el =>               
+                      (
                         <ContentInfoArea key={index}>
-                          <ContentInfoText>{agenteRisco.agenteRisco.nome}</ContentInfoText>
-                          {agenteRisco?.riscos.map((risco, index) => (
-                            <ContentInfoArea key={index}>
-                              <ContentInfoText>{risco.risco.nome}</ContentInfoText>
-                              {risco?.viaAbsorcao.map((viaAbsorcao, index) => (
-                                <ContentInfoText>{viaAbsorcao.nome}</ContentInfoText>
-                              ))}
-                               {risco?.frequenciaExposicao.map((frequenciaExposicao, index) => (
-                                <ContentInfoText>{frequenciaExposicao.nome}</ContentInfoText>
-                              ))}
-                              {risco?.duracaoExposicao.map((duracaoExposicao, index) => (
-                                <ContentInfoText>{duracaoExposicao.nome}</ContentInfoText>
-                              ))}
-                              {risco?.causa.map((causa, index) => (
-                                  <ContentInfoText>{causa.causa.nome}</ContentInfoText>
-                                
-                              ))}
-                              {risco?.medida.map((medida, index) => (
-                                <ContentInfoText>{medida.medida.nome}</ContentInfoText>
-                              ))}
-                              {risco?.avaliacao.map((avaliacao, index) => (
-                                <ContentInfoText>{avaliacao.nome}</ContentInfoText>
-                              ))}
-                              {risco?.probabilidade.map((probabilidade, index) => (
-                                <ContentInfoText>{probabilidade.probabilidade.nome}</ContentInfoText>
-                              ))}
-                              {risco?.severidade.map((severidade, index) => (
-                                <ContentInfoText>{severidade.severidade.nome}</ContentInfoText>
-                              ))}
-                              {risco?.nivelRisco.map((nivelRisco, index) => (
-                                <ContentInfoText>{nivelRisco.nivelRisco.nome}</ContentInfoText>
-                              ))}
-                              {risco?.planosAcao.map((planoAcao, index) => (
-                                <ContentInfoArea key={index}>
-                                <ContentInfoText>{planoAcao.planoAcao.nome}</ContentInfoText>
-                                
-                                {planoAcao?.intencao.map((intencao, index) => (
-                                  <ContentInfoText>{intencao.nome}</ContentInfoText>
-                                ))}
-                                {planoAcao?.prioridade.map((prioridade, index) => (
-                                  <ContentInfoText>{prioridade.nome}</ContentInfoText>
-                                ))}
-                                {planoAcao?.prazo.map((prazo, index) => (
-                                  <ContentInfoText>{prazo.nome}</ContentInfoText>
-                                ))}
-                                
-                                {planoAcao?.monitoramento.map((monitoramento, index) => (
-                                  <ContentInfoText>{monitoramento.monitoramento.nome}</ContentInfoText>
-                                ))}
-                                {planoAcao?.status.map((status, index) => (
-                                  <ContentInfoText>{status.nome}</ContentInfoText>
-                                ))}
-                                </ContentInfoArea>
-                              ))}
-                            </ContentInfoArea>
-                          ))}
+                          Atividades:
+                          <ContentInfoText>{el.atividade.nome}</ContentInfoText>
+                          {dadosState?.perigos.filter(el => el.setor === setor?._id).map(el =>               
+                            (
+                              <ContentInfoArea key={index}>
+                                Perigos:
+                                <ContentInfoText>{el.perigo.nome}</ContentInfoText>
+                                {dadosState?.riscos.filter(el => el.setor === setor?._id).map(el =>               
+                                  (
+                                    <ContentInfoArea key={index}>
+                                      Riscos:
+                                      <ContentInfoText>{el.risco.nome}</ContentInfoText>
+                                      {dadosState?.riscos.filter(el => el.setor === setor?._id).map(el =>               
+                                        (
+                                            <ContentInfoText>{el.risco.nome}</ContentInfoText>
+                                          
+                                        )
+                                      )}
+                                    </ContentInfoArea>
+                                  )
+                                )}
+                              </ContentInfoArea>
+                            )
+                          )}
                         </ContentInfoArea>
-                      ))}
-                    </ContentInfoArea>
-                  ))}
-                </ContentInfoArea>
-              ))}
-            </ContentInfoArea>
+                      )
+                    )}
+                  </ContentInfoArea>
+                )
+              )}
+
+            </ContentInfoSetor>
+            // <ContentInfoSetor key={index}>
+            //   <ContentInfoText style={{fontSize: 20, fontWeight: 700}}>{setor.nome}</ContentInfoText>
+            //   {dadosState?.funcoes.map((funcao, index) => (
+            //     <ContentInfoArea key={index}>
+            //       <ContentInfoText>{funcao.funcao.nome}</ContentInfoText>
+            //       {dadosState?.atividades.map((atividade, index) => (
+            //         <ContentInfoArea key={index}>
+            //           <ContentInfoText>{atividade.atividade.nome}</ContentInfoText>
+            //           {atividade?.perigos.map((perigo, index) => (
+            //             <ContentInfoArea key={index}>
+            //               <ContentInfoText>{perigo.perigo.nome}</ContentInfoText>
+            //               {perigo?.agentesRisco.map((agenteRisco, index) => (
+            //                 <ContentInfoArea key={index}>
+            //                   <ContentInfoText>{agenteRisco.agenteRisco.nome}</ContentInfoText>
+            //                   {agenteRisco?.riscos.map((risco, index) => (
+            //                     <ContentInfoArea key={index}>
+            //                       <ContentInfoText>{risco.risco.nome}</ContentInfoText>
+            //                       {risco?.viasAbsorcao.map((viaAbsorcao, index) => (
+            //                         <ContentInfoText>{viaAbsorcao.nome}</ContentInfoText>
+            //                       ))}
+            //                        {risco?.frequenciaExposicao.map((frequenciaExposicao, index) => (
+            //                         <ContentInfoText>{frequenciaExposicao.nome}</ContentInfoText>
+            //                       ))}
+            //                       {risco?.duracaoExposicao.map((duracaoExposicao, index) => (
+            //                         <ContentInfoText>{duracaoExposicao.nome}</ContentInfoText>
+            //                       ))}
+            //                       {risco?.causas.map((causa, index) => (
+            //                           <ContentInfoText>{causa.causa.nome}</ContentInfoText>
+
+            //                       ))}
+            //                       {risco?.medidas.map((medida, index) => (
+            //                         <ContentInfoText>{medida.medida.nome}</ContentInfoText>
+            //                       ))}
+            //                       {risco?.avaliacao.map((avaliacao, index) => (
+            //                         <ContentInfoText>{avaliacao.nome}</ContentInfoText>
+            //                       ))}
+            //                       {risco?.probabilidades.map((probabilidade, index) => (
+            //                         <ContentInfoText>{probabilidade.probabilidade.nome}</ContentInfoText>
+            //                       ))}
+            //                       {risco?.severidades.map((severidade, index) => (
+            //                         <ContentInfoText>{severidade.severidade.nome}</ContentInfoText>
+            //                       ))}
+            //                       {risco?.niveisRisco.map((nivelRisco, index) => (
+            //                         <ContentInfoText>{nivelRisco.nivelRisco.nome}</ContentInfoText>
+            //                       ))}
+            //                       {risco?.planosAcao.map((planoAcao, index) => (
+            //                         <ContentInfoArea key={index}>
+            //                         <ContentInfoText>{planoAcao.planoAcao.nome}</ContentInfoText>
+
+            //                         {planoAcao?.intencao.map((intencao, index) => (
+            //                           <ContentInfoText>{intencao.nome}</ContentInfoText>
+            //                         ))}
+            //                         {planoAcao?.prioridade.map((prioridade, index) => (
+            //                           <ContentInfoText>{prioridade.nome}</ContentInfoText>
+            //                         ))}
+            //                         {planoAcao?.prazo.map((prazo, index) => (
+            //                           <ContentInfoText>{prazo.nome}</ContentInfoText>
+            //                         ))}
+
+            //                         {planoAcao?.monitoramentos.map((monitoramento, index) => (
+            //                           <ContentInfoText>{monitoramento.monitoramento.nome}</ContentInfoText>
+            //                         ))}
+            //                         {planoAcao?.status.map((status, index) => (
+            //                           <ContentInfoText>{status.nome}</ContentInfoText>
+            //                         ))}
+            //                         </ContentInfoArea>
+            //                       ))}
+            //                     </ContentInfoArea>
+            //                   ))}
+            //                 </ContentInfoArea>
+            //               ))}
+            //             </ContentInfoArea>
+            //           ))}
+            //         </ContentInfoArea>
+            //       ))}
+            //     </ContentInfoArea>
+            //   ))}
+            // </ContentInfoSetor>
           ))}
-        </ContentInfoSetor>
-      ))}
         </ContentInfoSetorizacao>
       </ModalContent>
     </ModalWrapper>
