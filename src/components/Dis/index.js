@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
@@ -291,6 +291,8 @@ const Dis = ({
 
   ])
 
+  const scrollPositionRef = useRef(null);
+
   useEffect(() => {
     listarDis(page, 1);
     listarEmpresas(0, 1);
@@ -537,7 +539,10 @@ const Dis = ({
           }));
         },
         selectedIndex: riscoSelectedIndex,
-        handleListSelect: () => { perigoSelectedIndex >= 0 && setShowModalRiscosListSelect(true); }
+        handleListSelect: (event) => {event.preventDefault();
+          event.stopPropagation(); perigoSelectedIndex >= 0 && setShowModalRiscosListSelect(true); scrollPositionRef.current = window.scrollY;  if (scrollPositionRef.current !== null) {
+            window.scrollTo(0, scrollPositionRef.current);
+          } }
       },
       {
         id: 6,
@@ -1057,7 +1062,6 @@ const Dis = ({
     // const newItem = items.filter(item => {
     //   return !disSelected?.riscos.some(el => el.risco?._id === item._id)
     // });
-
     const updated = items.map(item =>
     ({
       risco: item,
@@ -1082,7 +1086,7 @@ const Dis = ({
 
   }
 
-  const addAgenteRisco = (items, idRisco = riscoSelected) => {
+  const addAgenteRisco = ( items, idRisco = riscoSelected) => {
     // const newItem = items.filter(item => {
     //   return !disSelected?.agentesRisco.some(el => el.agenteRisco?._id === item._id)
     // });
@@ -1481,6 +1485,7 @@ const Dis = ({
       setItensSelected={(items) => addPerigo(items)} />
   }
   if (showModalRiscosListSelect) {
+    scrollPositionRef.current = window.scrollY;
     return <ModalListSelect dados={riscosState} close={setShowModalRiscosListSelect}
       setItensSelected={(items) => { addRisco(items) }} />
   }
@@ -1661,8 +1666,8 @@ const Dis = ({
                           }
                         </DiagnosticoContent>
                       </ScrollableContainer>
-                      <Styled.Button type="submit">Salvar</Styled.Button>
-                      <Styled.Button type="button" onClick={() => handleClear()}>Limpar</Styled.Button>
+                      <Styled.Button type="submit" style={{marginBottom: 10}}>Salvar</Styled.Button>
+                      <Styled.Button type="button" style={{background: '#FBAF3A'}} onClick={() => handleClear()}>Limpar</Styled.Button>
                     </Styled.Form>
                   </Styled.FormArea>
                 )

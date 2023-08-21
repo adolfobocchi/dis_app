@@ -62,7 +62,9 @@ const ModalListSelect = ({ dados, close, setItensSelected }) => {
   }, [dados]);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const handleItemClick = (item) => {
+  const handleItemClick = (event,item) => {
+    event.preventDefault();
+    event.stopPropagation();
     const itemIndex = selectedItems.findIndex((selectedItem) => selectedItem._id === item._id);
 
     if (itemIndex === -1) {
@@ -83,7 +85,7 @@ const ModalListSelect = ({ dados, close, setItensSelected }) => {
 
         <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}><h2>SELECIONAR ITENS DA LISTA</h2></div>
         
-        <MdClose onClick={() => {setItensSelected(selectedItems); close(false)}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em' }} />
+        <MdClose onClick={(event ) => {event.stopPropagation(); event.preventDefault(); setItensSelected(selectedItems); close(false)}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em' }} />
       </ModalHeader>
       <ModalContent >
       {dadosState && dadosState.length > 0 && dadosState.map((item, index) => {
@@ -92,7 +94,7 @@ const ModalListSelect = ({ dados, close, setItensSelected }) => {
         <ListItem
           key={item._id} 
           selected={selectedItems.some((selectedItem) => selectedItem._id === item._id)} 
-          onClick={() => handleItemClick(item)}
+          onClick={(event) => handleItemClick(event, item)}
           >
           
           {item.nome}

@@ -366,13 +366,15 @@ const Riscos = ({ loading, riscos, error, page, listarRiscos, criarRiscos, updat
     ])
   }, [agenteRiscoSelectedIndex, agentesRiscoState, causaSelectedIndex, causasState, planoAcaoSelectedIndex, planosAcaoState, riscoSelected, viaAbsorcaoSelectedIndex, viasAbsorcaoState]);
 
-  console.log(riscoSelected);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleSelect = (event, index) => {
     event.preventDefault();
     event.stopPropagation();
     setRiscoselected(riscos[index]);
-
+    scrollToTop();
   }
 
   const handleDelete = (event, index) => {
