@@ -412,7 +412,7 @@ const Dis = ({
         items: disSelected.setores.map(setor => setor) || [],
         onSelect: (item) => {
           const exists = disSelected?.setores.find((el) => el._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.setores, item];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -438,7 +438,7 @@ const Dis = ({
         items: setorSelected ? disSelected.funcoes.filter(el => el.setor === setorSelected?._id).map(el => el?.funcao) : disSelected.funcoes.flatMap(el => el.funcao) || [],
         onSelect: (item) => {
           const exists = disSelected?.funcoes.find((el) => el?.funcao._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.funcoes, { funcao: item, setor: setorSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -464,7 +464,7 @@ const Dis = ({
         items: setorSelected ? disSelected.atividades.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).map(el => el?.atividade) : disSelected.atividades.flatMap(el => el?.atividade) || [],
         onSelect: (item) => {
           const exists = disSelected?.atividades.find((el) => el?.atividade._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.atividades, { atividade: item, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -491,7 +491,7 @@ const Dis = ({
           : disSelected.perigos.flatMap(el => el?.perigo) || [],
         onSelect: (item) => {
           const exists = disSelected?.perigos.find((el) => el?.perigo._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.perigos, { perigo: item, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -519,7 +519,7 @@ const Dis = ({
           : disSelected.riscos.flatMap(el => el?.risco) || [],
         onSelect: (item) => {
           const exists = disSelected?.riscos.find((el) => el?.risco._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.riscos, { risco: item, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -548,7 +548,7 @@ const Dis = ({
         onSelect: (item) => {
           item.risco = riscoSelected;
           const exists = disSelected?.agentesRisco.find((el) => el?.agenteRisco._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.agentesRisco, { agenteRisco: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -577,7 +577,7 @@ const Dis = ({
         onSelect: (item) => {
           item.risco = riscoSelected;
           const exists = disSelected?.viasAbsorcao.find((el) => el?.viaAbsorcao._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.viasAbsorcao, { viaAbsorcao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -605,7 +605,7 @@ const Dis = ({
           : disSelected.frequenciaExposicao.flatMap(el => el?.frequenciaExposicao) || [],
         onSelect: (item) => {
           const exists = disSelected?.frequenciaExposicao.find((el) => el?.frequenciaExposicao._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.frequenciaExposicao, { frequenciaExposicao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -633,7 +633,7 @@ const Dis = ({
           : disSelected.duracaoExposicao.flatMap(el => el?.duracaoExposicao) || [],
         onSelect: (item) => {
           const exists = disSelected?.duracaoExposicao.find((el) => el?.duracaoExposicao._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.duracaoExposicao, { duracaoExposicao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -661,7 +661,7 @@ const Dis = ({
           : disSelected.causas.flatMap(el => el?.causa) || [],
         onSelect: (item) => {
           const exists = disSelected?.causas.find((el) => el?.causa._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.causas, { causa: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -689,7 +689,7 @@ const Dis = ({
           : disSelected.medidas.flatMap(el => el?.medida) || [],
         onSelect: (item) => {
           const exists = disSelected?.medidas.find((el) => el?.medida._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.medidas, { medida: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -717,7 +717,7 @@ const Dis = ({
           : disSelected.avaliacao.flatMap(el => el?.avaliacao) || [],
         onSelect: (item) => {
           const exists = disSelected?.avaliacao.find((el) => el?.avaliacao._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.avaliacao, { avaliacao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -745,7 +745,7 @@ const Dis = ({
           : disSelected.probabilidades.flatMap(el => el?.probabilidade) || [],
         onSelect: (item) => {
           const exists = disSelected?.probabilidades.find((el) => el?.probabilidade._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.probabilidades, { probabilidade: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -773,7 +773,7 @@ const Dis = ({
           : disSelected.severidades.flatMap(el => el?.severidade) || [],
         onSelect: (item) => {
           const exists = disSelected?.severidades.find((el) => el?.severidade._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.severidades, { severidade: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -801,7 +801,7 @@ const Dis = ({
           : disSelected.niveisRisco.flatMap(el => el?.nivelRisco) || [],
         onSelect: (item) => {
           const exists = disSelected?.niveisRisco.find((el) => el?.nivelRisco._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.niveisRisco, { nivelRisco: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -830,7 +830,7 @@ const Dis = ({
         onSelect: (item) => {
           item.risco = riscoSelected;
           const exists = disSelected?.planosAcao.find((el) => el?.planoAcao._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.planosAcao, { planoAcao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];;
             setDisSelected((prevState) => ({
               ...prevState,
@@ -858,7 +858,7 @@ const Dis = ({
           : disSelected.intencao.flatMap(el => el?.intencao) || [],
         onSelect: (item) => {
           const exists = disSelected?.intencao.find((el) => el?.intencao._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.intencao, { intencao: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -886,7 +886,7 @@ const Dis = ({
           :disSelected.prioridade.flatMap(el => el?.prioridade) || [],
         onSelect: (item) => {
           const exists = disSelected?.prioridade.find((el) => el?.prioridade._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.prioridade, { prioridade: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -914,7 +914,7 @@ const Dis = ({
           : disSelected.prazo.flatMap(el => el?.prazo) || [],
         onSelect: (item) => {
           const exists = disSelected?.prazo.find((el) => el?.prazo._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.prazo, { prazo: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -942,7 +942,7 @@ const Dis = ({
           : disSelected.monitoramentos.flatMap(el => el?.monitoramento) || [],
         onSelect: (item) => {
           const exists = disSelected?.monitoramentos.find((el) => el?.monitoramento._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.monitoramentos, { monitoramento: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];;
             setDisSelected((prevState) => ({
               ...prevState,
@@ -970,7 +970,7 @@ const Dis = ({
           : disSelected.status.flatMap(el => el?.status) || [],
         onSelect: (item) => {
           const exists = disSelected?.status.find((el) => el?.status._id === item._id);
-          if (!exists) {
+          if (!exists||exists) {
             const update = [...disSelected?.status, { status: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1009,10 +1009,10 @@ const Dis = ({
     }));
   }
   const addFuncao = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.funcoes.some(el => el?.funcao._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.funcoes.some(el => el?.funcao._id === item._id)
+    // });
+    const updated = items.map(item => ({
       funcao: item,
       setor: setorSelected?._id
     }));
@@ -1023,10 +1023,10 @@ const Dis = ({
   }
 
   const addAtividade = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.atividades.some(el => el?.atividade._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.atividades.some(el => el?.atividade._id === item._id)
+    // });
+    const updated = items.map(item => ({
       atividade: item,
       setor: setorSelected?._id,
       funcao: funcaoSelected?._id,
@@ -1038,10 +1038,10 @@ const Dis = ({
   }
 
   const addPerigo = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.perigos.some(el => el?.perigo._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.perigos.some(el => el?.perigo._id === item._id)
+    // });
+    const updated = items.map(item => ({
       perigo: item,
       atividade: atividadeSelected?._id,
       setor: setorSelected?._id,
@@ -1054,11 +1054,11 @@ const Dis = ({
   }
 
   const addRisco = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.riscos.some(el => el.risco?._id === item._id)
-    });
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.riscos.some(el => el.risco?._id === item._id)
+    // });
 
-    const updated = newItem.map(item =>
+    const updated = items.map(item =>
     ({
       risco: item,
       perigo: perigoSelected?._id,
@@ -1083,10 +1083,10 @@ const Dis = ({
   }
 
   const addAgenteRisco = (items, idRisco = riscoSelected) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.agentesRisco.some(el => el.agenteRisco?._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.agentesRisco.some(el => el.agenteRisco?._id === item._id)
+    // });
+    const updated = items.map(item => ({
       agenteRisco: item,
       risco: idRisco,
       perigo: perigoSelected?._id,
@@ -1101,10 +1101,10 @@ const Dis = ({
   }
 
   const addViaAbsorcao = (items, idRisco = riscoSelected) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.viasAbsorcao.some(el => el?.viaAbsorcao._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.viasAbsorcao.some(el => el?.viaAbsorcao._id === item._id)
+    // });
+    const updated = items.map(item => ({
       viaAbsorcao: item,
       risco:  idRisco,
       perigo: perigoSelected?._id,
@@ -1119,10 +1119,10 @@ const Dis = ({
   }
 
   const addFrequenciaExposicao = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.frequenciaExposicao.some(el => el?.frequenciaExposicao._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.frequenciaExposicao.some(el => el?.frequenciaExposicao._id === item._id)
+    // });
+    const updated = items.map(item => ({
       frequenciaExposicao: item,
       risco: riscoSelected?._id,
       perigo: perigoSelected?._id,
@@ -1137,10 +1137,10 @@ const Dis = ({
   }
 
   const addDuracaoExposicao = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.duracaoExposicao.some(el => el?.duracaoExposicao._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.duracaoExposicao.some(el => el?.duracaoExposicao._id === item._id)
+    // });
+    const updated = items.map(item => ({
       duracaoExposicao: item,
       risco: riscoSelected?._id,
       perigo: perigoSelected?._id,
@@ -1155,10 +1155,10 @@ const Dis = ({
   }
 
   const addCausa = (items, idRisco = riscoSelected) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.causas.some(el => el?.causa._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.causas.some(el => el?.causa._id === item._id)
+    // });
+    const updated = items.map(item => ({
       causa: item,
       risco: idRisco,
       perigo: perigoSelected?._id,
@@ -1173,10 +1173,10 @@ const Dis = ({
   }
 
   const addMedida = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.medidas.some(el => el?.medida._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.medidas.some(el => el?.medida._id === item._id)
+    // });
+    const updated = items.map(item => ({
       medida: item,
       risco: riscoSelected?._id,
       perigo: perigoSelected?._id,
@@ -1191,10 +1191,10 @@ const Dis = ({
   }
 
   const addAvaliacao = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.avaliacao.some(el => el?.avaliacao._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.avaliacao.some(el => el?.avaliacao._id === item._id)
+    // });
+    const updated = items.map(item => ({
       avaliacao: item,
       risco: riscoSelected?._id,
       perigo: perigoSelected?._id,
@@ -1209,10 +1209,10 @@ const Dis = ({
   }
 
   const addProbabilidade = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.probabilidades.some(el => el?.probabilidade._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.probabilidades.some(el => el?.probabilidade._id === item._id)
+    // });
+    const updated = items.map(item => ({
       probabilidade: item,
       risco: riscoSelected?._id,
       perigo: perigoSelected?._id,
@@ -1230,7 +1230,7 @@ const Dis = ({
     const newItem = items.filter(item => {
       const nivelRisco = niveisRiscoState.filter((el) => el.probabilidadeValor === probabilidadeSelected?.valor && el.severidadeValor === item.valor);
       addNivel(nivelRisco)
-      return !disSelected?.severidades.some(el => el?.severidade._id === item._id)
+      return item
     });
     const updated = newItem.map(item => ({
       severidade: item,
@@ -1247,10 +1247,10 @@ const Dis = ({
   }
 
   const addNivel = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.niveisRisco.some(el => el?.nivel._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.niveisRisco.some(el => el?.nivel._id === item._id)
+    // });
+    const updated = items.map(item => ({
       nivelRisco: item,
       risco: riscoSelected?._id,
       perigo: perigoSelected?._id,
@@ -1265,10 +1265,10 @@ const Dis = ({
   }
 
   const addPlanoAcao = (items, idRisco = riscoSelected) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.planosAcao.some(el => el?.planoAcao._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.planosAcao.some(el => el?.planoAcao._id === item._id)
+    // });
+    const updated = items.map(item => ({
       planoAcao: item,
       risco: idRisco,
       perigo: perigoSelected?._id,
@@ -1283,10 +1283,10 @@ const Dis = ({
   }
 
   const addIntencao = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.intencao.some(el => el?.intencao._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.intencao.some(el => el?.intencao._id === item._id)
+    // });
+    const updated = items.map(item => ({
       intencao: item,
       planoAcao: planoAcaoSelected?._id,
       risco: riscoSelected?._id,
@@ -1302,10 +1302,10 @@ const Dis = ({
   }
 
   const addPrioridade = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.prioridade.some(el => el?.prioridade._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.prioridade.some(el => el?.prioridade._id === item._id)
+    // });
+    const updated = items.map(item => ({
       prioridade: item,
       planoAcao: planoAcaoSelected?._id,
       risco: riscoSelected?._id,
@@ -1321,10 +1321,10 @@ const Dis = ({
   }
 
   const addPrazo = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.prazo.some(el => el?.prazo._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.prazo.some(el => el?.prazo._id === item._id)
+    // });
+    const updated = items.map(item => ({
       prazo: item,
       planoAcao: planoAcaoSelected?._id,
       risco: riscoSelected?._id,
@@ -1340,10 +1340,10 @@ const Dis = ({
   }
 
   const addMonitoramento = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.monitoramentos.some(el => el?.monitoramento._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.monitoramentos.some(el => el?.monitoramento._id === item._id)
+    // });
+    const updated = items.map(item => ({
       monitoramento: item,
       planoAcao: planoAcaoSelected?._id,
       risco: riscoSelected?._id,
@@ -1359,10 +1359,10 @@ const Dis = ({
   }
 
   const addStatus = (items) => {
-    const newItem = items.filter(item => {
-      return !disSelected?.status.some(el => el?.status._id === item._id)
-    });
-    const updated = newItem.map(item => ({
+    // const newItem = items.filter(item => {
+    //   return !disSelected?.status.some(el => el?.status._id === item._id)
+    // });
+    const updated = items.map(item => ({
       status: item,
       planoAcao: planoAcaoSelected?._id,
       risco: riscoSelected?._id,
