@@ -46,7 +46,7 @@ const ContentInfoSetorizacao = styled.div`
   width: 100vw;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
 `;
 const ContentInfoSetor = styled.div`
@@ -73,6 +73,16 @@ const ContentInfoArea = styled.div`
   margin-left: 10px;
 `;
 
+const ColLabel = styled.div`
+  
+  display: flex;
+  width: 110px;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #000;
+  height: 110px;
+  background-color: #CCC;
+`;
 const API_URL = process.env.REACT_APP_URL_API;
 
 const ModalInfo = ({ dados, close }) => {
@@ -121,127 +131,329 @@ const ModalInfo = ({ dados, close }) => {
         <ContentInfoSetorizacao>
 
 
-          {dadosState?.setores.map((setor, index) => (
-            <ContentInfoSetor key={index}>
-              <ContentInfoText style={{ fontSize: 20, fontWeight: 700 }}>{setor.nome}</ContentInfoText>
-              {dadosState?.funcoes.filter(el => el.setor === setor?._id).map(el =>               
-                (
-                  <ContentInfoArea key={index}>
-                    Funções:
-                    <ContentInfoText>{el.funcao.nome}</ContentInfoText>
-                    {dadosState?.atividades.filter(el => el.setor === setor?._id).map(el =>               
-                      (
-                        <ContentInfoArea key={index}>
-                          Atividades:
-                          <ContentInfoText>{el.atividade.nome}</ContentInfoText>
-                          {dadosState?.perigos.filter(el => el.setor === setor?._id).map(el =>               
-                            (
-                              <ContentInfoArea key={index}>
-                                Perigos:
-                                <ContentInfoText>{el.perigo.nome}</ContentInfoText>
-                                {dadosState?.riscos.filter(el => el.setor === setor?._id).map(el =>               
-                                  (
-                                    <ContentInfoArea key={index}>
-                                      Riscos:
-                                      <ContentInfoText>{el.risco.nome}</ContentInfoText>
-                                      {dadosState?.riscos.filter(el => el.setor === setor?._id).map(el =>               
-                                        (
-                                            <ContentInfoText>{el.risco.nome}</ContentInfoText>
-                                          
-                                        )
-                                      )}
-                                    </ContentInfoArea>
-                                  )
-                                )}
-                              </ContentInfoArea>
+          {dadosState?.setores.map((setor, setIndex) => (
+            dadosState?.funcoes.filter(funcao => funcao.setor === setor?._id).map((funcao, index) => {
+              return (
+                <div style={{ display: 'flex', flex: 1, flexDirection: 'column', width: '80%', margin: 20 }}>
+                  <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+                    <ColLabel>{index}</ColLabel>
+                    <ColLabel>Função:</ColLabel>
+                    <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>{funcao.funcao.nome}</div>
+                    <div style={{ display: 'flex', width: 150, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>QT DE FUNCIONARIOS:</div>
+                    <ColLabel>0</ColLabel>
+                  </div>
+                  <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+                    <ColLabel>{setIndex}</ColLabel>
+                    <ColLabel>Setor:</ColLabel>
+                    <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>{setor.nome}</div>
+                  </div>
+                  <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+                    <ColLabel>atividades: </ColLabel>
+                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>
+                      {dadosState?.atividades.filter(atividade => atividade.funcao === funcao?.funcao._id).map((atividade, atividadeIndex) => {
+                        return (
+
+                          <p key={atividadeIndex} style={{ display: 'block' }}>
+                            {atividade.atividade.nome}
+                          </p>
+
+                        )
+                      })
+                      }
+                    </div>
+
+                  </div>
+                  <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+                    <ColLabel>perigos: </ColLabel>
+                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                      {dadosState?.perigos.filter(perigo => perigo.funcao === funcao?.funcao._id).map((perigo, perigoIndex) => {
+                        return (
+
+                          <p key={perigoIndex} style={{ display: 'block' }}>
+                            {perigo.perigo.nome}
+                          </p>
+
+                        )
+                      })
+                      }
+                    </div>
+
+                  </div>
+                  <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+                    <ColLabel>riscos: </ColLabel>
+                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                      {dadosState?.riscos.filter(risco => risco.funcao === funcao?.funcao._id).map((risco, riscoIndex) => {
+                        return (
+
+                          <p key={riscoIndex} style={{ display: 'block' }}>
+                            {risco.risco.nome}
+                          </p>
+
+                        )
+                      })
+                      }
+                    </div>
+
+                  </div>
+
+
+                  {dadosState?.riscos.filter(risco => risco.funcao === funcao?.funcao._id).map((risco, riscoIndex) => (
+                    <div style={{ display: 'flex', flex: 1, flexDirection: 'column', marginTop: 20 }}>
+                      <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+                        <ColLabel>agente: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.agentesRisco.filter(agenteRisco => agenteRisco.risco === risco?.risco._id).map((agenteRisco, agenteRiscoIndex) => {
+                            return (
+
+                              <p key={agenteRiscoIndex} style={{ display: 'block' }}>
+                                {agenteRisco.agenteRisco.nome}
+                              </p>
+
                             )
-                          )}
-                        </ContentInfoArea>
-                      )
-                    )}
-                  </ContentInfoArea>
-                )
-              )}
+                          })
+                          }
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
-            </ContentInfoSetor>
-            // <ContentInfoSetor key={index}>
-            //   <ContentInfoText style={{fontSize: 20, fontWeight: 700}}>{setor.nome}</ContentInfoText>
-            //   {dadosState?.funcoes.map((funcao, index) => (
-            //     <ContentInfoArea key={index}>
-            //       <ContentInfoText>{funcao.funcao.nome}</ContentInfoText>
-            //       {dadosState?.atividades.map((atividade, index) => (
-            //         <ContentInfoArea key={index}>
-            //           <ContentInfoText>{atividade.atividade.nome}</ContentInfoText>
-            //           {atividade?.perigos.map((perigo, index) => (
-            //             <ContentInfoArea key={index}>
-            //               <ContentInfoText>{perigo.perigo.nome}</ContentInfoText>
-            //               {perigo?.agentesRisco.map((agenteRisco, index) => (
-            //                 <ContentInfoArea key={index}>
-            //                   <ContentInfoText>{agenteRisco.agenteRisco.nome}</ContentInfoText>
-            //                   {agenteRisco?.riscos.map((risco, index) => (
-            //                     <ContentInfoArea key={index}>
-            //                       <ContentInfoText>{risco.risco.nome}</ContentInfoText>
-            //                       {risco?.viasAbsorcao.map((viaAbsorcao, index) => (
-            //                         <ContentInfoText>{viaAbsorcao.nome}</ContentInfoText>
-            //                       ))}
-            //                        {risco?.frequenciaExposicao.map((frequenciaExposicao, index) => (
-            //                         <ContentInfoText>{frequenciaExposicao.nome}</ContentInfoText>
-            //                       ))}
-            //                       {risco?.duracaoExposicao.map((duracaoExposicao, index) => (
-            //                         <ContentInfoText>{duracaoExposicao.nome}</ContentInfoText>
-            //                       ))}
-            //                       {risco?.causas.map((causa, index) => (
-            //                           <ContentInfoText>{causa.causa.nome}</ContentInfoText>
+                        <ColLabel>{riscoIndex} </ColLabel>
+                        <ColLabel>risco: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          
 
-            //                       ))}
-            //                       {risco?.medidas.map((medida, index) => (
-            //                         <ContentInfoText>{medida.medida.nome}</ContentInfoText>
-            //                       ))}
-            //                       {risco?.avaliacao.map((avaliacao, index) => (
-            //                         <ContentInfoText>{avaliacao.nome}</ContentInfoText>
-            //                       ))}
-            //                       {risco?.probabilidades.map((probabilidade, index) => (
-            //                         <ContentInfoText>{probabilidade.probabilidade.nome}</ContentInfoText>
-            //                       ))}
-            //                       {risco?.severidades.map((severidade, index) => (
-            //                         <ContentInfoText>{severidade.severidade.nome}</ContentInfoText>
-            //                       ))}
-            //                       {risco?.niveisRisco.map((nivelRisco, index) => (
-            //                         <ContentInfoText>{nivelRisco.nivelRisco.nome}</ContentInfoText>
-            //                       ))}
-            //                       {risco?.planosAcao.map((planoAcao, index) => (
-            //                         <ContentInfoArea key={index}>
-            //                         <ContentInfoText>{planoAcao.planoAcao.nome}</ContentInfoText>
+                              <p key={riscoIndex} style={{ display: 'block' }}>
+                                {risco.risco.nome}
+                              </p>
 
-            //                         {planoAcao?.intencao.map((intencao, index) => (
-            //                           <ContentInfoText>{intencao.nome}</ContentInfoText>
-            //                         ))}
-            //                         {planoAcao?.prioridade.map((prioridade, index) => (
-            //                           <ContentInfoText>{prioridade.nome}</ContentInfoText>
-            //                         ))}
-            //                         {planoAcao?.prazo.map((prazo, index) => (
-            //                           <ContentInfoText>{prazo.nome}</ContentInfoText>
-            //                         ))}
+                           
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
-            //                         {planoAcao?.monitoramentos.map((monitoramento, index) => (
-            //                           <ContentInfoText>{monitoramento.monitoramento.nome}</ContentInfoText>
-            //                         ))}
-            //                         {planoAcao?.status.map((status, index) => (
-            //                           <ContentInfoText>{status.nome}</ContentInfoText>
-            //                         ))}
-            //                         </ContentInfoArea>
-            //                       ))}
-            //                     </ContentInfoArea>
-            //                   ))}
-            //                 </ContentInfoArea>
-            //               ))}
-            //             </ContentInfoArea>
-            //           ))}
-            //         </ContentInfoArea>
-            //       ))}
-            //     </ContentInfoArea>
-            //   ))}
-            // </ContentInfoSetor>
+                        <ColLabel>via absorcao: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.viasAbsorcao.filter(viaAbsorcao => viaAbsorcao.risco === risco?.risco._id).map((viaAbsorcao, viaAbsorcaoIndex) => {
+                            return (
+
+                              <p key={viaAbsorcaoIndex} style={{ display: 'block' }}>
+                                {viaAbsorcao.viaAbsorcao.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        <ColLabel>Frequencia Exposicao: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.frequenciaExposicao.filter(frequenciaExposicao => frequenciaExposicao.risco === risco?.risco._id).map((frequenciaExposicao, frequenciaExposicaoIndex) => {
+                            return (
+
+                              <p key={frequenciaExposicaoIndex} style={{ display: 'block' }}>
+                                {frequenciaExposicao.frequenciaExposicao.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        <ColLabel>Duração Exposicao: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.duracaoExposicao.filter(duracaoExposicao => duracaoExposicao.risco === risco?.risco._id).map((duracaoExposicao, duracaoExposicaoIndex) => {
+                            return (
+
+                              <p key={duracaoExposicaoIndex} style={{ display: 'block' }}>
+                                {duracaoExposicao.duracaoExposicao.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+                        <ColLabel>Possiveis Lesoes: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.causas.filter(causa => causa.risco === risco?.risco._id).map((causa, causaIndex) => {
+                            return (
+
+                              <p key={causaIndex} style={{ display: 'block' }}>
+                                {causa.causa.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        <ColLabel>Medida: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.medidas.filter(medida => medida.risco === risco?.risco._id).map((medida, medidaIndex) => {
+                            return (
+
+                              <p key={medidaIndex} style={{ display: 'block' }}>
+                                {medida.medida.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        <ColLabel>Avaliação Quantitativa: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.avaliacao.filter(avaliacao => avaliacao.risco === risco?.risco._id).map((avaliacao, avaliacaoIndex) => {
+                            return (
+
+                              <p key={avaliacaoIndex} style={{ display: 'block' }}>
+                                {avaliacao.avaliacao.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+                        <ColLabel>Probabilidade: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.probabilidades.filter(probabilidade => probabilidade.risco === risco?.risco._id).map((probabilidade, probabilidadeIndex) => {
+                            return (
+
+                              <p key={probabilidadeIndex} style={{ display: 'block' }}>
+                                {`(${probabilidade.probabilidade.valor}) ${probabilidade.probabilidade.nome}`}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        <ColLabel>Severidade: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.severidades.filter(severidade => severidade.risco === risco?.risco._id).map((severidade, severidadeIndex) => {
+                            return (
+
+                              <p key={severidadeIndex} style={{ display: 'block' }}>
+                                {`(${severidade.severidade.valor}) ${severidade.severidade.nome}`}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        <ColLabel>Nivel de risco: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.niveisRisco.filter(nivelRisco => nivelRisco.risco === risco?.risco._id).map((nivelRisco, nivelRiscoIndex) => {
+                            return (
+
+                              <p key={nivelRiscoIndex} style={{ display: 'block' }}>
+                                {`(${nivelRisco.nivelRisco?.probabilidadeValor}X${nivelRisco.nivelRisco?.probabilidadeValor}) ${nivelRisco.nivelRisco.nome}`}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                      </div>
+                      {dadosState?.planosAcao.filter(planoAcao => planoAcao.risco === risco?.risco._id).map((planoAcao, planoAcaoIndex) => (
+                    <div style={{ display: 'flex', flex: 1, flexDirection: 'column', marginTop: 20 }}>
+                       
+                      <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+                        <ColLabel>{planoAcaoIndex} </ColLabel>
+                        <ColLabel>plano Acao: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          
+
+                              <p key={planoAcaoIndex} style={{ display: 'block' }}>
+                                {planoAcao.planoAcao.nome}
+                              </p>
+
+                           
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+                        <ColLabel>intenção: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.intencao.filter(intencao => intencao.planoAcao === planoAcao?.planoAcao._id).map((intencao, intencaoIndex) => {
+                            return (
+
+                              <p key={intencaoIndex} style={{ display: 'block' }}>
+                                {intencao.intencao.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        <ColLabel>prioridade: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.prioridade.filter(prioridade => prioridade.planoAcao === planoAcao?.planoAcao._id).map((prioridade, prioridadeIndex) => {
+                            return (
+
+                              <p key={prioridadeIndex} style={{ display: 'block' }}>
+                                {prioridade.prioridade.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        <ColLabel>prazo: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.prazo.filter(prazo => prazo.planoAcao === planoAcao?.planoAcao._id).map((prazo, prazoIndex) => {
+                            return (
+
+                              <p key={prazoIndex} style={{ display: 'block' }}>
+                                {prazo.prazo.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+
+                        <ColLabel>monitoramento: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.monitoramentos.filter(monitoramento => monitoramento.planoAcao === planoAcao?.planoAcao._id).map((monitoramento, monitoramentoIndex) => {
+                            return (
+
+                              <p key={monitoramentoIndex} style={{ display: 'block' }}>
+                                {monitoramento.monitoramento.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        <ColLabel>Status: </ColLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
+                          {dadosState?.status.filter(status => status.planoAcao === planoAcao?.planoAcao._id).map((status, statusIndex) => {
+                            return (
+
+                              <p key={statusIndex} style={{ display: 'block' }}>
+                                {status.status.nome}
+                              </p>
+
+                            )
+                          })
+                          }
+                        </div>
+                        
+                      </div>
+                    </div>
+                  ))}
+                    </div>
+                  ))}
+
+                </div>
+              )
+            })
           ))}
         </ContentInfoSetorizacao>
       </ModalContent>
