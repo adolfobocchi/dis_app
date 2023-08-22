@@ -90,7 +90,6 @@ const ModalInfo = ({ dados, close }) => {
   useEffect(() => {
     setDadosState(dados);
   }, [dados])
-  console.log(dadosState);
   if (!dadosState) {
     return <ModalLoading />
   }

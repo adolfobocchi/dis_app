@@ -402,9 +402,6 @@ const Dis = ({
       });
     }
   }, [empresaSelected, setValue]);
-
-  console.log(disSelected.agentesRisco);
-
   useEffect(() => {
     setDiagnotiscoItems([
       {
