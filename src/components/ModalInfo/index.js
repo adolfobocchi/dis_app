@@ -16,7 +16,7 @@ const ModalWrapper = styled.div`
   flex-direction: column;
   z-index: 9999;
   overflow-y: scroll;
-  font-size: 14px;
+  font-size: 13px;
 `;
 
 const ModalContent = styled.div`
@@ -83,6 +83,9 @@ const ColLabel = styled.div`
   border: 1px solid #000;
   height: 110px;
   background-color: #CCC;
+  overflow: hidden;
+  white-space: normal;
+  padding: 6px;
 `;
 const API_URL = process.env.REACT_APP_URL_API;
 
@@ -144,8 +147,8 @@ const ModalInfo = ({ dados, close }) => {
                     <ColLabel>{funcaoIndex + 1}</ColLabel>
                     <ColLabel>Função:</ColLabel>
                     <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>{funcao.funcao.nome}</div>
-                    <div style={{ display: 'flex', width: 150, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>QT DE FUNCIONARIOS:</div>
-                    <ColLabel>0</ColLabel>
+                    <ColLabel>QT DE FUNCIONARIOS:</ColLabel>
+                    <div style={{ display: 'flex', width: 100, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>0</div>
                   </div>
                   <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
@@ -195,7 +198,7 @@ const ModalInfo = ({ dados, close }) => {
                         return (
 
                           <p key={riscoIndex} style={{ display: 'block' }}>
-                            {risco.risco.nome}
+                            {`${funcaoIndex + 1}.${riscoIndex + 1} ${risco.risco.nome}`}
                           </p>
 
                         )
@@ -226,7 +229,7 @@ const ModalInfo = ({ dados, close }) => {
                       </div>
                       <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
-                        <ColLabel>{riscoIndex + 1} </ColLabel>
+                        <ColLabel>{`${funcaoIndex +1}.${riscoIndex + 1}`} </ColLabel>
                         <ColLabel>risco: </ColLabel>
                         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
                           
@@ -364,13 +367,14 @@ const ModalInfo = ({ dados, close }) => {
                           }
                         </div>
                       </div>
+                      <div style={{ display: 'flex', flex: 1, flexDirection: 'column', marginTop: 20 }}>
+                      <div style={{ backgroundColor: '#CCC', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>PLANO DE ACAO</div>
                       {dadosState?.planosAcao.filter(planoAcao => planoAcao.risco === risco?.risco._id).map((planoAcao, planoAcaoIndex) => (
-                    <div style={{ display: 'flex', flex: 1, flexDirection: 'column', marginTop: 20 }}>
-                       
+                   
+                       <>
                       <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
                         <ColLabel>{planoAcaoIndex + 1} </ColLabel>
-                        <ColLabel>plano Acao: </ColLabel>
                         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
                           
 
@@ -451,8 +455,10 @@ const ModalInfo = ({ dados, close }) => {
                         </div>
                         
                       </div>
-                    </div>
+                      </>
                   ))}
+                  
+                      </div>
                     </div>
                   ))}
 
