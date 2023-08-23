@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarDis(action) {
@@ -47,6 +48,7 @@ function* criarDis(action) {
     const response = yield call(() => api.post('/dis', action.payload.dis));
     const dis = response.data;
     yield put({ type: CRIAR_DIS_SUCCESS, payload: dis });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'DIAGNOSTICO CADASTRADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_DIS_FAILURE, payload: error.message });
   }
@@ -59,6 +61,7 @@ function* updateDis(action) {
     const response = yield call(() => api.put(`/dis/${action.payload.id}`, action.payload.dis));
     const dis = response.data;
     yield put({ type: UPDATE_DIS_SUCCESS, payload: dis });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'DIAGNOSTICO ATUALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_DIS_FAILURE, payload: error.message });
   }

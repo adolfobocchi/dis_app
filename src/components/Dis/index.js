@@ -1740,6 +1740,12 @@ const Dis = ({
     confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR A DIS?', () => { deleteDis(id) });
   }
 
+  const handleLimparBtn = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    confirmacao('LIMPAR REGISTRO', 'VOCE REALMENTE DESEJA LIMPAR O FORMULARIO?', () => { handleClear() });
+  }
+
   const handleClear = () => {
     setDisSelected({ ...formEmpty });
     setEmpresaSelected(null)
@@ -2026,7 +2032,7 @@ const Dis = ({
                         </DiagnosticoContent>
                       </ScrollableContainer>
                       <Styled.Button type="submit" style={{marginBottom: 10}}>Salvar</Styled.Button>
-                      <Styled.Button type="button" style={{background: '#FBAF3A'}} onClick={() => handleClear()}>Limpar</Styled.Button>
+                      <Styled.Button type="button" style={{background: '#FBAF3A'}} onClick={(event) => handleLimparBtn(event)}>Limpar</Styled.Button>
                     </Styled.Form>
                   </Styled.FormArea>
                 )
@@ -2065,7 +2071,6 @@ const Dis = ({
                         return <Styled.Coluna label={key} key={index} />
                       })
                     }
-                    <Styled.Coluna label='' />
                   </Styled.ListHeader>
                   <Styled.List>
                     {disListState?.length > 0 && disListState?.map((dis, index) => (
@@ -2084,10 +2089,10 @@ const Dis = ({
                             })
                           }
 
-                          <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                          <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
                             <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, dis._id)} style={{ height: '1.2em', width: '1.2em' }} />
                           </div>
-                          <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                          <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer',width: '6em' }} >
                             <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
                           </div>
 
