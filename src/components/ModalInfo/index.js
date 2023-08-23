@@ -16,6 +16,7 @@ const ModalWrapper = styled.div`
   flex-direction: column;
   z-index: 9999;
   overflow-y: scroll;
+  font-size: 14px;
 `;
 
 const ModalContent = styled.div`
@@ -86,6 +87,10 @@ const ColLabel = styled.div`
 const API_URL = process.env.REACT_APP_URL_API;
 
 const ModalInfo = ({ dados, close }) => {
+  const [countSetor, setCountSetor] = useState(0);
+  const [countFuncao, setCountFuncao] = useState(0);
+  const [countRisco, setCountRisco] = useState(0);
+
   const [dadosState, setDadosState] = useState(null);
   useEffect(() => {
     setDadosState(dados);
@@ -130,12 +135,13 @@ const ModalInfo = ({ dados, close }) => {
         <ContentInfoSetorizacao>
 
 
-          {dadosState?.setores.map((setor, setIndex) => (
-            dadosState?.funcoes.filter(funcao => funcao.setor === setor?._id).map((funcao, index) => {
+          {dadosState?.setores.map((setor, setIndex) => {
+            return (
+            dadosState?.funcoes.filter(funcao => funcao.setor === setor?._id).map((funcao, funcaoIndex) => {
               return (
                 <div style={{ display: 'flex', flex: 1, flexDirection: 'column', width: '80%', margin: 20 }}>
                   <div style={{ display: 'flex', flex: 1, width: '100%' }}>
-                    <ColLabel>{index}</ColLabel>
+                    <ColLabel>{funcaoIndex + 1}</ColLabel>
                     <ColLabel>Função:</ColLabel>
                     <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>{funcao.funcao.nome}</div>
                     <div style={{ display: 'flex', width: 150, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>QT DE FUNCIONARIOS:</div>
@@ -143,7 +149,7 @@ const ModalInfo = ({ dados, close }) => {
                   </div>
                   <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
-                    <ColLabel>{setIndex}</ColLabel>
+                    <ColLabel>{setIndex + 1}</ColLabel>
                     <ColLabel>Setor:</ColLabel>
                     <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>{setor.nome}</div>
                   </div>
@@ -220,7 +226,7 @@ const ModalInfo = ({ dados, close }) => {
                       </div>
                       <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
-                        <ColLabel>{riscoIndex} </ColLabel>
+                        <ColLabel>{riscoIndex + 1} </ColLabel>
                         <ColLabel>risco: </ColLabel>
                         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
                           
@@ -363,7 +369,7 @@ const ModalInfo = ({ dados, close }) => {
                        
                       <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
-                        <ColLabel>{planoAcaoIndex} </ColLabel>
+                        <ColLabel>{planoAcaoIndex + 1} </ColLabel>
                         <ColLabel>plano Acao: </ColLabel>
                         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
                           
@@ -453,7 +459,7 @@ const ModalInfo = ({ dados, close }) => {
                 </div>
               )
             })
-          ))}
+          )})}
         </ContentInfoSetorizacao>
       </ModalContent>
     </ModalWrapper>

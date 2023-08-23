@@ -426,6 +426,17 @@ const Dis = ({
             ...prevState,
             setores: update,
           }));
+          const updateFuncoes = disSelected?.funcoes.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            funcoes: updateFuncoes,
+          }));
+
+          const updateAtividades = disSelected?.atividades.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            atividades: updateAtividades,
+          }));
         },
         selectedIndex: setorSelectedIndex,
         handleListSelect: () => { setShowModalSetoresListSelect(true); }
