@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarPerigos(action) {
@@ -47,6 +48,7 @@ function* criarPerigos(action) {
     const response = yield call(() => api.post('/perigos', action.payload.perigo));
     const perigo = response.data;
     yield put({ type: CRIAR_PERIGOS_SUCCESS, payload: perigo });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_PERIGOS_FAILURE, payload: error.message });
   }
@@ -60,6 +62,7 @@ function* updatePerigos(action) {
     const response = yield call(() => api.put(`/perigos/${action.payload.id}`, action.payload.perigo));
     const perigo = response.data;
     yield put({ type: UPDATE_PERIGOS_SUCCESS, payload: perigo });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_PERIGOS_FAILURE, payload: error.message });
   }

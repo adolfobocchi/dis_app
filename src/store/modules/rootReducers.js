@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import usuario from './Usuario/reducers';
 import confirmation from './Confirmation/reducers';
+import information from './Information/reducers';
 import area from './Area/reducers';
 import setor from './Setor/reducers';
 import funcao from './Funcao/reducers';
@@ -20,6 +21,7 @@ import empresa from './Empresa/reducers'
 const rootReducer = combineReducers({
     usuario,
     confirmation,
+    information,
     area,
     setor,
     funcao,

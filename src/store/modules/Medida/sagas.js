@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarMedidas(action) {
@@ -47,6 +48,7 @@ function* criarMedidas(action) {
     const response = yield call(() => api.post('/medidas', action.payload.medida));
     const medida = response.data;
     yield put({ type: CRIAR_MEDIDAS_SUCCESS, payload: medida });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_MEDIDAS_FAILURE, payload: error.message });
   }
@@ -59,6 +61,7 @@ function* updateMedidas(action) {
     const response = yield call(() => api.put(`/medidas/${action.payload.id}`, action.payload.medida));
     const medida = response.data;
     yield put({ type: UPDATE_MEDIDAS_SUCCESS, payload: medida });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_MEDIDAS_FAILURE, payload: error.message });
   }

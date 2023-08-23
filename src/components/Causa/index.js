@@ -12,7 +12,7 @@ import Paginacao from '../Paginacao';
 import InputSearch from '../InputSearch';
 import { listarRiscosRequest } from '../../store/modules/Risco/actions';
 
-const Causas = ({ loading, causas, listarRiscos, riscos, error, page, listarCausas, criarCausas, updateCausas, deleteCausas, confirmacao }) => {
+const Causas = ({ loading, causas, error, page, listarCausas, criarCausas, updateCausas, deleteCausas, confirmacao }) => {
   
   const listFields = {
     nome: 'texto',
@@ -38,7 +38,6 @@ const Causas = ({ loading, causas, listarRiscos, riscos, error, page, listarCaus
 
   useEffect(() => {
     listarCausas(page, 0);
-    listarRiscos(0, 1);
   }, []);
 
   useEffect(() => {

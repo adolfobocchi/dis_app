@@ -11,9 +11,15 @@ import * as Styled from '../styleds';
 import Paginacao from '../Paginacao';
 
 const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, updateFuncoes, deleteFuncoes, confirmacao }) => {
+  const listFields = {
+    nome: 'texto',
+    ativo: 'boolean',
+    opções: ''
+  }
   const formEmpty = {
     _id: '',
     nome: '',
+    descricao: '',
     ativo: true,
   }
 
@@ -23,7 +29,8 @@ const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, up
     defaultValues: funcaoSelected
       ? {
         _id: funcaoSelected._id,
-        nome: funcaoSelected.nome
+        nome: funcaoSelected.nome,
+        descricao: funcaoSelected.descricao,
       } :
       {}
   });
@@ -86,6 +93,11 @@ const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, up
             {...register('nome', { required: true })}
           />
           {errors.nome && <span>Campo obrigatório</span>}
+          <Styled.Label>Descrição (CBO)</Styled.Label>
+          <Styled.Input
+            {...register('descricao', { required: false })}
+          />
+          {errors.descricao && <span>Campo obrigatório</span>}
           <Styled.Label>Ativo</Styled.Label>
           <Styled.Input
             type='checkbox'
@@ -102,12 +114,10 @@ const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, up
 
         <Styled.ListHeader>
           {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
+            Object.keys(listFields).map((key, index) => {
+              return <Styled.Coluna label={key} key={index} />
             })
           }
-          <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
 
@@ -115,18 +125,13 @@ const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, up
             <>
               <Styled.ListItem key={funcao._id} onClick={(event) => handleSelect(event, index)}>
                 {Object.keys(funcao).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (funcao[field]) === 'boolean') {
-                      return (<>
-                        {funcao[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
+                    if (field !== '_id' && listFields.hasOwnProperty(field)) {
+                      if (typeof (funcao[field]) === 'boolean')
+                        return (<>{funcao[field] ? <Styled.Ativo /> : <Styled.Inativo />}</>)
                       return (<Styled.CampoValor>{funcao[field]}</Styled.CampoValor>)
+
                     }
-                  }
-
-
-                })
+                  })
                 }
 
                 <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >

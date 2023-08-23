@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 function* listarPlanosAcao(action) {
   try {
@@ -46,6 +47,7 @@ function* criarPlanosAcao(action) {
     const response = yield call(() => api.post('/planosAcao', action.payload.planoAcao));
     const planoAcao = response.data;
     yield put({ type: CRIAR_PLANOSACAO_SUCCESS, payload: planoAcao });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_PLANOSACAO_FAILURE, payload: error.message });
   }
@@ -58,6 +60,7 @@ function* updatePlanosAcao(action) {
     const response = yield call(() => api.put(`/planosAcao/${action.payload.id}`, action.payload.planoAcao));
     const planoAcao = response.data;
     yield put({ type: UPDATE_PLANOSACAO_SUCCESS, payload: planoAcao });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_PLANOSACAO_FAILURE, payload: error.message });
   }

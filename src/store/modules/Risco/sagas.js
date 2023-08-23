@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarRiscos(action) {
@@ -47,6 +48,7 @@ function* criarRiscos(action) {
     const response = yield call(() => api.post('/riscos', action.payload.risco));
     const risco = response.data;
     yield put({ type: CRIAR_RISCOS_SUCCESS, payload: risco });
+    yield put({ type:SHOW_INFORMATION, payload: {text: 'RISCO CADASTRADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_RISCOS_FAILURE, payload: error.message });
   }
@@ -56,10 +58,10 @@ function* criarRiscos(action) {
 
 function* updateRiscos(action) {
   try {
-    console.log(action.payload);
     const response = yield call(() => api.put(`/riscos/${action.payload.id}`, action.payload.risco));
     const risco = response.data;
     yield put({ type: UPDATE_RISCOS_SUCCESS, payload: risco });
+    yield put({ type:SHOW_INFORMATION, payload: {text: 'RISCO ATUALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_RISCOS_FAILURE, payload: error.message });
   }

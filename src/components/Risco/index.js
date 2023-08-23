@@ -389,7 +389,6 @@ const Riscos = ({ loading, riscos, error, page, listarRiscos, criarRiscos, updat
 
 
   const onSubmit = (data) => {
-    console.log(data);
     if (data._id) {
       updateRiscos(data._id, data);
 
@@ -520,7 +519,6 @@ const Riscos = ({ loading, riscos, error, page, listarRiscos, criarRiscos, updat
               return <Styled.Coluna label={key} key={index} />
             })
           }
-          <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
 

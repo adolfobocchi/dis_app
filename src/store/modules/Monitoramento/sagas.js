@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarMonitoramentos(action) {
@@ -47,6 +48,7 @@ function* criarMonitoramentos(action) {
     const response = yield call(() => api.post('/monitoramentos', action.payload.monitoramentos));
     const monitoramentos = response.data;
     yield put({ type: CRIAR_MONITORAMENTOS_SUCCESS, payload: monitoramentos });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_MONITORAMENTOS_FAILURE, payload: error.message });
   }
@@ -56,10 +58,10 @@ function* criarMonitoramentos(action) {
 
 function* updateMonitoramentos(action) {
   try {
-    console.log(action.payload);
     const response = yield call(() => api.put(`/monitoramentos/${action.payload.id}`, action.payload.monitoramentos));
     const monitoramentos = response.data;
     yield put({ type: UPDATE_MONITORAMENTOS_SUCCESS, payload: monitoramentos });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_MONITORAMENTOS_FAILURE, payload: error.message });
   }

@@ -101,7 +101,6 @@ const ColunaHeader = styled.div`
 `
 
 const ColunaValor = styled.div`
-    text-transform: capitalize;
     display: flex;
     align-items: center;
     justify-content: center;

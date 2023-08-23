@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarNivelriscos(action) {
@@ -47,6 +48,7 @@ function* criarNivelriscos(action) {
     const response = yield call(() => api.post('/nivelriscos', action.payload.nivelrisco));
     const nivelrisco = response.data;
     yield put({ type: CRIAR_NIVELRISCOS_SUCCESS, payload: nivelrisco });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_NIVELRISCOS_FAILURE, payload: error.message });
   }
@@ -59,6 +61,7 @@ function* updateNivelriscos(action) {
     const response = yield call(() => api.put(`/nivelriscos/${action.payload.id}`, action.payload.nivelrisco));
     const nivelrisco = response.data;
     yield put({ type: UPDATE_NIVELRISCOS_SUCCESS, payload: nivelrisco });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_NIVELRISCOS_FAILURE, payload: error.message });
   }

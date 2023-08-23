@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarCausas(action) {
@@ -47,6 +48,7 @@ function* criarCausas(action) {
     const response = yield call(() => api.post('/causas', action.payload.causa));
     const causa = response.data;
     yield put({ type: CRIAR_CAUSAS_SUCCESS, payload: causa });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'POSSIVEL LESÃO CADASTRADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_CAUSAS_FAILURE, payload: error.message });
   }
@@ -59,6 +61,7 @@ function* updateCausas(action) {
     const response = yield call(() => api.put(`/causas/${action.payload.id}`, action.payload.causa));
     const causa = response.data;
     yield put({ type: UPDATE_CAUSAS_SUCCESS, payload: causa });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'POSSIVEL LESÃO ATUALIZADA COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_CAUSAS_FAILURE, payload: error.message });
   }

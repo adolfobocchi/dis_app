@@ -356,7 +356,7 @@ const ModalInfo = ({ dados, close }) => {
                             return (
 
                               <p key={nivelRiscoIndex} style={{ display: 'block' }}>
-                                {`(${nivelRisco.nivelRisco?.probabilidadeValor}X${nivelRisco.nivelRisco?.probabilidadeValor}) ${nivelRisco.nivelRisco.nome}`}
+                                {`(${nivelRisco.nivelRisco?.probabilidadeValor}X${nivelRisco.nivelRisco?.severidadeValor}) ${nivelRisco.nivelRisco.nome}`}
                               </p>
 
                             )

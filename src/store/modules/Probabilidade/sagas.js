@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarProbabilidades(action) {
@@ -47,6 +48,7 @@ function* criarProbabilidades(action) {
     const response = yield call(() => api.post('/probabilidades', action.payload.probabilidade));
     const probabilidade = response.data;
     yield put({ type: CRIAR_PROBABILIDADES_SUCCESS, payload: probabilidade });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_PROBABILIDADES_FAILURE, payload: error.message });
   }
@@ -59,6 +61,7 @@ function* updateProbabilidades(action) {
     const response = yield call(() => api.put(`/probabilidades/${action.payload.id}`, action.payload.probabilidade));
     const probabilidade = response.data;
     yield put({ type: UPDATE_PROBABILIDADES_SUCCESS, payload: probabilidade });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_PROBABILIDADES_FAILURE, payload: error.message });
   }

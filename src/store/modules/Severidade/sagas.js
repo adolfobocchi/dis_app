@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarSeveridades(action) {
@@ -47,6 +48,7 @@ function* criarSeveridades(action) {
     const response = yield call(() => api.post('/severidades', action.payload.severidade));
     const severidade = response.data;
     yield put({ type: CRIAR_SEVERIDADES_SUCCESS, payload: severidade });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_SEVERIDADES_FAILURE, payload: error.message });
   }
@@ -59,6 +61,7 @@ function* updateSeveridades(action) {
     const response = yield call(() => api.put(`/severidades/${action.payload.id}`, action.payload.severidade));
     const severidade = response.data;
     yield put({ type: UPDATE_SEVERIDADES_SUCCESS, payload: severidade });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_SEVERIDADES_FAILURE, payload: error.message });
   }

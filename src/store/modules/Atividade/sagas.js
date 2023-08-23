@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarAtividades(action) {
@@ -47,6 +48,7 @@ function* criarAtividades(action) {
     const response = yield call(() => api.post('/atividades', action.payload.atividade));
     const atividade = response.data;
     yield put({ type: CRIAR_ATIVIDADES_SUCCESS, payload: atividade });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATIVIDADE CADASTRADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_ATIVIDADES_FAILURE, payload: error.message });
   }
@@ -60,6 +62,7 @@ function* updateAtividades(action) {
     const response = yield call(() => api.put(`/atividades/${action.payload.id}`, action.payload.atividade));
     const atividade = response.data;
     yield put({ type: UPDATE_ATIVIDADES_SUCCESS, payload: atividade });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATIVIDADE ATUALIZADA COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_ATIVIDADES_FAILURE, payload: error.message });
   }

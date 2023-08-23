@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarFuncoes(action) {
@@ -47,6 +48,7 @@ function* criarFuncoes(action) {
     const response = yield call(() => api.post('/funcoes', action.payload.funcao));
     const funcao = response.data;
     yield put({ type: CRIAR_FUNCOES_SUCCESS, payload: funcao });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_FUNCOES_FAILURE, payload: error.message });
   }
@@ -60,6 +62,7 @@ function* updateFuncoes(action) {
     const response = yield call(() => api.put(`/funcoes/${action.payload.id}`, action.payload.funcao));
     const funcao = response.data;
     yield put({ type: UPDATE_FUNCOES_SUCCESS, payload: funcao });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_FUNCOES_FAILURE, payload: error.message });
   }

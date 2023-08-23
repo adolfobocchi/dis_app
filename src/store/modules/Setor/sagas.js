@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarSetores(action) {
@@ -47,6 +48,7 @@ function* criarSetores(action) {
     const response = yield call(() => api.post('/setores', action.payload.setor));
     const setor = response.data;
     yield put({ type: CRIAR_SETORES_SUCCESS, payload: setor });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_SETORES_FAILURE, payload: error.message });
   }
@@ -60,6 +62,7 @@ function* updateSetores(action) {
     const response = yield call(() => api.put(`/setores/${action.payload.id}`, action.payload.setor));
     const setor = response.data;
     yield put({ type: UPDATE_SETORES_SUCCESS, payload: setor });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_SETORES_FAILURE, payload: error.message });
   }

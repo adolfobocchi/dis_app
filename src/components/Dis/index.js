@@ -437,6 +437,76 @@ const Dis = ({
             ...prevState,
             atividades: updateAtividades,
           }));
+
+          const updatePerigos = disSelected?.perigos.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            perigos: updatePerigos,
+          }));
+
+          const updateRisco = disSelected?.riscos.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            riscos: updateRisco,
+          }));
+          
+          const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            agentesRisco: updateAgentesRisco,
+          }));
+
+          const updateViaAbsorcao = disSelected?.viasAbsorcao.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            viasAbsorcao: updateViaAbsorcao,
+          }));
+          const updateFrequenciaExposicao = disSelected?.frequenciaExposicao.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            frequenciaExposicao: updateFrequenciaExposicao,
+          }));
+          const updateDuracaoExposicao = disSelected?.duracaoExposicao.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            duracaoExposicao: updateDuracaoExposicao,
+          }));
+          const updateCausas = disSelected?.causas.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            causas: updateCausas,
+          }));
+          const updateMedidas = disSelected?.medidas.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            medidas: updateMedidas,
+          }));
+          const updateAvaliacao = disSelected?.avaliacao.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            avaliacao: updateAvaliacao,
+          }));
+          const updateProbabilidades = disSelected?.probabilidades.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            probabilidades: updateProbabilidades,
+          }));
+          const updateSeveridades = disSelected?.severidades.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            severidades: updateSeveridades,
+          }));
+          const updateNiveisRisco = disSelected?.niveisRisco.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            niveisRisco: updateNiveisRisco,
+          }));
+          const updatePlanosAcao = disSelected?.planosAcao.filter((el) => el?.setor !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            planosAcao: updatePlanosAcao,
+          }));
+          handleClearSelecteds();
         },
         selectedIndex: setorSelectedIndex,
         handleListSelect: () => { setShowModalSetoresListSelect(true); }
@@ -463,6 +533,81 @@ const Dis = ({
             ...prevState,
             funcoes: update,
           }));
+          const updateAtividades = disSelected?.atividades.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            atividades: updateAtividades,
+          }));
+
+          const updatePerigos = disSelected?.perigos.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            perigos: updatePerigos,
+          }));
+
+          const updateRisco = disSelected?.riscos.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            riscos: updateRisco,
+          }));
+          
+          const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            agentesRisco: updateAgentesRisco,
+          }));
+
+          const updateViaAbsorcao = disSelected?.viasAbsorcao.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            viasAbsorcao: updateViaAbsorcao,
+          }));
+          const updateFrequenciaExposicao = disSelected?.frequenciaExposicao.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            frequenciaExposicao: updateFrequenciaExposicao,
+          }));
+          const updateDuracaoExposicao = disSelected?.duracaoExposicao.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            duracaoExposicao: updateDuracaoExposicao,
+          }));
+          const updateCausas = disSelected?.causas.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            causas: updateCausas,
+          }));
+          const updateMedidas = disSelected?.medidas.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            medidas: updateMedidas,
+          }));
+          const updateAvaliacao = disSelected?.avaliacao.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            avaliacao: updateAvaliacao,
+          }));
+          const updateProbabilidades = disSelected?.probabilidades.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            probabilidades: updateProbabilidades,
+          }));
+          const updateSeveridades = disSelected?.severidades.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            severidades: updateSeveridades,
+          }));
+          const updateNiveisRisco = disSelected?.niveisRisco.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            niveisRisco: updateNiveisRisco,
+          }));
+          const updatePlanosAcao = disSelected?.planosAcao.filter((el) => el?.funcao !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            planosAcao: updatePlanosAcao,
+          }));
+          handleClearSelecteds();
         },
         selectedIndex: funcaoSelectedIndex,
         handleListSelect: () => { setorSelectedIndex >= 0 && setShowModalFuncoesListSelect(true); }
@@ -489,6 +634,75 @@ const Dis = ({
             ...prevState,
             atividades: update,
           }));
+          const updatePerigos = disSelected?.perigos.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            perigos: updatePerigos,
+          }));
+
+          const updateRisco = disSelected?.riscos.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            riscos: updateRisco,
+          }));
+          
+          const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            agentesRisco: updateAgentesRisco,
+          }));
+
+          const updateViaAbsorcao = disSelected?.viasAbsorcao.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            viasAbsorcao: updateViaAbsorcao,
+          }));
+          const updateFrequenciaExposicao = disSelected?.frequenciaExposicao.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            frequenciaExposicao: updateFrequenciaExposicao,
+          }));
+          const updateDuracaoExposicao = disSelected?.duracaoExposicao.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            duracaoExposicao: updateDuracaoExposicao,
+          }));
+          const updateCausas = disSelected?.causas.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            causas: updateCausas,
+          }));
+          const updateMedidas = disSelected?.medidas.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            medidas: updateMedidas,
+          }));
+          const updateAvaliacao = disSelected?.avaliacao.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            avaliacao: updateAvaliacao,
+          }));
+          const updateProbabilidades = disSelected?.probabilidades.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            probabilidades: updateProbabilidades,
+          }));
+          const updateSeveridades = disSelected?.severidades.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            severidades: updateSeveridades,
+          }));
+          const updateNiveisRisco = disSelected?.niveisRisco.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            niveisRisco: updateNiveisRisco,
+          }));
+          const updatePlanosAcao = disSelected?.planosAcao.filter((el) => el?.atividade !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            planosAcao: updatePlanosAcao,
+          }));
+          handleClearSelecteds();
         },
         selectedIndex: atividadeSelectedIndex,
         handleListSelect: () => { funcaoSelectedIndex >= 0 && setShowModalAtividadesListSelect(true); }
@@ -516,6 +730,69 @@ const Dis = ({
             ...prevState,
             perigos: update,
           }));
+          const updateRisco = disSelected?.riscos.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            riscos: updateRisco,
+          }));
+          
+          const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            agentesRisco: updateAgentesRisco,
+          }));
+
+          const updateViaAbsorcao = disSelected?.viasAbsorcao.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            viasAbsorcao: updateViaAbsorcao,
+          }));
+          const updateFrequenciaExposicao = disSelected?.frequenciaExposicao.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            frequenciaExposicao: updateFrequenciaExposicao,
+          }));
+          const updateDuracaoExposicao = disSelected?.duracaoExposicao.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            duracaoExposicao: updateDuracaoExposicao,
+          }));
+          const updateCausas = disSelected?.causas.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            causas: updateCausas,
+          }));
+          const updateMedidas = disSelected?.medidas.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            medidas: updateMedidas,
+          }));
+          const updateAvaliacao = disSelected?.avaliacao.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            avaliacao: updateAvaliacao,
+          }));
+          const updateProbabilidades = disSelected?.probabilidades.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            probabilidades: updateProbabilidades,
+          }));
+          const updateSeveridades = disSelected?.severidades.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            severidades: updateSeveridades,
+          }));
+          const updateNiveisRisco = disSelected?.niveisRisco.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            niveisRisco: updateNiveisRisco,
+          }));
+          const updatePlanosAcao = disSelected?.planosAcao.filter((el) => el?.perigo !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            planosAcao: updatePlanosAcao,
+          }));
+          handleClearSelecteds();
         },
         selectedIndex: perigoSelectedIndex,
         handleListSelect: () => { atividadeSelectedIndex >= 0 && setShowModalPerigosListSelect(true); }
@@ -545,6 +822,63 @@ const Dis = ({
             ...prevState,
             riscos: update,
           }));
+          const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            agentesRisco: updateAgentesRisco,
+          }));
+
+          const updateViaAbsorcao = disSelected?.viasAbsorcao.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            viasAbsorcao: updateViaAbsorcao,
+          }));
+          const updateFrequenciaExposicao = disSelected?.frequenciaExposicao.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            frequenciaExposicao: updateFrequenciaExposicao,
+          }));
+          const updateDuracaoExposicao = disSelected?.duracaoExposicao.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            duracaoExposicao: updateDuracaoExposicao,
+          }));
+          const updateCausas = disSelected?.causas.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            causas: updateCausas,
+          }));
+          const updateMedidas = disSelected?.medidas.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            medidas: updateMedidas,
+          }));
+          const updateAvaliacao = disSelected?.avaliacao.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            avaliacao: updateAvaliacao,
+          }));
+          const updateProbabilidades = disSelected?.probabilidades.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            probabilidades: updateProbabilidades,
+          }));
+          const updateSeveridades = disSelected?.severidades.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            severidades: updateSeveridades,
+          }));
+          const updateNiveisRisco = disSelected?.niveisRisco.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            niveisRisco: updateNiveisRisco,
+          }));
+          const updatePlanosAcao = disSelected?.planosAcao.filter((el) => el?.risco !== id);
+          setDisSelected((prevState) => ({
+            ...prevState,
+            planosAcao: updatePlanosAcao,
+          }));
+          handleClearSelecteds();
         },
         selectedIndex: riscoSelectedIndex,
         handleListSelect: (event) => {event.preventDefault();
@@ -1240,7 +1574,9 @@ const Dis = ({
 
   const addSeveridade = (items) => {
     const newItem = items.filter(item => {
+      console.log(probabilidadeSelected.valor, item.valor);
       const nivelRisco = niveisRiscoState.filter((el) => el.probabilidadeValor === probabilidadeSelected?.valor && el.severidadeValor === item.valor);
+      console.log(nivelRisco);
       addNivel(nivelRisco)
       return item
     });
@@ -1408,6 +1744,21 @@ const Dis = ({
     setDisSelected({ ...formEmpty });
     setEmpresaSelected(null)
     setAreaSelected(null);
+    setSetorSelected(null);
+    setSetorSelectedIndex(-1);
+    setFuncaoSelected(null);
+    setFuncaoSelectedIndex(-1);
+    setAtividadeSelected(null);
+    setAtividadeSelectedIndex(-1)
+    setPerigoSelected(null);
+    setPerigoSelectedIndex(-1)
+    setRiscoSelected(null);
+    setRiscoSelectedIndex(-1)
+    setPlanoAcaoSelected(null);
+    setPlanoAcaoSelectedIndex(-1);
+
+  }
+  const handleClearSelecteds = () => {
     setSetorSelected(null);
     setSetorSelectedIndex(-1);
     setFuncaoSelected(null);

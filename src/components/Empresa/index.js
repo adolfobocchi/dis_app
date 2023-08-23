@@ -313,7 +313,7 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                       />
                       {errors.ativo && <span>Campo obrigatório</span>}
                       <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}>
-                        <p>{`Usuário: ${empresaSelected?.usuario?.nome && empresaSelected?.usuario?.nome}`}</p>
+                        <p>{`Usuário: ${empresaSelected?.usuario?.nome || usuario.nome}`}</p>
                         <p>{`Ultima alteração: ${empresaSelected?.inclusao}`}</p>
                       </div>
                       <Styled.Button type="submit">Salvar</Styled.Button>

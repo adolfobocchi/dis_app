@@ -19,6 +19,7 @@ import {
 } from './actions';
 
 import api from '../../../services/api';
+import { SHOW_INFORMATION } from '../Information/actions';
 
 
 function* listarAreas(action) {
@@ -47,6 +48,7 @@ function* criarAreas(action) {
     const response = yield call(() => api.post('/areas', action.payload.area));
     const area = response.data;
     yield put({ type: CRIAR_AREAS_SUCCESS, payload: area });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'RAMO DE ATIVIDADE CADASTRADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_AREAS_FAILURE, payload: error.message });
   }
@@ -56,10 +58,10 @@ function* criarAreas(action) {
 
 function* updateAreas(action) {
   try {
-    console.log(action.payload);
     const response = yield call(() => api.put(`/areas/${action.payload.id}`, action.payload.area));
     const area = response.data;
     yield put({ type: UPDATE_AREAS_SUCCESS, payload: area });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'RAMO DE ATIVIDADE ATUALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: UPDATE_AREAS_FAILURE, payload: error.message });
   }
