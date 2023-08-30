@@ -25,10 +25,9 @@ const ModalContent = styled.div`
   border-radius: 5px;
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   flex: 1;
   flex-wrap: wrap;
-  justify-content: center;
   
   overflow-y: auto;
 `;
@@ -45,14 +44,16 @@ const ModalHeader = styled.div`
 const ListItem = styled.li`
   cursor: pointer;
   padding: 8px;
-  color: ${(props) => (props.selected ? '#00FF00' : '#000')};
+  background-color: ${(props) => (props.selected ? '#00FF00' : 'transparent')};
+  color: ${(props) => (props.selected ? '#FFF' : '#000')};
   display: flex;
-  margin: 8px;
-  width: 100px;
   overflow: hidden;
-  font-size: 0.8em;
+  font-size: 0.7em;
   font-weight: 400;
+  width: 250px;
+  margin: 4px;
   text-decoration: ${(props) => (props.selected ? 'underline' : 'none')};;
+  border-radius: 10px;
 `;
 
 const ModalListSelect = ({ dados, close, setItensSelected }) => {
@@ -85,7 +86,7 @@ const ModalListSelect = ({ dados, close, setItensSelected }) => {
 
         <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}><h2>SELECIONAR ITENS DA LISTA</h2></div>
         
-        <MdClose onClick={(event ) => {event.stopPropagation(); event.preventDefault(); setItensSelected(selectedItems); close(false)}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em' }} />
+        <MdClose onClick={(event ) => {event.stopPropagation(); event.preventDefault(); setItensSelected(selectedItems); close(false)}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em', marginRight: 8 }} />
       </ModalHeader>
       <ModalContent >
       {dadosState && dadosState.length > 0 && dadosState.map((item, index) => {

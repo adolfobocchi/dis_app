@@ -10,7 +10,6 @@ const ModalWrapper = styled.div`
   top: 0;
   left: 0;
   height: auto;
-  width: 100vw;
   height: calc(100vh);
   display: flex;
   flex-direction: column;
@@ -101,13 +100,14 @@ const ModalInfo = ({ dados, close }) => {
   if (!dadosState) {
     return <ModalLoading />
   }
+  console.log(dadosState);
   return (
     <ModalWrapper>
       <ModalHeader>
 
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><h2>DETALHES</h2></div>
 
-        <MdClose onClick={() => close(false)} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em' }} />
+        <MdClose onClick={() => close(false)} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em', marginRight: 8 }} />
       </ModalHeader>
       <ModalContent>
         <ContentInfoBasic>
@@ -127,9 +127,6 @@ const ModalInfo = ({ dados, close }) => {
           </div>
 
         </ContentInfoBasic>
-        <h3>Descrição do ambiente</h3>
-        <ContentInfoSeparador />
-        <ContentInfoText>{` ${dadosState?.ambiente}`}</ContentInfoText>
         <h3>Observações</h3>
         <ContentInfoSeparador />
         <ContentInfoText>{`${dadosState?.observacaoAmbiente}`}</ContentInfoText>
@@ -139,8 +136,10 @@ const ModalInfo = ({ dados, close }) => {
 
 
           {dadosState?.setores.map((setor, setIndex) => {
+            console.log(setor)
             return (
-            dadosState?.funcoes.filter(funcao => funcao.setor === setor?._id).map((funcao, funcaoIndex) => {
+            dadosState?.funcoes.filter(funcao => funcao.setor === setor?.setor?._id).map((funcao, funcaoIndex) => {
+              console.log(funcao)
               return (
                 <div style={{ display: 'flex', flex: 1, flexDirection: 'column', width: '80%', margin: 20 }}>
                   <div style={{ display: 'flex', flex: 1, width: '100%' }}>
@@ -148,28 +147,30 @@ const ModalInfo = ({ dados, close }) => {
                     <ColLabel>Função:</ColLabel>
                     <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>{funcao.funcao.nome}</div>
                     <ColLabel>QT DE FUNCIONARIOS:</ColLabel>
-                    <div style={{ display: 'flex', width: 100, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>0</div>
+                    <div style={{ display: 'flex', width: 100, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>{funcao.quantidade}</div>
                   </div>
                   <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
-                    <ColLabel>{setIndex + 1}</ColLabel>
                     <ColLabel>Setor:</ColLabel>
-                    <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>{setor.nome}</div>
+                    <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>{setor.setor.nome}</div>
                   </div>
                   <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
-                    <ColLabel>atividades: </ColLabel>
+                    <ColLabel>descricao do ambiente: </ColLabel>
                     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>
-                      {dadosState?.atividades.filter(atividade => atividade.funcao === funcao?.funcao._id).map((atividade, atividadeIndex) => {
-                        return (
+                      {setor?.descricao?.nome}
+                    </div>
+                    <ColLabel>data da identificação: </ColLabel>
+                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>
+                      {dadosState.data}
+                    </div>
 
-                          <p key={atividadeIndex} style={{ display: 'block' }}>
-                            {atividade.atividade.nome}
-                          </p>
+                  </div>
+                  <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 
-                        )
-                      })
-                      }
+                    <ColLabel>descricao das atividades: </ColLabel>
+                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 110 }}>
+                      {funcao?.descricao?.nome}
                     </div>
 
                   </div>

@@ -54,7 +54,7 @@ const ListItem = styled.li`
   text-decoration: ${(props) => (props.selected ? 'underline' : 'none')};;
 `;
 
-const ModalInput = ({dados, close, setItensSelected }) => {
+const ModalInput = ({label, dados, close, setItensSelected }) => {
   const [dadosState, setDadosState] = useState([]);
   const [inputData, setInputData] = useState({_id: 1, nome: ''})
   const [maiorIdState, setMaiorId] = useState(1);
@@ -64,12 +64,14 @@ const ModalInput = ({dados, close, setItensSelected }) => {
   }, [dados]);
 
   useEffect(() => {
+    
+    setInputData(dados[0])
     const maiorId = dadosState.reduce((maxId, obj) => {
       return obj.id > maxId ? obj.id : maxId;
     }, -Infinity);
     if(maiorId > 1)
       setMaiorId(maiorId)
-  }, [dadosState])
+  }, [dados, dadosState])
   
   const handleChange = (event) => {
     setInputData({...inputData, _id: maiorIdState, nome: event.target.value})
@@ -79,13 +81,13 @@ const ModalInput = ({dados, close, setItensSelected }) => {
     <ModalWrapper className="element-to-keep-selected">
       <ModalHeader>
 
-        <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}><h2>SELECIONAR ITENS DA LISTA</h2></div>
+        <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}><h2>DIGITE SEU TEXTO</h2></div>
         
-        <MdClose onClick={() => {setItensSelected([inputData]); close(false)}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em' }} />
+        <MdClose onClick={() => {setItensSelected([inputData]); close(false)}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em', marginRight: 8 }} />
       </ModalHeader>
       <ModalContent>
-        <h3>Avaliação: </h3>
-      <textarea style={{height: '70%', width: '70%'}} name="inputArea" value={inputData.nome} onChange={(event) => handleChange(event)} />
+        <h3>{label}: </h3>
+      <textarea style={{height: '70%', width: '70%'}} name="inputArea" value={inputData?.nome} onChange={(event) => handleChange(event)} />
       </ModalContent>
     </ModalWrapper>
   );

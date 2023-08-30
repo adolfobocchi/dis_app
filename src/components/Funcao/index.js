@@ -35,6 +35,8 @@ const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, up
       {}
   });
 
+  console.log(page);
+
   useEffect(() => {
     listarFuncoes(page, 0);
   }, []);

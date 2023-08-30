@@ -7,7 +7,7 @@ import ModalLoading from '../ModalLoading';
 import { addAtividade, addCausa, addFuncao, addMedida, addNivel, addProbabilidade, addPerigo, addPlanoAcao, addMonitoramento, addRisco, addSetor, addSeveridade, criarDisRequest, deleteDisRequest, listarDisRequest, removeAtividade, removeCausa, removeFuncao, removeMedida, removeNivel, removeProbabilidade, removePerigo, removePlanoAcao, removeMonitoramento, removeRisco, removeSetor, removeSeveridade, setDis, updateDisRequest, addAgenteRisco, removeAgenteRiscoo, removeAgenteRisco, addViasAbsorcao, removeViasAbsorcao, addViaAbsorcao, removeViaAbsorcao, addFrequenciaExposicao, removeFrequenciaExposicao, addDuracaoExposicao, removeDuracaoExposicao, addAvaliacao, removeAvaliacao, addIntencao, removeIntencao, addPrioridade, removePrioridade, addPrazo, removePrazo, addStatus, removeStatus } from '../../store/modules/Dis/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 
-import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdList, MdSearch, MdViewList } from 'react-icons/md';
+import { MdAdd, MdAddCircle, MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdList, MdSearch, MdViewList } from 'react-icons/md';
 
 import * as Styled from '../styleds';
 import styled from 'styled-components';
@@ -50,11 +50,13 @@ const ScrollableContainer = styled.div`
         overflow-y: hidden;
   margin-bottom: 10px;
   margin-top: 10px;
+  
 `;
 const DiagnosticoContent = styled.div`
   display: flex;
   width: 100%;
   flex-wrap: wrap;
+  font-size: 1.1em;
 `;
 const DiagnosticoItem = styled.div`
   display: flex;
@@ -64,6 +66,7 @@ const DiagnosticoItem = styled.div`
   flex-direction: column;
   padding: 6px;
   min-height: 280px;
+  font-size: 0.8em;
 
 `;
 const DiagnosticoItemArea = styled.div`
@@ -88,6 +91,10 @@ const DiagnosticoSearchArea = styled.div`
   height: 40px;
   align-items: center;
 
+`;
+
+const Titulo3 = styled.Titulo = styled.h3`
+  font-size: 1em;
 `
 
 const Dis = ({
@@ -132,6 +139,8 @@ const Dis = ({
   setoresDis,
   usuario,
 }) => {
+
+  const formRef = useRef(null);
 
   const API_URL = process.env.REACT_APP_URL_API;
 
@@ -202,6 +211,8 @@ const Dis = ({
   const [showModalPrazosListSelect, setShowModalPrazosListSelect] = useState(false);
   const [showModalMonitoramentosListSelect, setShowModalMonitoramentosListSelect] = useState(false);
   const [showModalStatusListSelect, setShowModalStatusListSelect] = useState(false);
+  const [showModalDescricaoSetorSelect, setShowModalDescricaoSetorSelect] = useState(false);
+  const [showModalDescricaoFuncaoSelect, setShowModalDescricaoFuncaoSelect] = useState(false);
 
   const [disListState, setDisListState] = useState([]);
 
@@ -275,6 +286,8 @@ const Dis = ({
   const [monitoramentoSelectedIndex, setMonitoramentoSelectedIndex] = useState(-1);
   const [statusSelectedIndex, setStatusSelectedIndex] = useState(-1);
 
+  const [quantidadeFuncaoState, setQuantidadeFuncaoState] = useState(0);
+
   const [disSelected, setDisSelected] = useState(formEmpty);
   const { register, control, setValue, formState: { errors }, handleSubmit, reset } = useForm({
     defaultValues: disSelected
@@ -284,6 +297,13 @@ const Dis = ({
     { id: 1, label: 'Cadastro', expanded: false, sections: [{ id: 1, label: 'Cadastro', expanded: false, component: 'formulario' },], icon: <MdEdit /> },
     { id: 2, label: 'Pesquisa', expanded: true, sections: [{ id: 1, label: 'Pesquisa', expanded: false, component: 'search' },], icon: <MdSearch /> },
     { id: 3, label: 'Listagem', expanded: true, sections: [{ id: 1, label: 'Listagem', expanded: false, component: 'listagem' },], icon: <MdViewList /> },
+  ])
+
+  const [sectionCadItems, setSectionCadItems] = useState([
+    { id: 0, label: 'Geral', expanded: true, sections: [{ id: 1, label: 'Geral', expanded: false, component: 'geral' },], icon: <MdEdit /> },
+    { id: 1, label: 'Setor', expanded: false, sections: [{ id: 1, label: 'Setor', expanded: false, component: 'setor' },], icon: <MdEdit /> },
+    { id: 2, label: 'Função', expanded: false, sections: [{ id: 1, label: 'Função', expanded: false, component: 'funcao' },], icon: <MdEdit /> },
+    { id: 3, label: 'Diagnóstico', expanded: false, sections: [{ id: 1, label: 'Diagnóstico', expanded: false, component: 'diagnostico' },], icon: <MdEdit /> },
   ])
 
   const [diagnosticoItems, setDiagnotiscoItems] = useState([
@@ -408,20 +428,20 @@ const Dis = ({
         id: 1,
         label: 'Setores:',
         list: setoresState,
-        items: disSelected.setores.map(setor => setor) || [],
+        items: disSelected.setores.map(setor => setor?.setor) || [],
         onSelect: (item) => {
-          const exists = disSelected?.setores.find((el) => el._id === item._id);
-          if (!exists||exists) {
-            const update = [...disSelected?.setores, item];
+          const exists = disSelected?.setores.find((el) => el.setor?._id === item._id);
+          if (!exists || exists) {
+            const update = [...disSelected?.setores, { setor: item, descricao: '', setorImg: '' }];
             setDisSelected((prevState) => ({
               ...prevState,
               setores: update,
             }));
           }
         },
-        onSelected: (event, index) => { setSetorSelected(disSelected.setores[index]); setSetorSelectedIndex(index) },
+        onSelected: (event, index) => { handleClearSelecteds(); setSetorSelected(disSelected.setores[index].setor); setSetorSelectedIndex(index) },
         onDelete: (event, id) => {
-          const update = disSelected?.setores.filter((el) => el?._id !== id);
+          const update = disSelected?.setores.filter((el) => el?.setor?._id !== id);
           setDisSelected((prevState) => ({
             ...prevState,
             setores: update,
@@ -449,7 +469,7 @@ const Dis = ({
             ...prevState,
             riscos: updateRisco,
           }));
-          
+
           const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.setor !== id);
           setDisSelected((prevState) => ({
             ...prevState,
@@ -509,17 +529,18 @@ const Dis = ({
           handleClearSelecteds();
         },
         selectedIndex: setorSelectedIndex,
-        handleListSelect: () => { setShowModalSetoresListSelect(true); }
+        handleListSelect: () => { setShowModalSetoresListSelect(true); },
+        doublelClick: () => { setorSelectedIndex >= 0 && setShowModalDescricaoSetorSelect(true); }
       },
       {
         id: 2,
         label: 'Funções:',
         list: funcoesState,
-        items: setorSelected ? disSelected.funcoes.filter(el => el.setor === setorSelected?._id).map(el => el?.funcao) : disSelected.funcoes.flatMap(el => el.funcao) || [],
+        items: setorSelected ? disSelected.funcoes.filter(el => el?.setor === setorSelected?._id).map(el => el?.funcao) : disSelected.funcoes.flatMap(el => el?.funcao) || [],
         onSelect: (item) => {
           const exists = disSelected?.funcoes.find((el) => el?.funcao._id === item._id);
-          if (!exists||exists) {
-            const update = [...disSelected?.funcoes, { funcao: item, setor: setorSelected?._id }];
+          if (!exists || exists) {
+            const update = [...disSelected?.funcoes, { funcao: item, setor: setorSelected?._id, quantidade: 0, descricao: '' }];
             setDisSelected((prevState) => ({
               ...prevState,
               funcoes: update,
@@ -550,7 +571,7 @@ const Dis = ({
             ...prevState,
             riscos: updateRisco,
           }));
-          
+
           const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.funcao !== id);
           setDisSelected((prevState) => ({
             ...prevState,
@@ -610,112 +631,113 @@ const Dis = ({
           handleClearSelecteds();
         },
         selectedIndex: funcaoSelectedIndex,
-        handleListSelect: () => { setorSelectedIndex >= 0 && setShowModalFuncoesListSelect(true); }
+        handleListSelect: () => { setorSelectedIndex >= 0 && setShowModalFuncoesListSelect(true); },
+        doublelClick: () => { setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && setShowModalDescricaoFuncaoSelect(true); }
       },
-      {
-        id: 3,
-        label: 'Atividades Realizadas:',
-        list: atividadesState,
-        items: setorSelected ? disSelected.atividades.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).map(el => el?.atividade) : disSelected.atividades.flatMap(el => el?.atividade) || [],
-        onSelect: (item) => {
-          const exists = disSelected?.atividades.find((el) => el?.atividade._id === item._id);
-          if (!exists||exists) {
-            const update = [...disSelected?.atividades, { atividade: item, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
-            setDisSelected((prevState) => ({
-              ...prevState,
-              atividades: update,
-            }));
-          }
-        },
-        onSelected: (event, index) => { setAtividadeSelected(disSelected.atividades[index].atividade); setAtividadeSelectedIndex(index) },
-        onDelete: (event, id) => {
-          const update = disSelected?.atividades.filter((el) => el?.atividade._id !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            atividades: update,
-          }));
-          const updatePerigos = disSelected?.perigos.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            perigos: updatePerigos,
-          }));
+      // {
+      //   id: 3,
+      //   label: 'Atividades Realizadas:',
+      //   list: atividadesState,
+      //   items: setorSelected ? disSelected.atividades.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).map(el => el?.atividade) : disSelected.atividades.flatMap(el => el?.atividade) || [],
+      //   onSelect: (item) => {
+      //     const exists = disSelected?.atividades.find((el) => el?.atividade._id === item._id);
+      //     if (!exists || exists) {
+      //       const update = [...disSelected?.atividades, { atividade: item, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
+      //       setDisSelected((prevState) => ({
+      //         ...prevState,
+      //         atividades: update,
+      //       }));
+      //     }
+      //   },
+      //   onSelected: (event, index) => { setAtividadeSelected(disSelected.atividades[index].atividade); setAtividadeSelectedIndex(index) },
+      //   onDelete: (event, id) => {
+      //     const update = disSelected?.atividades.filter((el) => el?.atividade._id !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       atividades: update,
+      //     }));
+      //     const updatePerigos = disSelected?.perigos.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       perigos: updatePerigos,
+      //     }));
 
-          const updateRisco = disSelected?.riscos.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            riscos: updateRisco,
-          }));
-          
-          const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            agentesRisco: updateAgentesRisco,
-          }));
+      //     const updateRisco = disSelected?.riscos.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       riscos: updateRisco,
+      //     }));
 
-          const updateViaAbsorcao = disSelected?.viasAbsorcao.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            viasAbsorcao: updateViaAbsorcao,
-          }));
-          const updateFrequenciaExposicao = disSelected?.frequenciaExposicao.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            frequenciaExposicao: updateFrequenciaExposicao,
-          }));
-          const updateDuracaoExposicao = disSelected?.duracaoExposicao.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            duracaoExposicao: updateDuracaoExposicao,
-          }));
-          const updateCausas = disSelected?.causas.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            causas: updateCausas,
-          }));
-          const updateMedidas = disSelected?.medidas.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            medidas: updateMedidas,
-          }));
-          const updateAvaliacao = disSelected?.avaliacao.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            avaliacao: updateAvaliacao,
-          }));
-          const updateProbabilidades = disSelected?.probabilidades.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            probabilidades: updateProbabilidades,
-          }));
-          const updateSeveridades = disSelected?.severidades.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            severidades: updateSeveridades,
-          }));
-          const updateNiveisRisco = disSelected?.niveisRisco.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            niveisRisco: updateNiveisRisco,
-          }));
-          const updatePlanosAcao = disSelected?.planosAcao.filter((el) => el?.atividade !== id);
-          setDisSelected((prevState) => ({
-            ...prevState,
-            planosAcao: updatePlanosAcao,
-          }));
-          handleClearSelecteds();
-        },
-        selectedIndex: atividadeSelectedIndex,
-        handleListSelect: () => { funcaoSelectedIndex >= 0 && setShowModalAtividadesListSelect(true); }
-      },
+      //     const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       agentesRisco: updateAgentesRisco,
+      //     }));
+
+      //     const updateViaAbsorcao = disSelected?.viasAbsorcao.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       viasAbsorcao: updateViaAbsorcao,
+      //     }));
+      //     const updateFrequenciaExposicao = disSelected?.frequenciaExposicao.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       frequenciaExposicao: updateFrequenciaExposicao,
+      //     }));
+      //     const updateDuracaoExposicao = disSelected?.duracaoExposicao.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       duracaoExposicao: updateDuracaoExposicao,
+      //     }));
+      //     const updateCausas = disSelected?.causas.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       causas: updateCausas,
+      //     }));
+      //     const updateMedidas = disSelected?.medidas.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       medidas: updateMedidas,
+      //     }));
+      //     const updateAvaliacao = disSelected?.avaliacao.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       avaliacao: updateAvaliacao,
+      //     }));
+      //     const updateProbabilidades = disSelected?.probabilidades.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       probabilidades: updateProbabilidades,
+      //     }));
+      //     const updateSeveridades = disSelected?.severidades.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       severidades: updateSeveridades,
+      //     }));
+      //     const updateNiveisRisco = disSelected?.niveisRisco.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       niveisRisco: updateNiveisRisco,
+      //     }));
+      //     const updatePlanosAcao = disSelected?.planosAcao.filter((el) => el?.atividade !== id);
+      //     setDisSelected((prevState) => ({
+      //       ...prevState,
+      //       planosAcao: updatePlanosAcao,
+      //     }));
+      //     handleClearSelecteds();
+      //   },
+      //   selectedIndex: atividadeSelectedIndex,
+      //   handleListSelect: () => { funcaoSelectedIndex >= 0 && setShowModalAtividadesListSelect(true); }
+      // },
       {
         id: 4,
-        label: 'Condição de perigo:',
+        label: 'Fonte ou Circunstância:',
         list: perigosState,
         items: setorSelected ? disSelected.perigos.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).filter(el => el.atividade === atividadeSelected?._id).map(el => el?.perigo)
           : disSelected.perigos.flatMap(el => el?.perigo) || [],
         onSelect: (item) => {
           const exists = disSelected?.perigos.find((el) => el?.perigo._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.perigos, { perigo: item, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -735,7 +757,7 @@ const Dis = ({
             ...prevState,
             riscos: updateRisco,
           }));
-          
+
           const updateAgentesRisco = disSelected?.agentesRisco.filter((el) => el?.perigo !== id);
           setDisSelected((prevState) => ({
             ...prevState,
@@ -795,7 +817,7 @@ const Dis = ({
           handleClearSelecteds();
         },
         selectedIndex: perigoSelectedIndex,
-        handleListSelect: () => { atividadeSelectedIndex >= 0 && setShowModalPerigosListSelect(true); }
+        handleListSelect: () => { setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && setShowModalPerigosListSelect(true); }
       },
 
       {
@@ -806,7 +828,7 @@ const Dis = ({
           : disSelected.riscos.flatMap(el => el?.risco) || [],
         onSelect: (item) => {
           const exists = disSelected?.riscos.find((el) => el?.risco._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.riscos, { risco: item, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -881,10 +903,12 @@ const Dis = ({
           handleClearSelecteds();
         },
         selectedIndex: riscoSelectedIndex,
-        handleListSelect: (event) => {event.preventDefault();
-          event.stopPropagation(); perigoSelectedIndex >= 0 && setShowModalRiscosListSelect(true); scrollPositionRef.current = window.scrollY;  if (scrollPositionRef.current !== null) {
+        handleListSelect: (event) => {
+          event.preventDefault();
+          event.stopPropagation(); perigoSelectedIndex >= 0 && setShowModalRiscosListSelect(true); scrollPositionRef.current = window.scrollY; if (scrollPositionRef.current !== null) {
             window.scrollTo(0, scrollPositionRef.current);
-          } }
+          }
+        }
       },
       {
         id: 6,
@@ -895,7 +919,7 @@ const Dis = ({
         onSelect: (item) => {
           item.risco = riscoSelected;
           const exists = disSelected?.agentesRisco.find((el) => el?.agenteRisco._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.agentesRisco, { agenteRisco: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -924,7 +948,7 @@ const Dis = ({
         onSelect: (item) => {
           item.risco = riscoSelected;
           const exists = disSelected?.viasAbsorcao.find((el) => el?.viaAbsorcao._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.viasAbsorcao, { viaAbsorcao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -952,7 +976,7 @@ const Dis = ({
           : disSelected.frequenciaExposicao.flatMap(el => el?.frequenciaExposicao) || [],
         onSelect: (item) => {
           const exists = disSelected?.frequenciaExposicao.find((el) => el?.frequenciaExposicao._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.frequenciaExposicao, { frequenciaExposicao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -980,7 +1004,7 @@ const Dis = ({
           : disSelected.duracaoExposicao.flatMap(el => el?.duracaoExposicao) || [],
         onSelect: (item) => {
           const exists = disSelected?.duracaoExposicao.find((el) => el?.duracaoExposicao._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.duracaoExposicao, { duracaoExposicao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1008,7 +1032,7 @@ const Dis = ({
           : disSelected.causas.flatMap(el => el?.causa) || [],
         onSelect: (item) => {
           const exists = disSelected?.causas.find((el) => el?.causa._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.causas, { causa: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1036,7 +1060,7 @@ const Dis = ({
           : disSelected.medidas.flatMap(el => el?.medida) || [],
         onSelect: (item) => {
           const exists = disSelected?.medidas.find((el) => el?.medida._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.medidas, { medida: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1064,7 +1088,7 @@ const Dis = ({
           : disSelected.avaliacao.flatMap(el => el?.avaliacao) || [],
         onSelect: (item) => {
           const exists = disSelected?.avaliacao.find((el) => el?.avaliacao._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.avaliacao, { avaliacao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1092,7 +1116,7 @@ const Dis = ({
           : disSelected.probabilidades.flatMap(el => el?.probabilidade) || [],
         onSelect: (item) => {
           const exists = disSelected?.probabilidades.find((el) => el?.probabilidade._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.probabilidades, { probabilidade: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1120,7 +1144,7 @@ const Dis = ({
           : disSelected.severidades.flatMap(el => el?.severidade) || [],
         onSelect: (item) => {
           const exists = disSelected?.severidades.find((el) => el?.severidade._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.severidades, { severidade: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1148,7 +1172,7 @@ const Dis = ({
           : disSelected.niveisRisco.flatMap(el => el?.nivelRisco) || [],
         onSelect: (item) => {
           const exists = disSelected?.niveisRisco.find((el) => el?.nivelRisco._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.niveisRisco, { nivelRisco: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1177,7 +1201,7 @@ const Dis = ({
         onSelect: (item) => {
           item.risco = riscoSelected;
           const exists = disSelected?.planosAcao.find((el) => el?.planoAcao._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.planosAcao, { planoAcao: item, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];;
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1201,11 +1225,11 @@ const Dis = ({
         id: 17,
         label: 'Intenção:',
         list: intencoesState,
-        items:  setorSelected ? disSelected.intencao.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).filter(el => el.atividade === atividadeSelected?._id).filter(el => el.perigo === perigoSelected?._id).filter(el => el.risco === riscoSelected?._id).filter(el => el.planoAcao === planoAcaoSelected?._id).map(el => el?.intencao)
+        items: setorSelected ? disSelected.intencao.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).filter(el => el.atividade === atividadeSelected?._id).filter(el => el.perigo === perigoSelected?._id).filter(el => el.risco === riscoSelected?._id).filter(el => el.planoAcao === planoAcaoSelected?._id).map(el => el?.intencao)
           : disSelected.intencao.flatMap(el => el?.intencao) || [],
         onSelect: (item) => {
           const exists = disSelected?.intencao.find((el) => el?.intencao._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.intencao, { intencao: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1229,11 +1253,11 @@ const Dis = ({
         id: 18,
         label: 'Prioridade:',
         list: prioridadesState,
-        items:  setorSelected ? disSelected.prioridade.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).filter(el => el.atividade === atividadeSelected?._id).filter(el => el.perigo === perigoSelected?._id).filter(el => el.risco === riscoSelected?._id).filter(el => el.planoAcao === planoAcaoSelected?._id).map(el => el?.prioridade)
-          :disSelected.prioridade.flatMap(el => el?.prioridade) || [],
+        items: setorSelected ? disSelected.prioridade.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).filter(el => el.atividade === atividadeSelected?._id).filter(el => el.perigo === perigoSelected?._id).filter(el => el.risco === riscoSelected?._id).filter(el => el.planoAcao === planoAcaoSelected?._id).map(el => el?.prioridade)
+          : disSelected.prioridade.flatMap(el => el?.prioridade) || [],
         onSelect: (item) => {
           const exists = disSelected?.prioridade.find((el) => el?.prioridade._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.prioridade, { prioridade: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1261,7 +1285,7 @@ const Dis = ({
           : disSelected.prazo.flatMap(el => el?.prazo) || [],
         onSelect: (item) => {
           const exists = disSelected?.prazo.find((el) => el?.prazo._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.prazo, { prazo: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1289,7 +1313,7 @@ const Dis = ({
           : disSelected.monitoramentos.flatMap(el => el?.monitoramento) || [],
         onSelect: (item) => {
           const exists = disSelected?.monitoramentos.find((el) => el?.monitoramento._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.monitoramentos, { monitoramento: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];;
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1313,11 +1337,11 @@ const Dis = ({
         id: 21,
         label: 'Status:',
         list: statusState,
-        items:  setorSelected ? disSelected.status.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).filter(el => el.atividade === atividadeSelected?._id).filter(el => el.perigo === perigoSelected?._id).filter(el => el.risco === riscoSelected?._id).filter(el => el.planoAcao === planoAcaoSelected?._id).map(el => el?.status)
+        items: setorSelected ? disSelected.status.filter(el => el.setor === setorSelected?._id).filter(el => el.funcao === funcaoSelected?._id).filter(el => el.atividade === atividadeSelected?._id).filter(el => el.perigo === perigoSelected?._id).filter(el => el.risco === riscoSelected?._id).filter(el => el.planoAcao === planoAcaoSelected?._id).map(el => el?.status)
           : disSelected.status.flatMap(el => el?.status) || [],
         onSelect: (item) => {
           const exists = disSelected?.status.find((el) => el?.status._id === item._id);
-          if (!exists||exists) {
+          if (!exists || exists) {
             const update = [...disSelected?.status, { status: item, planoAcao: planoAcaoSelected?._id, risco: riscoSelected?._id, perigo: perigoSelected?._id, atividade: atividadeSelected?._id, setor: setorSelected?._id, funcao: funcaoSelected?._id }];
             setDisSelected((prevState) => ({
               ...prevState,
@@ -1345,15 +1369,37 @@ const Dis = ({
     reset({ ...disSelected });
   }, [reset, disSelected])
 
+  const triggerSubmit = () => {
+    // Disparar o submit do formulário
+    //formRef.current.dispatchEvent(new Event('submit', { cancelable: true }));
+  };
+
+  const handleQuantidadeFuncao = (event) => {
+    setQuantidadeFuncaoState(event.target.value);
+    disSelected.funcoes[funcaoSelectedIndex].quantidade = quantidadeFuncaoState;
+    
+    setDisSelected((prevState) => ({
+      ...prevState,
+      funcoes: [...prevState.funcoes],
+    }));
+  }
+
   const addSetor = (items) => {
     const newItem = items.filter(item => (
-      !disSelected?.setores.some(el => el._id === item._id)
+      !disSelected?.setores.some(el => el?.setor?._id === item._id)
     ));
+
+    const updated = newItem.map(item => ({
+      setor: item,
+      descricao: '',
+      setorImg: ''
+    }));
 
     setDisSelected((prevState) => ({
       ...prevState,
-      setores: [...prevState.setores, ...newItem],
+      setores: [...prevState.setores, ...updated],
     }));
+    triggerSubmit()
   }
   const addFuncao = (items) => {
     // const newItem = items.filter(item => {
@@ -1361,7 +1407,9 @@ const Dis = ({
     // });
     const updated = items.map(item => ({
       funcao: item,
-      setor: setorSelected?._id
+      setor: setorSelected?._id,
+      descricao: '',
+      quantidade: 0
     }));
     setDisSelected((prevState) => ({
       ...prevState,
@@ -1416,9 +1464,9 @@ const Dis = ({
     updated.forEach(item => {
       //setRiscoSelected(item.risco);
       addAgenteRisco(item?.risco?.agentesRisco, item.risco?._id);
-      addViaAbsorcao(item?.risco?.viasAbsorcao,  item.risco?._id);
-      addCausa(item?.risco?.causas,  item.risco?._id);
-      addPlanoAcao(item?.risco?.planosAcao,  item.risco?._id);
+      addViaAbsorcao(item?.risco?.viasAbsorcao, item.risco?._id);
+      addCausa(item?.risco?.causas, item.risco?._id);
+      addPlanoAcao(item?.risco?.planosAcao, item.risco?._id);
     })
 
     setDisSelected((prevState) => ({
@@ -1428,7 +1476,7 @@ const Dis = ({
 
   }
 
-  const addAgenteRisco = ( items, idRisco = riscoSelected) => {
+  const addAgenteRisco = (items, idRisco = riscoSelected) => {
     // const newItem = items.filter(item => {
     //   return !disSelected?.agentesRisco.some(el => el.agenteRisco?._id === item._id)
     // });
@@ -1452,7 +1500,7 @@ const Dis = ({
     // });
     const updated = items.map(item => ({
       viaAbsorcao: item,
-      risco:  idRisco,
+      risco: idRisco,
       perigo: perigoSelected?._id,
       atividade: atividadeSelected?._id,
       setor: setorSelected?._id,
@@ -1725,6 +1773,24 @@ const Dis = ({
     }));
   }
 
+  const addDescricaoSetor = (items) => {
+    disSelected.setores[setorSelectedIndex].descricao = items[0];
+    
+    setDisSelected((prevState) => ({
+      ...prevState,
+      setores: [...prevState.setores],
+    }));
+  }
+
+  const addDescricaoFuncao = (items) => {
+    disSelected.funcoes[funcaoSelectedIndex].descricao = items[0];
+    
+    setDisSelected((prevState) => ({
+      ...prevState,
+      funcoes: [...prevState.funcoes],
+    }));
+  }
+
   const handleSelect = (event, index) => {
     event.preventDefault();
     event.stopPropagation();
@@ -1826,6 +1892,49 @@ const Dis = ({
     );
   };
 
+
+  const toggleSectionCad = (itemId, event) => {
+    event.stopPropagation();
+    setSectionCadItems((prevState) =>
+      prevState.map((item) => {
+        if (item.id === itemId) {
+          return { ...item, expanded: !item.expanded };
+        }
+        return item;
+      })
+    );
+  };
+
+  const toggleSectionCadExpand = (itemId, event) => {
+    event.stopPropagation();
+    setSectionCadItems((prevState) =>
+      prevState.map((item) => {
+        if (item.id === itemId) {
+          return { ...item, expanded: true };
+        }
+        return item;
+      })
+    );
+  };
+
+  useEffect(() => {
+    setSetorSelected(disSelected.setores[setorSelectedIndex]?.setor);
+  }, [disSelected.setores, setSetorSelectedIndex, setorSelectedIndex])
+
+  useEffect(() => {
+    
+    setFuncaoSelected(disSelected.funcoes[funcaoSelectedIndex]?.funcao);
+  },[disSelected.funcoes, funcaoSelectedIndex, setFuncaoSelectedIndex])
+
+  const handleSetorChange = (event) => {
+    setSetorSelectedIndex(event.target.value);
+    
+  }
+
+  const handleFuncaoChange = (event) => {
+    setFuncaoSelectedIndex(event.target.value);
+  }
+
   if (loading || !areasState || !setoresState) {
     return <ModalLoading />
   }
@@ -1919,6 +2028,14 @@ const Dis = ({
       setItensSelected={(items) => addStatus(items)} />
   }
 
+  if (showModalDescricaoSetorSelect) {
+    return <ModalInput label={'Descrição do setor'} dados={[disSelected.setores[setorSelectedIndex].descricao]} close={setShowModalDescricaoSetorSelect}
+      setItensSelected={(items) => addDescricaoSetor(items)} />
+  }
+  if (showModalDescricaoFuncaoSelect) {
+    return <ModalInput label={'Descrição da Função'} dados={[disSelected.funcoes[funcaoSelectedIndex].descricao]} close={setShowModalDescricaoFuncaoSelect}
+      setItensSelected={(items) => addDescricaoFuncao(items)} />
+  }
   return (
     <Styled.Container>
       {sectionItems.map((sectionItem) => (
@@ -1938,102 +2055,218 @@ const Dis = ({
               if (section.component === 'formulario') {
                 return (
                   <Styled.FormArea className="element-to-keep-selected">
-                    <Styled.Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
-                      <Styled.Input
-                        hidden
-                        {...register('_id')}
-                      />
-                      <Styled.Label>Empresa: </Styled.Label>
-                      <InputSearch items={empresasState} onSelect={(item) => setEmpresaSelected(item)} valueSelected={empresaSelected?.razaoSocial} field={'razaoSocial'} />
+                    <Styled.Form ref={formRef} onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+                      {sectionCadItems.map((sectionCadItem) => (
+                        <>
+                          <Styled.SectionArea
+                            key={sectionCadItem.id}
+                            onClick={(event) => toggleSectionCad(sectionCadItem.id, event)}
+                          >
+                            <Styled.AreaWidth style={{ width: 20 }}>{sectionCadItem.icon}</Styled.AreaWidth>
+                            <Styled.AreaFlex>{sectionCadItem.label}</Styled.AreaFlex>
+                            <Styled.AreaWidth style={{ width: 20, justifyContent: 'flex-end' }} >
+                              {sectionCadItem.expanded ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                            </Styled.AreaWidth>
+                          </Styled.SectionArea>
+                          {sectionCadItem.expanded &&
+                            sectionCadItem.sections.map((section) => {
+                              if (section.component === 'geral') {
+                                return (<>
+                                  <Styled.Input
+                                    hidden
+                                    {...register('_id')}
+                                  />
+                                  <Styled.Label>Empresa: </Styled.Label>
+                                  <InputSearch items={empresasState} onSelect={(item) => setEmpresaSelected(item)} valueSelected={empresaSelected?.razaoSocial} field={'razaoSocial'} />
 
-                      {errors.empresa && <span>Campo obrigatório</span>}
+                                  {errors.empresa && <span>Campo obrigatório</span>}
 
-                      <Styled.Label>Data: </Styled.Label>
-                      <DataPicker name="data" control={control} setValue={setValue} defaultValue={disSelected?.data} showTimeSelect={false} />
-                      {errors.data && <span>Campo obrigatório</span>}
+                                  <Styled.Label>Data: </Styled.Label>
+                                  <DataPicker name="data" control={control} setValue={setValue} defaultValue={disSelected?.data} showTimeSelect={false} />
+                                  {errors.data && <span>Campo obrigatório</span>}
 
-                      <Styled.Label>Foto da Fachada: </Styled.Label>
-                      <Styled.Input type='file' multiple name='files' {...register('files', { required: false })} />
+                                  <Styled.Label>Foto da Fachada: </Styled.Label>
+                                  <Styled.Input type='file' multiple name='files' {...register('files', { required: false })} />
 
-                      <Styled.Label>Responsavel: </Styled.Label>
-                      <Styled.Input
-                        placeholder='Nome do responsavel'
-                        {...register('responsavel', { required: false })}
-                      />
-                      {errors.responsavel && <span>Campo obrigatório</span>}
-                      <Styled.Label>Função: </Styled.Label>
-                      <Styled.Input
-                        placeholder='Função do responsavel'
-                        {...register('funcao', { required: false })}
-                      />
-                      {errors.responsavel && <span>Campo obrigatório</span>}
-                      <Styled.Label>Telefone: </Styled.Label>
-                      <Styled.Input
-                        placeholder='Telefone do responsavel'
-                        {...register('telefone', { required: false })}
-                      />
-                      {errors.telefone && <span>Campo obrigatório</span>}
+                                  <Styled.Label>Responsavel: </Styled.Label>
+                                  <Styled.Input
+                                    placeholder='Nome do responsavel'
+                                    {...register('responsavel', { required: false })}
+                                  />
+                                  {errors.responsavel && <span>Campo obrigatório</span>}
+                                  <Styled.Label>Função: </Styled.Label>
+                                  <Styled.Input
+                                    placeholder='Função do responsavel'
+                                    {...register('funcao', { required: false })}
+                                  />
+                                  {errors.responsavel && <span>Campo obrigatório</span>}
+                                  <Styled.Label>Telefone: </Styled.Label>
+                                  <Styled.Input
+                                    placeholder='Telefone do responsavel'
+                                    {...register('telefone', { required: false })}
+                                  />
+                                  {errors.telefone && <span>Campo obrigatório</span>}
 
-                      <Styled.Label>E-mail: </Styled.Label>
-                      <Styled.Input
-                        type='email'
-                        placeholder='E-mail'
-                        {...register('email', { required: false })}
-                      />
-                      {errors.email && <span>Campo obrigatório</span>}
+                                  <Styled.Label>E-mail: </Styled.Label>
+                                  <Styled.Input
+                                    type='email'
+                                    placeholder='E-mail'
+                                    {...register('email', { required: false })}
+                                  />
+                                  {errors.email && <span>Campo obrigatório</span>}
 
-                      <Styled.Label>Ramo de atividade: </Styled.Label>
-                      <Styled.Input
-                        disabled
-                        value={empresaSelected?.area?.nome}
-                      />
-                      {errors.area && <span>Campo obrigatório</span>}
+                                  <Styled.Label>Ramo de atividade: </Styled.Label>
+                                  <Styled.Input
+                                    disabled
+                                    value={empresaSelected?.area?.nome}
+                                  />
+                                  {errors.area && <span>Campo obrigatório</span>}
 
-                      <Styled.Label>Caracterização do ambiente</Styled.Label>
-                      <Styled.Input
-                        placeholder=''
-                        {...register('ambiente', { required: true })}
-                      />
-                      {errors.ambiente && <span>Campo obrigatório</span>}
+                                  <Styled.Label>Observação</Styled.Label>
+                                  <Styled.Input
+                                    placeholder=''
+                                    {...register('observacaoAmbiente', { required: false })}
+                                  />
+                                  {errors.observacaoAmbiente && <span>Campo obrigatório</span>}
+                                </>)
+                              }
+                              if (section.component === 'setor') {
+                                return (<>
+                                  <ScrollableContainer>
+                                    <DiagnosticoContent >
+                                      <DiagnosticoItemArea key={diagnosticoItems[0].id} className="element-to-keep-selected" >
+                                        <Titulo3>{diagnosticoItems[0].label}</Titulo3>
+                                        <DiagnosticoItem  >
+                                          <DiagnosticoSearchArea>
+                                            <InputSearch items={diagnosticoItems[0].list} onSelect={diagnosticoItems[0].onSelect} /> <MdList onClick={diagnosticoItems[0].handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
+                                          </DiagnosticoSearchArea >
+                                          {
+                                            diagnosticoItems[0].items && diagnosticoItems[0].items.map((item, index) =>
+                                            (
+                                              <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[0].onSelected(event, index)} style={{ background: index === diagnosticoItems[0].selectedIndex ? '#CCC' : '#FFF' }}   >
+                                                <p>{item?.nome}</p>
+                                                <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[0].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
+                                              </DignosticoItemSelectedArea>
+                                            )
+                                            )
+                                          }
+                                        </DiagnosticoItem>
 
-                      <Styled.Label>Observação</Styled.Label>
-                      <Styled.Input
-                        placeholder=''
-                        {...register('observacaoAmbiente', { required: false })}
-                      />
-                      {errors.observacaoAmbiente && <span>Campo obrigatório</span>}
+                                      </DiagnosticoItemArea>
+                                      <DiagnosticoItemArea>
+                                        <div style={{display: 'flex', alignItems: 'center'}}><Titulo3>Descrição</Titulo3><MdAddCircle onClick={diagnosticoItems[0].doublelClick} style={{ height: '2em', width: '2em', cursor: 'pointer' }} /></div>
+                                        <p>{disSelected.setores[setorSelectedIndex]?.descricao ? disSelected.setores[setorSelectedIndex]?.descricao?.nome : 'Selecione um setor e adicione uma descricao'}</p>
+                                      </DiagnosticoItemArea>
+                                      <DiagnosticoItemArea>
+                                        <Titulo3>Imagem Setor: </Titulo3>
+                                        <Styled.Input type='file' multiple name='files' {...register('files', { required: false })} />
+                                      </DiagnosticoItemArea>
+                                    </DiagnosticoContent>
+                                  </ScrollableContainer>
+                                </>)
+                              }
+                              if (section.component === 'funcao') {
+                                return (<>
+                                  <ScrollableContainer>
+                                    <div style={{height: 40, display: 'flex', justifyContent: 'center', marginBottom: 10, alignItems: 'center'}}>
+                                      <Titulo3>Setor:</Titulo3>
+                                    <select style={{width: '20%'}} value={setorSelectedIndex} onChange={handleSetorChange} >
+                                        <option key="0" value={-1}>SELECIONE UM SETOR</option>
+                                        {disSelected.setores.map((setor, index) => (
+                                          <option key={index} value={index}>{setor?.setor?.nome}</option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                    <DiagnosticoContent >
+                                     
+                                      <DiagnosticoItemArea key={diagnosticoItems[1].id} className="element-to-keep-selected" >
+                                        <Titulo3>{diagnosticoItems[1].label}</Titulo3>
+                                        <DiagnosticoItem  >
+                                          <DiagnosticoSearchArea>
+                                            <InputSearch items={diagnosticoItems[1].list} onSelect={diagnosticoItems[1].onSelect} /> <MdList onClick={diagnosticoItems[1].handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
+                                          </DiagnosticoSearchArea >
 
-                      <ScrollableContainer>
-                        <DiagnosticoContent >
-                          {diagnosticoItems?.map((diagnosticoItem, index) => (
-                            <DiagnosticoItemArea key={diagnosticoItem.id} className="element-to-keep-selected" >
-                              <h3>{diagnosticoItem.label}</h3>
-                              <DiagnosticoItem  >
-                                <DiagnosticoSearchArea>
-                                  <InputSearch items={diagnosticoItem.list} onSelect={diagnosticoItem.onSelect} /> <MdList onClick={diagnosticoItem.handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
-                                </DiagnosticoSearchArea >
+                                          {
 
-                                {
+                                            diagnosticoItems[1].items && diagnosticoItems[1].items.map((item, index) =>
+                                            (
 
-                                  diagnosticoItem.items && diagnosticoItem.items.map((item, index) =>
-                                  (
+                                              <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[1].onSelected(event, index)} style={{ background: index === diagnosticoItems[1].selectedIndex ? '#CCC' : '#FFF' }}   >
+                                                <p>{item?.nome}</p>
+                                                <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[1].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
+                                              </DignosticoItemSelectedArea>
+                                            )
+                                            )
+                                          }
+                                        </DiagnosticoItem>
+                                      </DiagnosticoItemArea>
+                                      <DiagnosticoItemArea>
+                                      <div style={{display: 'flex', alignItems: 'center'}}><Titulo3>Descrição</Titulo3><MdAddCircle onClick={diagnosticoItems[1].doublelClick} style={{ height: '2em', width: '2em', cursor: 'pointer' }} /></div>
+                                        <p>{disSelected.funcoes[funcaoSelectedIndex]?.descricao ? disSelected.funcoes[funcaoSelectedIndex]?.descricao?.nome : 'Selecione uma função e adicione uma descricao'}</p>
+                                      </DiagnosticoItemArea>
+                                      <DiagnosticoItemArea>
+                                        <Titulo3>Quantidade:</Titulo3>
+                                        <input id='quantidade' name='quantidade' type='number'  value={disSelected.funcoes[funcaoSelectedIndex]?.quantidade || 0} onChange={handleQuantidadeFuncao}/>
+                                      </DiagnosticoItemArea>
+                                    </DiagnosticoContent>
+                                  </ScrollableContainer>
+                                </>)
+                              }
+                              if (section.component === 'diagnostico') {
+                                return (<>
+                                  <ScrollableContainer>
+                                  <div style={{height: 40, display: 'flex', justifyContent: 'center', marginBottom: 10, alignItems: 'center'}}>
+                                      <Titulo3>Setor:</Titulo3>
+                                    <select style={{width: '20%'}} value={setorSelectedIndex} onChange={handleSetorChange} >
+                                        <option key="0" value={-1}>SELECIONE UM SETOR</option>
+                                        {disSelected.setores.map((setor, index) => (
+                                          <option key={index} value={index}>{setor?.setor?.nome}</option>
+                                        ))}
+                                      </select>
+                                      <Titulo3>Função:</Titulo3>
+                                    <select style={{width: '20%'}} value={funcaoSelectedIndex} onChange={handleFuncaoChange} >
+                                        <option key="0" value={-1}>SELECIONE UMA FUNCAO</option>
+                                        {setorSelected && disSelected.funcoes.filter(el => el?.setor === setorSelected?._id).map((funcao, index) => (
+                                          <option key={index} value={index}>{funcao?.funcao?.nome}</option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                    <DiagnosticoContent >
+                                      {diagnosticoItems?.map((diagnosticoItem, index) => {
+                                        if (diagnosticoItem.id >= 3) {
+                                          return (<DiagnosticoItemArea key={diagnosticoItem.id} className="element-to-keep-selected" >
+                                            <Titulo3>{diagnosticoItem.label}</Titulo3>
+                                            <DiagnosticoItem  >
+                                              <DiagnosticoSearchArea>
+                                                <InputSearch items={diagnosticoItem.list} onSelect={diagnosticoItem.onSelect} /> <MdList onClick={diagnosticoItem.handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
+                                              </DiagnosticoSearchArea >
+                                              {
+                                                diagnosticoItem.items && diagnosticoItem.items.map((item, index) =>
+                                                (
 
-                                    <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItem.onSelected(event, index)} style={{ background: index === diagnosticoItem.selectedIndex ? '#CCC' : '#FFF' }}   >
-                                      <p>{item?.nome}</p>
-                                      <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItem.onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
-                                    </DignosticoItemSelectedArea>
-                                  )
-                                  )
-                                }
-                              </DiagnosticoItem>
-                            </DiagnosticoItemArea>
-                          ))
+                                                  <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItem.onSelected(event, index)} style={{ background: index === diagnosticoItem.selectedIndex ? '#CCC' : '#FFF' }}   >
+                                                    <p>{item?.nome}</p>
+                                                    <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItem.onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
+                                                  </DignosticoItemSelectedArea>
+                                                )
+                                                )
+                                              }
+                                            </DiagnosticoItem>
+                                          </DiagnosticoItemArea>)
+                                        }
+                                      })
+                                      }
+                                    </DiagnosticoContent>
+                                  </ScrollableContainer>
+                                </>)
+                              }
+                            })
                           }
-                        </DiagnosticoContent>
-                      </ScrollableContainer>
-                      <Styled.Button type="submit" style={{marginBottom: 10}}>Salvar</Styled.Button>
-                      <Styled.Button type="button" style={{background: '#FBAF3A'}} onClick={(event) => handleLimparBtn(event)}>Limpar</Styled.Button>
-                    </Styled.Form>
+                        </>
+                      ))}
+                      <Styled.Button type="submit" style={{ marginBottom: 10 }}>Salvar</Styled.Button>
+                      <Styled.Button type="button" style={{ background: '#FBAF3A' }} onClick={(event) => handleLimparBtn(event)}>Limpar</Styled.Button>
+                    </Styled.Form >
                   </Styled.FormArea>
                 )
               }
@@ -2084,15 +2317,13 @@ const Dis = ({
                                 if (listFields[field] === 'json')
                                   return (<Styled.CampoValor>{dis[field].nome || dis[field].razaoSocial}</Styled.CampoValor>)
                                 return (<Styled.CampoValor>{dis[field]}</Styled.CampoValor>)
-
                               }
                             })
                           }
-
                           <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
                             <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, dis._id)} style={{ height: '1.2em', width: '1.2em' }} />
                           </div>
-                          <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer',width: '6em' }} >
+                          <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
                             <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
                           </div>
 
