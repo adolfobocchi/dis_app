@@ -4,6 +4,11 @@
   box-sizing: border-box;
   padding: 0;
   font-family: 'Open Sans', sans-serif;
+  font-size: 0.99em;
+}
+
+p {
+  font-size: 0.9em;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */

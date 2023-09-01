@@ -20,6 +20,8 @@ export const Form = styled.form`
 
 export const Input = styled.input`
   padding: 8px;
+  text-transform: lowercase;
+  font-size: 0.8em;
 `;
 
 export const Button = styled.button`
@@ -66,6 +68,8 @@ export const ListHeader = styled.li`
 export const Label = styled.label`
   margin-bottom: 0.5rem;
   font-weight: bold;
+  font-size: 0.9em;
+
 `;
 
 const AtivoItem = styled.div`
@@ -94,7 +98,7 @@ const ColunaHeader = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 1.1em;
     font-weight: 500;
     padding: 20px;
     flex: 1;
@@ -106,13 +110,15 @@ const ColunaValor = styled.div`
     justify-content: center;
     font-size: 0.8em;
     font-weight: 400;
-    padding: 10px;
+    padding: 20px;
     flex: 1;
+    text-transform: lowercase;
 `
 
 export const AreaFlex = styled.div`
   flex: 1;
   display: flex;
+  font-size: 1em;
 `
 
 export const AreaWidth = styled.div`
@@ -136,7 +142,7 @@ export const SectionArea = styled.div`
   background: #EBF0F7;
   display: flex;
   height: 40px;
-  font-size: 1.3em;
+  font-size: 1.1em;
   font-weight: 400;
   align-items: center;
   margin-bottom: 12px;

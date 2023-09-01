@@ -36,7 +36,9 @@ const Menu = styled.div`
   padding: 20px;
   background: linear-gradient(#212934, #5BAE54);
   color: #FFF;
-  
+  position: fixed;
+  margin-top: 60px;
+  height:  calc(100vw - 60px);
 `;
 
 const MenuItem = styled.div`
@@ -56,6 +58,9 @@ const Content = styled.div`
   flex: 1;
   padding: 20px;
   width: calc(100vw - 217px);
+  overflow-y: auto;
+  margin-left: 200px;
+  margin-top: 60px;
 `;
 
 const Section = styled.div`
@@ -76,6 +81,7 @@ const SectionItem = styled.div`
   }
 `;
 
+
 const HomePainel = () => {
   return (
     <><h3>Utilize o menu lateral para navegar no sistema.</h3></>
@@ -95,7 +101,7 @@ function PainelPage({ usuario }) {
         { id: 1, label: 'Ramo de Atividade', expanded: false, component: <Area /> },
         { id: 2, label: 'Setores', expanded: false, component: <Setor /> },
         { id: 3, label: 'Funções', expanded: false, component: <Funcao /> },
-        { id: 4, label: 'Atividades realizadas', expanded: false, component: <Atividade /> },
+        // { id: 4, label: 'Atividades realizadas', expanded: false, component: <Atividade /> },
         { id: 5, label: 'Condição de perigo', expanded: false, component: <Perigo /> },
         { id: 6, label: 'Riscos', expanded: false, component: <Risco /> },
         { id: 7, label: 'Possíveis lesões', expanded: false, component: <Causa /> },
@@ -143,6 +149,7 @@ function PainelPage({ usuario }) {
   return (
     <>
       <NavBar />
+
       <Container>
         <Menu>
           {menuItems.map((menuItem) => (

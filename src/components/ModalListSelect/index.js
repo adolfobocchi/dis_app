@@ -15,7 +15,7 @@ const ModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   z-index: 9999;
-  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const ModalContent = styled.div`

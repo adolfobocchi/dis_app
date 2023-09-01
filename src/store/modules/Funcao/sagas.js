@@ -24,6 +24,7 @@ import { SHOW_INFORMATION } from '../Information/actions';
 
 function* listarFuncoes(action) {
   try {
+    console.log(action.payload.page);
     const response = yield call(() => api.get(`/funcoes/${action.payload.page}/${action.payload.ativo}`));
     const funcao = response.data;
     yield put({ type: LISTAR_FUNCOES_SUCCESS, payload: funcao});

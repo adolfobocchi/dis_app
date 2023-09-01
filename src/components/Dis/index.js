@@ -94,7 +94,7 @@ const DiagnosticoSearchArea = styled.div`
 `;
 
 const Titulo3 = styled.Titulo = styled.h3`
-  font-size: 1em;
+  font-size: 0.99;
 `
 
 const Dis = ({
@@ -183,7 +183,6 @@ const Dis = ({
   const listFields = {
     empresa: 'json',
     data: 'data',
-    fachada: 'imagem',
     responsavel: 'texto',
     telefone: 'telefone',
     opções: ''
@@ -305,6 +304,8 @@ const Dis = ({
     { id: 2, label: 'Função', expanded: false, sections: [{ id: 1, label: 'Função', expanded: false, component: 'funcao' },], icon: <MdEdit /> },
     { id: 3, label: 'Diagnóstico', expanded: false, sections: [{ id: 1, label: 'Diagnóstico', expanded: false, component: 'diagnostico' },], icon: <MdEdit /> },
   ])
+
+  const [activeTab, setActiveTab] = useState('Geral'); // Valor padrão como 'geral'
 
   const [diagnosticoItems, setDiagnotiscoItems] = useState([
 
@@ -1377,7 +1378,7 @@ const Dis = ({
   const handleQuantidadeFuncao = (event) => {
     setQuantidadeFuncaoState(event.target.value);
     disSelected.funcoes[funcaoSelectedIndex].quantidade = quantidadeFuncaoState;
-    
+
     setDisSelected((prevState) => ({
       ...prevState,
       funcoes: [...prevState.funcoes],
@@ -1622,9 +1623,7 @@ const Dis = ({
 
   const addSeveridade = (items) => {
     const newItem = items.filter(item => {
-      console.log(probabilidadeSelected.valor, item.valor);
       const nivelRisco = niveisRiscoState.filter((el) => el.probabilidadeValor === probabilidadeSelected?.valor && el.severidadeValor === item.valor);
-      console.log(nivelRisco);
       addNivel(nivelRisco)
       return item
     });
@@ -1775,7 +1774,7 @@ const Dis = ({
 
   const addDescricaoSetor = (items) => {
     disSelected.setores[setorSelectedIndex].descricao = items[0];
-    
+
     setDisSelected((prevState) => ({
       ...prevState,
       setores: [...prevState.setores],
@@ -1784,7 +1783,7 @@ const Dis = ({
 
   const addDescricaoFuncao = (items) => {
     disSelected.funcoes[funcaoSelectedIndex].descricao = items[0];
-    
+
     setDisSelected((prevState) => ({
       ...prevState,
       funcoes: [...prevState.funcoes],
@@ -1873,6 +1872,7 @@ const Dis = ({
     setSectionItems((prevState) =>
       prevState.map((item) => {
         if (item.id === itemId) {
+
           return { ...item, expanded: !item.expanded };
         }
         return item;
@@ -1892,12 +1892,19 @@ const Dis = ({
     );
   };
 
-
   const toggleSectionCad = (itemId, event) => {
     event.stopPropagation();
     setSectionCadItems((prevState) =>
       prevState.map((item) => {
         if (item.id === itemId) {
+          if (item.label === 'Geral')
+            setActiveTab('Geral')
+          if (item.label === 'Setor')
+            setActiveTab('Setor')
+          if (item.label === 'Função')
+            setActiveTab('Função')
+          if (item.label === 'Diagnóstico')
+            setActiveTab('Diagnóstico')
           return { ...item, expanded: !item.expanded };
         }
         return item;
@@ -1922,13 +1929,13 @@ const Dis = ({
   }, [disSelected.setores, setSetorSelectedIndex, setorSelectedIndex])
 
   useEffect(() => {
-    
+
     setFuncaoSelected(disSelected.funcoes[funcaoSelectedIndex]?.funcao);
-  },[disSelected.funcoes, funcaoSelectedIndex, setFuncaoSelectedIndex])
+  }, [disSelected.funcoes, funcaoSelectedIndex, setFuncaoSelectedIndex])
 
   const handleSetorChange = (event) => {
     setSetorSelectedIndex(event.target.value);
-    
+
   }
 
   const handleFuncaoChange = (event) => {
@@ -2056,214 +2063,224 @@ const Dis = ({
                 return (
                   <Styled.FormArea className="element-to-keep-selected">
                     <Styled.Form ref={formRef} onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
-                      {sectionCadItems.map((sectionCadItem) => (
-                        <>
-                          <Styled.SectionArea
-                            key={sectionCadItem.id}
-                            onClick={(event) => toggleSectionCad(sectionCadItem.id, event)}
-                          >
-                            <Styled.AreaWidth style={{ width: 20 }}>{sectionCadItem.icon}</Styled.AreaWidth>
-                            <Styled.AreaFlex>{sectionCadItem.label}</Styled.AreaFlex>
-                            <Styled.AreaWidth style={{ width: 20, justifyContent: 'flex-end' }} >
-                              {sectionCadItem.expanded ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
-                            </Styled.AreaWidth>
-                          </Styled.SectionArea>
-                          {sectionCadItem.expanded &&
-                            sectionCadItem.sections.map((section) => {
-                              if (section.component === 'geral') {
-                                return (<>
-                                  <Styled.Input
-                                    hidden
-                                    {...register('_id')}
-                                  />
-                                  <Styled.Label>Empresa: </Styled.Label>
-                                  <InputSearch items={empresasState} onSelect={(item) => setEmpresaSelected(item)} valueSelected={empresaSelected?.razaoSocial} field={'razaoSocial'} />
+                      <Styled.Label>{empresaSelected?.razaoSocial && 'Empresa: ' + empresaSelected.razaoSocial}</Styled.Label>
+                      <div style={{ display: 'flex' }}>
+                        {sectionCadItems.map((sectionCadItem) => (
+                          <>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                              <Styled.SectionArea
+                                style={{ margin: 0, background: activeTab === sectionCadItem.label ? '#EBF0F7' : '#FFF', border: activeTab === sectionCadItem.label ? '2px solid #DDD' : '1px solid #DDD', cursor: 'pointer' }}
+                                key={sectionCadItem.id}
+                                onClick={(event) => toggleSectionCad(sectionCadItem.id, event)}
+                              >
+                                <Styled.AreaFlex>{sectionCadItem.label}</Styled.AreaFlex>
+                                {/* <Styled.AreaWidth style={{ width: 20, justifyContent: 'flex-end' }} >
+                                  {sectionCadItem.expanded ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                                </Styled.AreaWidth> */}
+                              </Styled.SectionArea>
 
-                                  {errors.empresa && <span>Campo obrigatório</span>}
+                            </div>
+                          </>
+                        ))}
+                      </div>
 
-                                  <Styled.Label>Data: </Styled.Label>
-                                  <DataPicker name="data" control={control} setValue={setValue} defaultValue={disSelected?.data} showTimeSelect={false} />
-                                  {errors.data && <span>Campo obrigatório</span>}
 
-                                  <Styled.Label>Foto da Fachada: </Styled.Label>
+                      <div style={{ display: 'flex', flexDirection: 'column', border: '2px solid #DDD' }}>
+
+                        {
+                          activeTab === 'Geral' &&
+                          (<>
+                            <Styled.Input
+                              hidden
+                              {...register('_id')}
+                            />
+                            <Styled.Label>Empresa: </Styled.Label>
+                            <InputSearch items={empresasState} onSelect={(item) => setEmpresaSelected(item)} valueSelected={empresaSelected?.razaoSocial} field={'razaoSocial'} />
+
+                            {errors.empresa && <span>Campo obrigatório</span>}
+
+                            <Styled.Label>Data: </Styled.Label>
+                            <DataPicker name="data" control={control} setValue={setValue} defaultValue={disSelected?.data} showTimeSelect={false} />
+                            {errors.data && <span>Campo obrigatório</span>}
+
+                            <Styled.Label>Foto da Fachada: </Styled.Label>
+                            <Styled.Input type='file' multiple name='files' {...register('files', { required: false })} />
+
+                            <Styled.Label>Responsavel: </Styled.Label>
+                            <Styled.Input
+                              placeholder='Nome do responsavel'
+                              {...register('responsavel', { required: false })}
+                            />
+                            {errors.responsavel && <span>Campo obrigatório</span>}
+                            <Styled.Label>Função: </Styled.Label>
+                            <Styled.Input
+                              placeholder='Função do responsavel'
+                              {...register('funcao', { required: false })}
+                            />
+                            {errors.responsavel && <span>Campo obrigatório</span>}
+                            <Styled.Label>Telefone: </Styled.Label>
+                            <Styled.Input
+                              placeholder='Telefone do responsavel'
+                              {...register('telefone', { required: false })}
+                            />
+                            {errors.telefone && <span>Campo obrigatório</span>}
+
+                            <Styled.Label>E-mail: </Styled.Label>
+                            <Styled.Input
+                              type='email'
+                              placeholder='E-mail'
+                              {...register('email', { required: false })}
+                            />
+                            {errors.email && <span>Campo obrigatório</span>}
+
+                            <Styled.Label>Ramo de atividade: </Styled.Label>
+                            <Styled.Input
+                              disabled
+                              value={empresaSelected?.area?.nome}
+                            />
+                            {errors.area && <span>Campo obrigatório</span>}
+
+                            <Styled.Label>Observação</Styled.Label>
+                            <Styled.Input
+                              placeholder=''
+                              {...register('observacaoAmbiente', { required: false })}
+                            />
+                            {errors.observacaoAmbiente && <span>Campo obrigatório</span>}
+                          </>)
+                        }
+                        {activeTab === 'Setor' &&
+                          (<>
+                            <ScrollableContainer>
+                              <DiagnosticoContent >
+                                <DiagnosticoItemArea key={diagnosticoItems[0].id} className="element-to-keep-selected" >
+                                  <Titulo3>{diagnosticoItems[0].label}</Titulo3>
+                                  <DiagnosticoItem  >
+                                    <DiagnosticoSearchArea>
+                                      <InputSearch items={diagnosticoItems[0].list} onSelect={diagnosticoItems[0].onSelect} /> <MdList onClick={diagnosticoItems[0].handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
+                                    </DiagnosticoSearchArea >
+                                    {
+                                      diagnosticoItems[0].items && diagnosticoItems[0].items.map((item, index) =>
+                                      (
+                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[0].onSelected(event, index)} style={{ background: index === diagnosticoItems[0].selectedIndex ? '#CCC' : '#FFF' }}   >
+                                          <p>{item?.nome}</p>
+                                          <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[0].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
+                                        </DignosticoItemSelectedArea>
+                                      )
+                                      )
+                                    }
+                                  </DiagnosticoItem>
+
+                                </DiagnosticoItemArea>
+                                <DiagnosticoItemArea>
+                                  <div style={{ display: 'flex', alignItems: 'center' }}><Titulo3>Descrição</Titulo3><MdAddCircle onClick={diagnosticoItems[0].doublelClick} style={{ height: '2em', width: '2em', cursor: 'pointer' }} /></div>
+                                  <p style={{fontSize: '0.8em'}}>{disSelected.setores[setorSelectedIndex]?.descricao ? disSelected.setores[setorSelectedIndex]?.descricao?.nome : 'Selecione um setor e adicione uma descricao'}</p>
+                                </DiagnosticoItemArea>
+                                <DiagnosticoItemArea>
+                                  <Titulo3>Imagem Setor: </Titulo3>
                                   <Styled.Input type='file' multiple name='files' {...register('files', { required: false })} />
+                                </DiagnosticoItemArea>
+                              </DiagnosticoContent>
+                            </ScrollableContainer>
+                          </>)
+                        }
+                        {activeTab === 'Função' &&
+                          (<>
+                            <ScrollableContainer>
+                              <div style={{ height: 40, display: 'flex', justifyContent: 'center', marginBottom: 10, alignItems: 'center' }}>
+                                <Titulo3>Setor:</Titulo3>
+                                <select style={{ width: '20%' }} value={setorSelectedIndex} onChange={handleSetorChange} >
+                                  <option key="0" value={-1}>SELECIONE UM SETOR</option>
+                                  {disSelected.setores.map((setor, index) => (
+                                    <option key={index} value={index}>{setor?.setor?.nome}</option>
+                                  ))}
+                                </select>
+                              </div>
+                              <DiagnosticoContent >
 
-                                  <Styled.Label>Responsavel: </Styled.Label>
-                                  <Styled.Input
-                                    placeholder='Nome do responsavel'
-                                    {...register('responsavel', { required: false })}
-                                  />
-                                  {errors.responsavel && <span>Campo obrigatório</span>}
-                                  <Styled.Label>Função: </Styled.Label>
-                                  <Styled.Input
-                                    placeholder='Função do responsavel'
-                                    {...register('funcao', { required: false })}
-                                  />
-                                  {errors.responsavel && <span>Campo obrigatório</span>}
-                                  <Styled.Label>Telefone: </Styled.Label>
-                                  <Styled.Input
-                                    placeholder='Telefone do responsavel'
-                                    {...register('telefone', { required: false })}
-                                  />
-                                  {errors.telefone && <span>Campo obrigatório</span>}
+                                <DiagnosticoItemArea key={diagnosticoItems[1].id} className="element-to-keep-selected" >
+                                  <Titulo3>{diagnosticoItems[1].label}</Titulo3>
+                                  <DiagnosticoItem  >
+                                    <DiagnosticoSearchArea>
+                                      <InputSearch items={diagnosticoItems[1].list} onSelect={diagnosticoItems[1].onSelect} /> <MdList onClick={diagnosticoItems[1].handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
+                                    </DiagnosticoSearchArea >
 
-                                  <Styled.Label>E-mail: </Styled.Label>
-                                  <Styled.Input
-                                    type='email'
-                                    placeholder='E-mail'
-                                    {...register('email', { required: false })}
-                                  />
-                                  {errors.email && <span>Campo obrigatório</span>}
+                                    {
 
-                                  <Styled.Label>Ramo de atividade: </Styled.Label>
-                                  <Styled.Input
-                                    disabled
-                                    value={empresaSelected?.area?.nome}
-                                  />
-                                  {errors.area && <span>Campo obrigatório</span>}
+                                      diagnosticoItems[1].items && diagnosticoItems[1].items.map((item, index) =>
+                                      (
 
-                                  <Styled.Label>Observação</Styled.Label>
-                                  <Styled.Input
-                                    placeholder=''
-                                    {...register('observacaoAmbiente', { required: false })}
-                                  />
-                                  {errors.observacaoAmbiente && <span>Campo obrigatório</span>}
-                                </>)
-                              }
-                              if (section.component === 'setor') {
-                                return (<>
-                                  <ScrollableContainer>
-                                    <DiagnosticoContent >
-                                      <DiagnosticoItemArea key={diagnosticoItems[0].id} className="element-to-keep-selected" >
-                                        <Titulo3>{diagnosticoItems[0].label}</Titulo3>
-                                        <DiagnosticoItem  >
-                                          <DiagnosticoSearchArea>
-                                            <InputSearch items={diagnosticoItems[0].list} onSelect={diagnosticoItems[0].onSelect} /> <MdList onClick={diagnosticoItems[0].handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
-                                          </DiagnosticoSearchArea >
-                                          {
-                                            diagnosticoItems[0].items && diagnosticoItems[0].items.map((item, index) =>
-                                            (
-                                              <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[0].onSelected(event, index)} style={{ background: index === diagnosticoItems[0].selectedIndex ? '#CCC' : '#FFF' }}   >
-                                                <p>{item?.nome}</p>
-                                                <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[0].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
-                                              </DignosticoItemSelectedArea>
-                                            )
-                                            )
-                                          }
-                                        </DiagnosticoItem>
+                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[1].onSelected(event, index)} style={{ background: index === diagnosticoItems[1].selectedIndex ? '#CCC' : '#FFF' }}   >
+                                          <p>{item?.nome}</p>
+                                          <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[1].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
+                                        </DignosticoItemSelectedArea>
+                                      )
+                                      )
+                                    }
+                                  </DiagnosticoItem>
+                                </DiagnosticoItemArea>
+                                <DiagnosticoItemArea>
+                                  <div style={{ display: 'flex', alignItems: 'center' }}><Titulo3>Descrição</Titulo3><MdAddCircle onClick={diagnosticoItems[1].doublelClick} style={{ height: '2em', width: '2em', cursor: 'pointer' }} /></div>
+                                  <p>{disSelected.funcoes[funcaoSelectedIndex]?.descricao ? disSelected.funcoes[funcaoSelectedIndex]?.descricao?.nome : 'Selecione uma função e adicione uma descricao'}</p>
+                                </DiagnosticoItemArea>
+                                <DiagnosticoItemArea>
+                                  <Titulo3>Quantidade:</Titulo3>
+                                  <input id='quantidade' name='quantidade' type='number' value={disSelected.funcoes[funcaoSelectedIndex]?.quantidade || 0} onChange={handleQuantidadeFuncao} />
+                                </DiagnosticoItemArea>
+                              </DiagnosticoContent>
+                            </ScrollableContainer>
+                          </>)
+                        }
+                        {activeTab === 'Diagnóstico' &&
+                          (<>
+                            <ScrollableContainer>
+                              <div style={{ height: 40, display: 'flex', justifyContent: 'center', marginBottom: 10, alignItems: 'center' }}>
+                                <Titulo3>Setor:</Titulo3>
+                                <select style={{ width: '20%' }} value={setorSelectedIndex} onChange={handleSetorChange} >
+                                  <option key="0" value={-1}>SELECIONE UM SETOR</option>
+                                  {disSelected.setores.map((setor, index) => (
+                                    <option key={index} value={index}>{setor?.setor?.nome}</option>
+                                  ))}
+                                </select>
+                                <Titulo3>Função:</Titulo3>
+                                <select style={{ width: '20%' }} value={funcaoSelectedIndex} onChange={handleFuncaoChange} >
+                                  <option key="0" value={-1}>SELECIONE UMA FUNCAO</option>
+                                  {setorSelected && disSelected.funcoes.filter(el => el?.setor === setorSelected?._id).map((funcao, index) => (
+                                    <option key={index} value={index}>{funcao?.funcao?.nome}</option>
+                                  ))}
+                                </select>
+                              </div>
+                              <DiagnosticoContent >
+                                {diagnosticoItems?.map((diagnosticoItem, index) => {
+                                  if (diagnosticoItem.id >= 3) {
+                                    return (<DiagnosticoItemArea key={diagnosticoItem.id} className="element-to-keep-selected" >
+                                      <Titulo3>{diagnosticoItem.label}</Titulo3>
+                                      <DiagnosticoItem  >
+                                        <DiagnosticoSearchArea>
+                                          <InputSearch items={diagnosticoItem.list} onSelect={diagnosticoItem.onSelect} /> <MdList onClick={diagnosticoItem.handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
+                                        </DiagnosticoSearchArea >
+                                        {
+                                          diagnosticoItem.items && diagnosticoItem.items.map((item, index) =>
+                                          (
 
-                                      </DiagnosticoItemArea>
-                                      <DiagnosticoItemArea>
-                                        <div style={{display: 'flex', alignItems: 'center'}}><Titulo3>Descrição</Titulo3><MdAddCircle onClick={diagnosticoItems[0].doublelClick} style={{ height: '2em', width: '2em', cursor: 'pointer' }} /></div>
-                                        <p>{disSelected.setores[setorSelectedIndex]?.descricao ? disSelected.setores[setorSelectedIndex]?.descricao?.nome : 'Selecione um setor e adicione uma descricao'}</p>
-                                      </DiagnosticoItemArea>
-                                      <DiagnosticoItemArea>
-                                        <Titulo3>Imagem Setor: </Titulo3>
-                                        <Styled.Input type='file' multiple name='files' {...register('files', { required: false })} />
-                                      </DiagnosticoItemArea>
-                                    </DiagnosticoContent>
-                                  </ScrollableContainer>
-                                </>)
-                              }
-                              if (section.component === 'funcao') {
-                                return (<>
-                                  <ScrollableContainer>
-                                    <div style={{height: 40, display: 'flex', justifyContent: 'center', marginBottom: 10, alignItems: 'center'}}>
-                                      <Titulo3>Setor:</Titulo3>
-                                    <select style={{width: '20%'}} value={setorSelectedIndex} onChange={handleSetorChange} >
-                                        <option key="0" value={-1}>SELECIONE UM SETOR</option>
-                                        {disSelected.setores.map((setor, index) => (
-                                          <option key={index} value={index}>{setor?.setor?.nome}</option>
-                                        ))}
-                                      </select>
-                                    </div>
-                                    <DiagnosticoContent >
-                                     
-                                      <DiagnosticoItemArea key={diagnosticoItems[1].id} className="element-to-keep-selected" >
-                                        <Titulo3>{diagnosticoItems[1].label}</Titulo3>
-                                        <DiagnosticoItem  >
-                                          <DiagnosticoSearchArea>
-                                            <InputSearch items={diagnosticoItems[1].list} onSelect={diagnosticoItems[1].onSelect} /> <MdList onClick={diagnosticoItems[1].handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
-                                          </DiagnosticoSearchArea >
-
-                                          {
-
-                                            diagnosticoItems[1].items && diagnosticoItems[1].items.map((item, index) =>
-                                            (
-
-                                              <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[1].onSelected(event, index)} style={{ background: index === diagnosticoItems[1].selectedIndex ? '#CCC' : '#FFF' }}   >
-                                                <p>{item?.nome}</p>
-                                                <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[1].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
-                                              </DignosticoItemSelectedArea>
-                                            )
-                                            )
-                                          }
-                                        </DiagnosticoItem>
-                                      </DiagnosticoItemArea>
-                                      <DiagnosticoItemArea>
-                                      <div style={{display: 'flex', alignItems: 'center'}}><Titulo3>Descrição</Titulo3><MdAddCircle onClick={diagnosticoItems[1].doublelClick} style={{ height: '2em', width: '2em', cursor: 'pointer' }} /></div>
-                                        <p>{disSelected.funcoes[funcaoSelectedIndex]?.descricao ? disSelected.funcoes[funcaoSelectedIndex]?.descricao?.nome : 'Selecione uma função e adicione uma descricao'}</p>
-                                      </DiagnosticoItemArea>
-                                      <DiagnosticoItemArea>
-                                        <Titulo3>Quantidade:</Titulo3>
-                                        <input id='quantidade' name='quantidade' type='number'  value={disSelected.funcoes[funcaoSelectedIndex]?.quantidade || 0} onChange={handleQuantidadeFuncao}/>
-                                      </DiagnosticoItemArea>
-                                    </DiagnosticoContent>
-                                  </ScrollableContainer>
-                                </>)
-                              }
-                              if (section.component === 'diagnostico') {
-                                return (<>
-                                  <ScrollableContainer>
-                                  <div style={{height: 40, display: 'flex', justifyContent: 'center', marginBottom: 10, alignItems: 'center'}}>
-                                      <Titulo3>Setor:</Titulo3>
-                                    <select style={{width: '20%'}} value={setorSelectedIndex} onChange={handleSetorChange} >
-                                        <option key="0" value={-1}>SELECIONE UM SETOR</option>
-                                        {disSelected.setores.map((setor, index) => (
-                                          <option key={index} value={index}>{setor?.setor?.nome}</option>
-                                        ))}
-                                      </select>
-                                      <Titulo3>Função:</Titulo3>
-                                    <select style={{width: '20%'}} value={funcaoSelectedIndex} onChange={handleFuncaoChange} >
-                                        <option key="0" value={-1}>SELECIONE UMA FUNCAO</option>
-                                        {setorSelected && disSelected.funcoes.filter(el => el?.setor === setorSelected?._id).map((funcao, index) => (
-                                          <option key={index} value={index}>{funcao?.funcao?.nome}</option>
-                                        ))}
-                                      </select>
-                                    </div>
-                                    <DiagnosticoContent >
-                                      {diagnosticoItems?.map((diagnosticoItem, index) => {
-                                        if (diagnosticoItem.id >= 3) {
-                                          return (<DiagnosticoItemArea key={diagnosticoItem.id} className="element-to-keep-selected" >
-                                            <Titulo3>{diagnosticoItem.label}</Titulo3>
-                                            <DiagnosticoItem  >
-                                              <DiagnosticoSearchArea>
-                                                <InputSearch items={diagnosticoItem.list} onSelect={diagnosticoItem.onSelect} /> <MdList onClick={diagnosticoItem.handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
-                                              </DiagnosticoSearchArea >
-                                              {
-                                                diagnosticoItem.items && diagnosticoItem.items.map((item, index) =>
-                                                (
-
-                                                  <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItem.onSelected(event, index)} style={{ background: index === diagnosticoItem.selectedIndex ? '#CCC' : '#FFF' }}   >
-                                                    <p>{item?.nome}</p>
-                                                    <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItem.onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
-                                                  </DignosticoItemSelectedArea>
-                                                )
-                                                )
-                                              }
-                                            </DiagnosticoItem>
-                                          </DiagnosticoItemArea>)
+                                            <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItem.onSelected(event, index)} style={{ background: index === diagnosticoItem.selectedIndex ? '#CCC' : '#FFF' }}   >
+                                              <p>{item?.nome}</p>
+                                              <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItem.onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
+                                            </DignosticoItemSelectedArea>
+                                          )
+                                          )
                                         }
-                                      })
-                                      }
-                                    </DiagnosticoContent>
-                                  </ScrollableContainer>
-                                </>)
-                              }
-                            })
-                          }
-                        </>
-                      ))}
+                                      </DiagnosticoItem>
+                                    </DiagnosticoItemArea>)
+                                  }
+                                })
+                                }
+                              </DiagnosticoContent>
+                            </ScrollableContainer>
+                          </>)
+                        }
+
+
+                      </div>
                       <Styled.Button type="submit" style={{ marginBottom: 10 }}>Salvar</Styled.Button>
                       <Styled.Button type="button" style={{ background: '#FBAF3A' }} onClick={(event) => handleLimparBtn(event)}>Limpar</Styled.Button>
                     </Styled.Form >
@@ -2320,12 +2337,15 @@ const Dis = ({
                               }
                             })
                           }
-                          <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
-                            <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, dis._id)} style={{ height: '1.2em', width: '1.2em' }} />
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
-                            <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
-                          </div>
+                          <Styled.CampoValor>
+                            <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
+                              <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, dis._id)} style={{ height: '1.2em', width: '1.2em' }} />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
+                              <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
+                            </div>
+                          </Styled.CampoValor>
+
 
                         </Styled.ListItem>
                       </>
