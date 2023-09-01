@@ -7,7 +7,7 @@ import InputMask from 'react-input-mask';
 
 import { criarEmpresasRequest, deleteEmpresasRequest, listarEmpresasRequest, updateEmpresasRequest } from '../../store/modules/Empresa/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
-import { MdEdit, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSearch, MdViewList } from 'react-icons/md';
+import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSearch, MdViewList } from 'react-icons/md';
 
 import * as Styled from '../styleds';
 import Paginacao from '../Paginacao';
@@ -52,6 +52,7 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
     responsavel: 'texto',
     telefone: 'texto',
     email: 'texto',
+    opção: ''
   }
 
   const [sectionItems, setSectionItems] = useState([
@@ -339,13 +340,13 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                           return <Styled.Coluna label={key} key={index} />
                         })
                       }
-                      <Styled.Coluna label='' />
+                      
                     </Styled.ListHeader>
                     <Styled.List>
 
                       {empresasState?.length > 0 && empresasState?.map((empresa, index) => (
                         <>
-                          <Styled.ListItem key={empresa._id} onClick={(event) => handleSelect(event, index)}>
+                          <Styled.ListItem key={empresa._id} >
                             {
                               Object.keys(empresa).map((field, index) => {
                                 if (field !== '_id' && listFields.hasOwnProperty(field)) {
@@ -353,10 +354,15 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                                 }
                               })
                             }
-
+                            <Styled.CampoValor>
                             <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
                               <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, empresa._id)} style={{ height: '1em', width: '1em' }} />
                             </div>
+                            <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
+                              <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
+                            </div>  
+                            </Styled.CampoValor>  
+                            
 
                           </Styled.ListItem>
                         </>
