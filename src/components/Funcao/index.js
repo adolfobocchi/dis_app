@@ -43,6 +43,7 @@ const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, up
 
   useEffect(() => {
     setFuncoesState(funcoes);
+    //updateAll();
   }, [funcoes]);
 
 
@@ -51,6 +52,11 @@ const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, up
   }, [reset, funcaoSelected])
 
 
+  const updateAll = () => {
+    funcoesState.forEach((item, index) => {
+      updateFuncoes(item._id, item)
+    })
+  }
   const handleSelect = (event, index) => {
     event.preventDefault();
     event.stopPropagation();

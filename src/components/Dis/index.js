@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 
 import ModalLoading from '../ModalLoading';
 
-import { addAtividade, addCausa, addFuncao, addMedida, addNivel, addProbabilidade, addPerigo, addPlanoAcao, addMonitoramento, addRisco, addSetor, addSeveridade, criarDisRequest, deleteDisRequest, listarDisRequest, removeAtividade, removeCausa, removeFuncao, removeMedida, removeNivel, removeProbabilidade, removePerigo, removePlanoAcao, removeMonitoramento, removeRisco, removeSetor, removeSeveridade, setDis, updateDisRequest, addAgenteRisco, removeAgenteRiscoo, removeAgenteRisco, addViasAbsorcao, removeViasAbsorcao, addViaAbsorcao, removeViaAbsorcao, addFrequenciaExposicao, removeFrequenciaExposicao, addDuracaoExposicao, removeDuracaoExposicao, addAvaliacao, removeAvaliacao, addIntencao, removeIntencao, addPrioridade, removePrioridade, addPrazo, removePrazo, addStatus, removeStatus } from '../../store/modules/Dis/actions';
+import { updateDisRequest, criarDisRequest, deleteDisRequest, listarDisRequest, setDis } from '../../store/modules/Dis/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 
-import { MdAdd, MdAddCircle, MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdList, MdSearch, MdViewList } from 'react-icons/md';
+import { MdAddCircle, MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdList, MdSearch, MdViewList } from 'react-icons/md';
 
 import * as Styled from '../styleds';
 import styled from 'styled-components';
@@ -315,6 +315,7 @@ const Dis = ({
   const scrollPositionRef = useRef(null);
 
   useEffect(() => {
+    console.log(page)
     listarDis(page, 1);
     listarEmpresas(0, 1);
     listarAreas(0, 1);
@@ -1858,7 +1859,8 @@ const Dis = ({
     data.usuario = usuario;
     data.area = areaSelected;
     const formData = new FormData();
-    formData.append("imagens", data.files[0]);
+    if(data.files)
+      formData.append("imagens", data?.files[0]);
     formData.append('dis', JSON.stringify(data));
     if (data._id) {
       updateDis(data._id, formData);
@@ -2337,14 +2339,14 @@ const Dis = ({
                               }
                             })
                           }
-                          <Styled.CampoValor>
+                          <Styled.ColunaValor>
                             <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
                               <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, dis._id)} style={{ height: '1.2em', width: '1.2em' }} />
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
                               <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
                             </div>
-                          </Styled.CampoValor>
+                          </Styled.ColunaValor>
 
 
                         </Styled.ListItem>

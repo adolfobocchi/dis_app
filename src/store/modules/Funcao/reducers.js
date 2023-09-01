@@ -46,6 +46,7 @@ const funcaoReducer = (state = initialState, action) => {
         error: action.payload,
       };
     case LISTAR_FUNCOES_REQUEST:
+      console.log(action.payload.page)
       return {
         ...state,
         page: action.payload.page,

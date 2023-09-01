@@ -265,7 +265,6 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                       <Controller
                         name="estado"
                         control={control}
-                        rules={{ required: 'Campo obrigatório' }}
                         render={({ field }) => (
                           <select style={{ padding: 8 }} {...field}>
                             <option value="">Selecione o estado</option>

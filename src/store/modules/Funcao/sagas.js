@@ -24,7 +24,6 @@ import { SHOW_INFORMATION } from '../Information/actions';
 
 function* listarFuncoes(action) {
   try {
-    console.log(action.payload.page);
     const response = yield call(() => api.get(`/funcoes/${action.payload.page}/${action.payload.ativo}`));
     const funcao = response.data;
     yield put({ type: LISTAR_FUNCOES_SUCCESS, payload: funcao});
@@ -51,7 +50,9 @@ function* criarFuncoes(action) {
     yield put({ type: CRIAR_FUNCOES_SUCCESS, payload: funcao });
     yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
+    console.log(error.response)
     yield put({ type: CRIAR_FUNCOES_FAILURE, payload: error.message });
+    yield put({ type: SHOW_INFORMATION, payload: {text: error.response.data.message} });
   }
 }
 
@@ -59,13 +60,14 @@ function* criarFuncoes(action) {
 
 function* updateFuncoes(action) {
   try {
-    console.log(action.payload);
     const response = yield call(() => api.put(`/funcoes/${action.payload.id}`, action.payload.funcao));
     const funcao = response.data;
     yield put({ type: UPDATE_FUNCOES_SUCCESS, payload: funcao });
     yield put({ type: SHOW_INFORMATION, payload: {text: 'ATUALIZAÇÃO REALIZADO COM SUCESSO'} });
   } catch (error) {
+    console.log(error)
     yield put({ type: UPDATE_FUNCOES_FAILURE, payload: error.message });
+    yield put({ type: SHOW_INFORMATION, payload: {text: 'ERRO AO GRAVAR O REGISTRO'} });
   }
 }
 

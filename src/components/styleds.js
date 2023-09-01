@@ -104,7 +104,7 @@ const ColunaHeader = styled.div`
     flex: 1;
 `
 
-const ColunaValor = styled.div`
+export const ColunaValor = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -113,6 +113,10 @@ const ColunaValor = styled.div`
     padding: 20px;
     flex: 1;
     text-transform: lowercase;
+
+    p::first-letter {
+      text-transform: uppercase;
+    }
 `
 
 export const AreaFlex = styled.div`
@@ -167,7 +171,7 @@ export const Coluna = ({label=''}) => {
 }
 
 export const CampoValor = ({children}) => (
-    <ColunaValor>{children}</ColunaValor>
+    <ColunaValor><p>{children}</p></ColunaValor>
 )
 
 export const CampoImg = ({src}) => (

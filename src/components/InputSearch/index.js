@@ -66,6 +66,8 @@ const InputSearch = ({
   
   };
 
+  console.log(itemSelected)
+
   const handleSelectItem = (item) => {
     onSelect(item);
     setItemSelected(item[field])

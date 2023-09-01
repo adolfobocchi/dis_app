@@ -24,3 +24,7 @@ p {
   color: #666666;
 }
 
+
+input::first-letter {
+  text-transform: uppercase;
+}
