@@ -44,15 +44,15 @@ const ModalHeader = styled.div`
 const ListItem = styled.li`
   cursor: pointer;
   padding: 8px;
-  background-color: ${(props) => (props.selected ? '#00FF00' : 'transparent')};
-  color: ${(props) => (props.selected ? '#FFF' : '#000')};
+  background-color: ${(props) => (props.selected ? '#008000' : 'transparent')};
+  color: ${(props) => (props.selected ? '#B6FF0D' : '#000')};
   display: flex;
   overflow: hidden;
   font-size: 0.7em;
   font-weight: 400;
   width: 250px;
   margin: 4px;
-  text-decoration: ${(props) => (props.selected ? 'underline' : 'none')};;
+  text-decoration: ${(props) => (props.selected ? 'none' : 'none')};;
   border-radius: 10px;
 `;
 

@@ -102,7 +102,7 @@ function PainelPage({ usuario }) {
         { id: 2, label: 'Setores', expanded: false, component: <Setor /> },
         { id: 3, label: 'Funções', expanded: false, component: <Funcao /> },
         // { id: 4, label: 'Atividades realizadas', expanded: false, component: <Atividade /> },
-        { id: 5, label: 'Condição de perigo', expanded: false, component: <Perigo /> },
+        { id: 5, label: 'Fonte ou Circunstância', expanded: false, component: <Perigo /> },
         { id: 6, label: 'Riscos', expanded: false, component: <Risco /> },
         { id: 7, label: 'Possíveis lesões', expanded: false, component: <Causa /> },
         { id: 8, label: 'Medidas de controle ', expanded: false, component: <Medida /> },
@@ -114,7 +114,7 @@ function PainelPage({ usuario }) {
       ],
     },
 
-    { id: 104, label: 'D.I.S', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
+    { id: 104, label: 'P.G.R', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
     { id: 105, label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
     {
       id: 106, label: 'Segurança', expanded: false,

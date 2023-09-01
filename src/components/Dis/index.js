@@ -43,6 +43,7 @@ import Prioridade from '../../models/Prioridade';
 import Prazo from '../../models/Prazo';
 import Status from '../../models/Status';
 import ModalInput from '../ModalInput';
+import { showInformation } from '../../store/modules/Information/actions';
 
 const ScrollableContainer = styled.div`
   width: calc(100vw - 247px);
@@ -108,6 +109,7 @@ const Dis = ({
   deleteDis,
   setDis,
   confirmacao,
+  informacao,
   listarEmpresas,
   listarAreas,
   listarSetores,
@@ -1854,18 +1856,35 @@ const Dis = ({
   }
 
   const onSubmit = (data) => {
-
-    data.empresa = empresaSelected;
     data.usuario = usuario;
-    data.area = areaSelected;
-    const formData = new FormData();
-    if(data.files)
-      formData.append("imagens", data?.files[0]);
-    formData.append('dis', JSON.stringify(data));
-    if (data._id) {
-      updateDis(data._id, formData);
-    } else {
-      criarDis(formData);
+    if (!data.usuario) {
+      informacao('USUARIO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!areaSelected) {
+      informacao('RAMO DE ATIVIDADE OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!empresaSelected) {
+      informacao('TÉCNICO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (data.data === '') {
+      informacao('DATA OBRIGATORIO! VERIFIQUE!');
+      return false
+    }  else {
+      data.empresa = empresaSelected;
+      data.area = areaSelected;
+      const formData = new FormData();
+      if(data.files)
+        formData.append("imagens", data?.files[0]);
+      formData.append('dis', JSON.stringify(data));
+      if (data._id) {
+        updateDis(data._id, formData);
+      } else {
+        criarDis(formData);
+      }
+      if (error === '') {
+        handleClear();
+
+      }
     }
   };
 
@@ -2395,6 +2414,7 @@ const mapDispatchToProps = dispatch => {
     deleteDis: (id) => dispatch(deleteDisRequest(id)),
     setDis: (index) => dispatch(setDis(index)),
     confirmacao: (title, text, onConfirm) => dispatch(showConfirmation(title, text, onConfirm)),
+    informacao: (text) => dispatch(showInformation(text)),
 
     listarEmpresas: (page, ativo) => dispatch(listarEmpresasRequest(page, ativo)),
 

@@ -34,6 +34,7 @@ function* criarEmpresas(action) {
     yield put({ type: SHOW_INFORMATION, payload: {text: 'CADASTRO REALIZADO COM SUCESSO'} });
   } catch (error) {
     yield put({ type: CRIAR_EMPRESAS_FAILURE, payload: error.message });
+    yield put({ type: SHOW_INFORMATION, payload: {text: error.response.data.message} });
   }
 }
 

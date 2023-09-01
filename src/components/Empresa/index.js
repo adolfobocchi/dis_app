@@ -7,6 +7,7 @@ import InputMask from 'react-input-mask';
 
 import { criarEmpresasRequest, deleteEmpresasRequest, listarEmpresasRequest, updateEmpresasRequest } from '../../store/modules/Empresa/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
+import { showInformation } from '../../store/modules/Information/actions';
 import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSearch, MdViewList } from 'react-icons/md';
 
 import * as Styled from '../styleds';
@@ -15,7 +16,7 @@ import InputSearch from '../InputSearch';
 import { listarAreasRequest } from '../../store/modules/Area/actions';
 import { listarUsuariosRequest } from '../../store/modules/Usuario/actions';
 
-const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAreas, empresas, error, page, listarEmpresas, criarEmpresas, updateEmpresas, deleteEmpresas, confirmacao }) => {
+const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAreas, empresas, error, page, listarEmpresas, criarEmpresas, updateEmpresas, deleteEmpresas, confirmacao, informacao }) => {
   const estados = [
     'acre', 'alagoas', 'amapa', 'amazonia', 'bahia', 'ceara', 'distrito federal', 'espirito santo', 'goias', 'maranhão',
     'mato grosso', 'mato grosso do sul', 'minas gerais', 'para', 'paraiba', 'parana', 'pernanbuco', 'piaui', 'rio de janeiro', 'rio grande do norte',
@@ -62,10 +63,10 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
   ]);
 
   const [areasState, setAreasState] = useState([]);
-  const [areaSelected, setAreaSelected] = useState({});
+  const [areaSelected, setAreaSelected] = useState(null);
 
   const [tecnicoState, setTecnicoState] = useState([]);
-  const [tecnicoSelected, setTecnicoSelected] = useState({});
+  const [tecnicoSelected, setTecnicoSelected] = useState(null);
 
   const [empresasState, setEmpresasState] = useState([]);
   const [empresaSelected, setEmpresaselected] = useState(formEmpty);
@@ -163,22 +164,52 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
   }
 
   const handleClear = () => {
+    setAreaSelected({});
+    setTecnicoSelected({});
     setEmpresaselected({ ...formEmpty })
   }
 
 
+
   const onSubmit = (data) => {
+
     data.usuario = usuario;
-    data.area = areaSelected;
-    data.tecnico = tecnicoSelected;
 
-    if (data._id) {
-      updateEmpresas(data._id, data);
-
+    if (!data.usuario) {
+      informacao('USUARIO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!areaSelected) {
+      informacao('RAMO DE ATIVIDADE OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!tecnicoSelected) {
+      informacao('TÉCNICO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (data.razaoSocial === '') {
+      informacao('RAZAO SOCIAL OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (data.nomeFantasia === '') {
+      informacao('NOME FANTASIA OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (data.estado === '') {
+      informacao('ESTADO OBRIGATORIO! VERIFIQUE!');
+      return false
     } else {
-      criarEmpresas(data);
+      data.tecnico = tecnicoSelected;
+
+      data.area = areaSelected;
+      if (data._id) {
+        updateEmpresas(data._id, data);
+
+      } else {
+        criarEmpresas(data);
+      }
+      if (error === '') {
+        handleClear();
+
+      }
     }
-    handleClear();
+
+
   };
 
   if (loading) {
@@ -265,6 +296,7 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                       <Controller
                         name="estado"
                         control={control}
+                        rules={{ required: true }}
                         render={({ field }) => (
                           <select style={{ padding: 8 }} {...field}>
                             <option value="">Selecione o estado</option>
@@ -274,6 +306,7 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                           </select>
                         )}
                       />
+                      {errors.estado && <span>Campo obrigatório</span>}
                       <Styled.Label>Funcionarios:</Styled.Label>
                       <Styled.Input type='number'
                         {...register('funcionarios', { required: false })}
@@ -317,6 +350,7 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                         <p>{`Ultima alteração: ${empresaSelected?.inclusao}`}</p>
                       </div>
                       <Styled.Button type="submit">Salvar</Styled.Button>
+                      <Styled.Button type="button" style={{ background: '#FBAF3A' }} onClick={(event) => handleClear(event)}>Limpar</Styled.Button>
                     </Styled.Form>
 
                   </Styled.FormArea>
@@ -339,7 +373,7 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                           return <Styled.Coluna label={key} key={index} />
                         })
                       }
-                      
+
                     </Styled.ListHeader>
                     <Styled.List>
 
@@ -353,15 +387,15 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                                 }
                               })
                             }
-                            <Styled.CampoValor>
-                            <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
-                              <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, empresa._id)} style={{ height: '1em', width: '1em' }} />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
-                              <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
-                            </div>  
-                            </Styled.CampoValor>  
-                            
+                            <Styled.ColunaValor>
+                              <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                                <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, empresa._id)} style={{ height: '1em', width: '1em' }} />
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
+                                <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
+                              </div>
+                            </Styled.ColunaValor>
+
 
                           </Styled.ListItem>
                         </>
@@ -400,6 +434,7 @@ const mapDispatchToProps = dispatch => {
     updateEmpresas: (id, empresa) => dispatch(updateEmpresasRequest(id, empresa)),
     deleteEmpresas: (id) => dispatch(deleteEmpresasRequest(id)),
     confirmacao: (title, text, onConfirm) => dispatch(showConfirmation(title, text, onConfirm)),
+    informacao: (text) => dispatch(showInformation(text)),
 
     listarAreas: (page, ativo) => dispatch(listarAreasRequest(page, ativo)),
     listarUsuarios: (page, ativo) => dispatch(listarUsuariosRequest(page, ativo)),
