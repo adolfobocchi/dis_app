@@ -5,7 +5,7 @@ import ModalLoading from '../ModalLoading';
 import { useForm, Controller } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 
-import { criarEmpresasRequest, deleteEmpresasRequest, listarEmpresasRequest, updateEmpresasRequest } from '../../store/modules/Empresa/actions';
+import { criarEmpresasRequest, deleteEmpresasRequest, listarEmpresasRequest, listarGruposRequest, updateEmpresasRequest, updateGruposRequest } from '../../store/modules/Empresa/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { showInformation } from '../../store/modules/Information/actions';
 import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSearch, MdViewList } from 'react-icons/md';
@@ -16,7 +16,7 @@ import InputSearch from '../InputSearch';
 import { listarAreasRequest } from '../../store/modules/Area/actions';
 import { listarUsuariosRequest } from '../../store/modules/Usuario/actions';
 
-const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAreas, empresas, error, page, listarEmpresas, criarEmpresas, updateEmpresas, deleteEmpresas, confirmacao, informacao }) => {
+const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAreas, empresas, error, page, listarEmpresas, criarEmpresas, updateEmpresas, deleteEmpresas, confirmacao, informacao, grupos, listarGrupos }) => {
   const estados = [
     'acre', 'alagoas', 'amapa', 'amazonia', 'bahia', 'ceara', 'distrito federal', 'espirito santo', 'goias', 'maranhão',
     'mato grosso', 'mato grosso do sul', 'minas gerais', 'para', 'paraiba', 'parana', 'pernanbuco', 'piaui', 'rio de janeiro', 'rio grande do norte',
@@ -42,9 +42,23 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
     usuario: '',
     tecnico: '',
     area: '',
+    grupo: '',
     observacao: '',
     inclusao: '',
     ativo: true,
+    tipoContrato: '',
+    inicioContrato: '',
+    vencimentoContrato: '',
+    contrato: '',
+    comunicados: [],
+    solicitacoes: [],
+    historicoAcao: [],
+    documentos: [
+
+    ],
+    planoAcao: [
+
+    ]
   }
 
   const listFields = {
@@ -67,6 +81,10 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
 
   const [tecnicoState, setTecnicoState] = useState([]);
   const [tecnicoSelected, setTecnicoSelected] = useState(null);
+
+
+  const [gruposState, setGruposState] = useState([]);
+  const [grupoSelected, setGrupoSelected] = useState(null);
 
   const [empresasState, setEmpresasState] = useState([]);
   const [empresaSelected, setEmpresaselected] = useState(formEmpty);
@@ -95,6 +113,11 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
         area: empresaSelected.area,
         observacao: empresaSelected.observacao,
         inclusao: empresaSelected.inclusao,
+        tipoContrato: empresaSelected.tipoContrato,
+        inicioContrato: empresaSelected.inicioContrato,
+        vencimentoContrato: empresaSelected.vencimentoContrato,
+        contrato: empresaSelected.contrato,
+        grupo: empresaSelected.grupo,
         ativo: empresaSelected.ativo,
       } :
       {}
@@ -104,10 +127,16 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
     listarEmpresas(page, 0);
     listarAreas(0, 1);
     listarUsuarios(0, 1);
+    listarGrupos(0, 1);
   }, []);
+
   useEffect(() => {
     setEmpresasState(empresas);
   }, [empresas]);
+
+  useEffect(() => {
+    setGruposState(grupos);
+  }, [grupos]);
 
   useEffect(() => {
     setAreasState(areas);
@@ -146,15 +175,13 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
     );
   };
 
-
-
   const handleSelect = (event, index) => {
     event.preventDefault();
     event.stopPropagation();
     setEmpresaselected(empresas[index]);
     setTecnicoSelected(empresas[index].tecnico);
     setAreaSelected(empresas[index].area);
-
+    setGrupoSelected(empresas[index].grupo);
   }
 
   const handleDelete = (event, index) => {
@@ -166,16 +193,16 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
   const handleClear = () => {
     setAreaSelected({});
     setTecnicoSelected({});
+    setGrupoSelected({});
     setEmpresaselected({ ...formEmpty })
   }
 
-
-
   const onSubmit = (data) => {
-
     data.usuario = usuario;
-
-    if (!data.usuario) {
+    if (!grupoSelected) {
+      informacao('GRUPO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!data.usuario) {
       informacao('USUARIO OBRIGATORIO! VERIFIQUE!');
       return false
     } else if (!areaSelected) {
@@ -195,26 +222,25 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
       return false
     } else {
       data.tecnico = tecnicoSelected;
-
       data.area = areaSelected;
+      data.grupo = grupoSelected;
       if (data._id) {
         updateEmpresas(data._id, data);
 
       } else {
         criarEmpresas(data);
+        
       }
       if (error === '') {
         handleClear();
-
       }
     }
-
-
   };
 
   if (loading) {
     return <ModalLoading />
   }
+  console.log(empresaSelected);
   return (
     <Styled.Container>
       {sectionItems.map((sectionItem) => (
@@ -237,8 +263,12 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                     <Styled.Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
                       <Styled.Input
                         hidden
-                        {...register('id')}
+                        {...register('_id')}
                       />
+                      <Styled.Label>Grupo: </Styled.Label>
+                      <InputSearch items={gruposState} onSelect={(item) => setGrupoSelected(item)} valueSelected={grupoSelected?.nome} field={'nome'} />
+                      {errors.grupo && <span>Campo obrigatório</span>}
+
                       <Styled.Label>Nome Fantasia:</Styled.Label>
                       <Styled.Input
                         {...register('nomeFantasia', { required: true })}
@@ -417,6 +447,7 @@ const mapStateToProps = (state) => {
   return {
     loading: state.empresa.loading,
     empresas: state.empresa.empresas,
+    grupos: state.empresa.grupos,
     error: state.empresa.error,
     page: state.empresa.page,
 
@@ -430,6 +461,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
   return {
     listarEmpresas: (page, ativo) => dispatch(listarEmpresasRequest(page, ativo)),
+    listarGrupos: (page, ativo) => dispatch(listarGruposRequest(page, ativo)),
     criarEmpresas: (empresa) => dispatch(criarEmpresasRequest(empresa)),
     updateEmpresas: (id, empresa) => dispatch(updateEmpresasRequest(id, empresa)),
     deleteEmpresas: (id) => dispatch(deleteEmpresasRequest(id)),

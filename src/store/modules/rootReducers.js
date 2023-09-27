@@ -17,6 +17,7 @@ import planoAcao from './PlanoAcao/reducers';
 import dis from './Dis/reducers';
 import atividade from './Atividade/reducers'
 import empresa from './Empresa/reducers'
+import video from './Video/reducers'
 
 const rootReducer = combineReducers({
     usuario,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
     dis,
     atividade,
     empresa,
+    video,
 })
 
 export default rootReducer;

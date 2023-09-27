@@ -105,19 +105,24 @@ const Usuarios = ({ loading, usuarios, error, page, listarUsuarios, criarUsuario
           {errors.email && <span>Campo obrigatório</span>}
           <Styled.Label>Tipo: </Styled.Label>
           <Controller
-          name="tipo"
-          control={control}
-          rules={{ required: 'Campo obrigatório' }}
-          render={({ field }) => (
-            <select style={{padding: 8}} {...field}>
-              <option value="">Selecione o tipo</option>
-              <option value="assistente">Assistente</option>
-              <option value="técnico">Técnico</option>
-              <option value="administrador">Administrador</option>
-            </select>
-          )}
-        />
+            name="tipo"
+            control={control}
+            rules={{ required: 'Campo obrigatório' }}
+            render={({ field }) => (
+              <select style={{padding: 8}} {...field}>
+                <option value="">Selecione o tipo</option>
+                <option value="assistente">Assistente</option>
+                <option value="técnico">Técnico</option>
+                <option value="administrador">Administrador</option>
+              </select>
+            )}
+          />
           {errors.tipo && <span>Campo obrigatório</span>}
+          <Styled.Label>Senha: </Styled.Label>
+          <Styled.Input type='password'
+            {...register('password', { required: false })}
+          />
+          {errors.password && <span>Campo obrigatório</span>}
           <Styled.Label>Registro: </Styled.Label>
           <Styled.Input 
             {...register('registro', { required: true })}

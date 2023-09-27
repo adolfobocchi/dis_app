@@ -443,7 +443,7 @@ const Dis = ({
             }));
           }
         },
-        onSelected: (event, index) => { handleClearSelecteds(); setSetorSelected(disSelected.setores[index].setor); setSetorSelectedIndex(index) },
+        onSelected: (event, index) => { handleClearSelecteds(); setSetorSelected(disSelected.setores.find(setor => setor?.setor?._id === index)?.setor); },
         onDelete: (event, id) => {
           const update = disSelected?.setores.filter((el) => el?.setor?._id !== id);
           setDisSelected((prevState) => ({
@@ -532,9 +532,9 @@ const Dis = ({
           }));
           handleClearSelecteds();
         },
-        selectedIndex: setorSelectedIndex,
+        selectedIndex: setorSelected,
         handleListSelect: () => { setShowModalSetoresListSelect(true); },
-        doublelClick: () => { setorSelectedIndex >= 0 && setShowModalDescricaoSetorSelect(true); }
+        doublelClick: () => { setorSelected && setShowModalDescricaoSetorSelect(true); }
       },
       {
         id: 2,
@@ -551,7 +551,7 @@ const Dis = ({
             }));
           }
         },
-        onSelected: (event, index) => { setFuncaoSelected(disSelected.funcoes[index].funcao); setFuncaoSelectedIndex(index) },
+        onSelected: (event, index) => { setFuncaoSelected(disSelected.funcoes.find(funcao => funcao?.funcao?._id === index)?.funcao); },
         onDelete: (event, id) => {
           const update = disSelected?.funcoes.filter((el) => el.funcao._id !== id);
           setDisSelected((prevState) => ({
@@ -634,9 +634,9 @@ const Dis = ({
           }));
           handleClearSelecteds();
         },
-        selectedIndex: funcaoSelectedIndex,
-        handleListSelect: () => { setorSelectedIndex >= 0 && setShowModalFuncoesListSelect(true); },
-        doublelClick: () => { setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && setShowModalDescricaoFuncaoSelect(true); }
+        selectedIndex: funcaoSelected,
+        handleListSelect: () => { setorSelected && setShowModalFuncoesListSelect(true); },
+        doublelClick: () => { setorSelected && funcaoSelected && setShowModalDescricaoFuncaoSelect(true); }
       },
       // {
       //   id: 3,
@@ -749,7 +749,7 @@ const Dis = ({
             }));
           }
         },
-        onSelected: (event, index) => { setPerigoSelected(disSelected.perigos[index].perigo); setPerigoSelectedIndex(index) },
+        onSelected: (event, index) => { setPerigoSelected(disSelected.perigos.find(perigo => perigo?.perigo?._id === index).perigo);  },
         onDelete: (event, id) => {
           const update = disSelected?.perigos.filter((el) => el?.perigo._id !== id);
           setDisSelected((prevState) => ({
@@ -820,8 +820,8 @@ const Dis = ({
           }));
           handleClearSelecteds();
         },
-        selectedIndex: perigoSelectedIndex,
-        handleListSelect: () => { setorSelectedIndex >= 0 && funcaoSelectedIndex >= 0 && setShowModalPerigosListSelect(true); }
+        selectedIndex: perigoSelected,
+        handleListSelect: () => { setorSelected  && funcaoSelected  && setShowModalPerigosListSelect(true); }
       },
 
       {
@@ -841,7 +841,7 @@ const Dis = ({
 
           }
         },
-        onSelected: (event, index) => { setRiscoSelected(disSelected.riscos[index].risco); setRiscoSelectedIndex(index) },
+        onSelected: (event, index) => { setRiscoSelected(disSelected.riscos.find(risco => risco?.risco?._id === index).risco) },
         onDelete: (event, id) => {
           const update = disSelected?.riscos.filter((el) => el?.risco._id !== id);
           setDisSelected((prevState) => ({
@@ -906,10 +906,10 @@ const Dis = ({
           }));
           handleClearSelecteds();
         },
-        selectedIndex: riscoSelectedIndex,
+        selectedIndex: riscoSelected,
         handleListSelect: (event) => {
           event.preventDefault();
-          event.stopPropagation(); perigoSelectedIndex >= 0 && setShowModalRiscosListSelect(true); scrollPositionRef.current = window.scrollY; if (scrollPositionRef.current !== null) {
+          event.stopPropagation(); perigoSelected && setShowModalRiscosListSelect(true); scrollPositionRef.current = window.scrollY; if (scrollPositionRef.current !== null) {
             window.scrollTo(0, scrollPositionRef.current);
           }
         }
@@ -932,7 +932,7 @@ const Dis = ({
 
           }
         },
-        onSelected: (event, index) => { setAgenteRiscoSelected(disSelected.agentesRisco[index].agenteRisco); setAgenteRiscoSelectedIndex(index) },
+        onSelected: (event, index) => {  setAgenteRiscoSelected(disSelected.agentesRisco.find(el => el?.agenteRisco?._id === index).agenteRisco) },
         onDelete: (event, id) => {
           const update = disSelected?.agentesRisco.filter((el) => el?.agenteRisco._id !== id);
           setDisSelected((prevState) => ({
@@ -940,8 +940,8 @@ const Dis = ({
             agentesRisco: update,
           }));
         },
-        selectedIndex: agenteRiscoSelectedIndex,
-        handleListSelect: () => { riscoSelectedIndex >= 0 && setShowModalAgentesRiscoListSelect(true); }
+        selectedIndex: agenteRiscoSelected,
+        handleListSelect: () => { riscoSelected && setShowModalAgentesRiscoListSelect(true); }
       },
       {
         id: 7,
@@ -961,7 +961,7 @@ const Dis = ({
 
           }
         },
-        onSelected: (event, index) => { setViaAbsorcaoSelected(disSelected.viasAbsorcao[index].viaAbsorcao); setViaAbsorcaoSelectedIndex(index) },
+        onSelected: (event, index) => { setViaAbsorcaoSelected(disSelected.viasAbsorcao.find(el => el?.viaAbsorcao?._id === index).viaAbsorcao) },
         onDelete: (event, id) => {
           const update = disSelected?.viasAbsorcao.filter((el) => el?.viaAbsorcao._id !== id);
           setDisSelected((prevState) => ({
@@ -969,8 +969,8 @@ const Dis = ({
             viasAbsorcao: update,
           }));
         },
-        selectedIndex: viaAbsorcaoSelectedIndex,
-        handleListSelect: () => { riscoSelectedIndex >= 0 && setShowModalViasAbsorcaoListSelect(true); }
+        selectedIndex: viaAbsorcaoSelected,
+        handleListSelect: () => { riscoSelected && setShowModalViasAbsorcaoListSelect(true); }
       },
       {
         id: 8,
@@ -1945,22 +1945,13 @@ const Dis = ({
     );
   };
 
-  useEffect(() => {
-    setSetorSelected(disSelected.setores[setorSelectedIndex]?.setor);
-  }, [disSelected.setores, setSetorSelectedIndex, setorSelectedIndex])
-
-  useEffect(() => {
-
-    setFuncaoSelected(disSelected.funcoes[funcaoSelectedIndex]?.funcao);
-  }, [disSelected.funcoes, funcaoSelectedIndex, setFuncaoSelectedIndex])
 
   const handleSetorChange = (event) => {
-    setSetorSelectedIndex(event.target.value);
-
+    setSetorSelected(disSelected.setores.find(setor => setor?.setor?._id === event.target.value).setor);
   }
 
   const handleFuncaoChange = (event) => {
-    setFuncaoSelectedIndex(event.target.value);
+    setFuncaoSelected(disSelected.funcoes.find(funcao => funcao?.funcao?._id === event.target.value).funcao);
   }
 
   if (loading || !areasState || !setoresState) {
@@ -2057,13 +2048,17 @@ const Dis = ({
   }
 
   if (showModalDescricaoSetorSelect) {
-    return <ModalInput label={'Descrição do setor'} dados={[disSelected.setores[setorSelectedIndex].descricao]} close={setShowModalDescricaoSetorSelect}
+    return <ModalInput label={'Descrição do setor'} dados={[disSelected.setores.map(setor => setor.setor._id === setorSelected._id)[0].descricao]} close={setShowModalDescricaoSetorSelect}
       setItensSelected={(items) => addDescricaoSetor(items)} />
   }
   if (showModalDescricaoFuncaoSelect) {
-    return <ModalInput label={'Descrição da Função'} dados={[disSelected.funcoes[funcaoSelectedIndex].descricao]} close={setShowModalDescricaoFuncaoSelect}
+    return <ModalInput label={'Descrição da Função'} dados={[disSelected.funcoes.map(funcao => funcao.funcao._id === funcaoSelected._id)[0].descricao]} close={setShowModalDescricaoFuncaoSelect}
       setItensSelected={(items) => addDescricaoFuncao(items)} />
   }
+  console.log(setorSelected);
+  console.log(setorSelectedIndex);
+  console.log(funcaoSelected);
+  console.log(funcaoSelectedIndex);
   return (
     <Styled.Container>
       {sectionItems.map((sectionItem) => (
@@ -2182,7 +2177,7 @@ const Dis = ({
                                     {
                                       diagnosticoItems[0].items && diagnosticoItems[0].items.map((item, index) =>
                                       (
-                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[0].onSelected(event, index)} style={{ background: index === diagnosticoItems[0].selectedIndex ? '#CCC' : '#FFF' }}   >
+                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[0].onSelected(event, item._id)} style={{ background: item._id === diagnosticoItems[0].selectedIndex?._id ? '#CCC' : '#FFF' }}   >
                                           <p>{item?.nome}</p>
                                           <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[0].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
                                         </DignosticoItemSelectedArea>
@@ -2209,10 +2204,10 @@ const Dis = ({
                             <ScrollableContainer>
                               <div style={{ height: 40, display: 'flex', justifyContent: 'center', marginBottom: 10, alignItems: 'center' }}>
                                 <Titulo3>Setor:</Titulo3>
-                                <select style={{ width: '20%' }} value={setorSelectedIndex} onChange={handleSetorChange} >
+                                <select style={{ width: '20%' }} value={setorSelected?._id} onChange={handleSetorChange} >
                                   <option key="0" value={-1}>SELECIONE UM SETOR</option>
                                   {disSelected.setores.map((setor, index) => (
-                                    <option key={index} value={index}>{setor?.setor?.nome}</option>
+                                    <option key={index} value={setor?.setor?._id}>{setor?.setor?.nome}</option>
                                   ))}
                                 </select>
                               </div>
@@ -2230,7 +2225,7 @@ const Dis = ({
                                       diagnosticoItems[1].items && diagnosticoItems[1].items.map((item, index) =>
                                       (
 
-                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[1].onSelected(event, index)} style={{ background: index === diagnosticoItems[1].selectedIndex ? '#CCC' : '#FFF' }}   >
+                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[1].onSelected(event, item._id)} style={{ background: item._id === diagnosticoItems[1].selectedIndex?._id ? '#CCC' : '#FFF' }}   >
                                           <p>{item?.nome}</p>
                                           <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[1].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
                                         </DignosticoItemSelectedArea>
@@ -2256,17 +2251,17 @@ const Dis = ({
                             <ScrollableContainer>
                               <div style={{ height: 40, display: 'flex', justifyContent: 'center', marginBottom: 10, alignItems: 'center' }}>
                                 <Titulo3>Setor:</Titulo3>
-                                <select style={{ width: '20%' }} value={setorSelectedIndex} onChange={handleSetorChange} >
+                                <select style={{ width: '20%' }} value={setorSelected?._id} onChange={handleSetorChange} >
                                   <option key="0" value={-1}>SELECIONE UM SETOR</option>
                                   {disSelected.setores.map((setor, index) => (
-                                    <option key={index} value={index}>{setor?.setor?.nome}</option>
+                                    <option key={index} value={setor?.setor?._id}>{setor?.setor?.nome}</option>
                                   ))}
                                 </select>
                                 <Titulo3>Função:</Titulo3>
-                                <select style={{ width: '20%' }} value={funcaoSelectedIndex} onChange={handleFuncaoChange} >
+                                <select style={{ width: '20%' }} value={funcaoSelected?._id} onChange={handleFuncaoChange} >
                                   <option key="0" value={-1}>SELECIONE UMA FUNCAO</option>
                                   {setorSelected && disSelected.funcoes.filter(el => el?.setor === setorSelected?._id).map((funcao, index) => (
-                                    <option key={index} value={index}>{funcao?.funcao?.nome}</option>
+                                    <option key={index} value={funcao?.funcao?._id}>{funcao?.funcao?.nome}</option>
                                   ))}
                                 </select>
                               </div>
@@ -2283,7 +2278,7 @@ const Dis = ({
                                           diagnosticoItem.items && diagnosticoItem.items.map((item, index) =>
                                           (
 
-                                            <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItem.onSelected(event, index)} style={{ background: index === diagnosticoItem.selectedIndex ? '#CCC' : '#FFF' }}   >
+                                            <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItem.onSelected(event, item._id)} style={{ background: item?._id === diagnosticoItem.selectedIndex?._id ? '#CCC' : '#FFF' }}   >
                                               <p>{item?.nome}</p>
                                               <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItem.onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
                                             </DignosticoItemSelectedArea>

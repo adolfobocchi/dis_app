@@ -22,6 +22,13 @@ import { AreaFlex, AreaWidth } from '../../components/styleds';
 import Atividade from '../../components/Atividade';
 import Usuario from '../../components/Usuario';
 import Empresa from '../../components/Empresa';
+import Grupo from '../../components/Grupo';
+import Comunicados from '../../components/Comunicados';
+import Solicitacoes from '../../components/Solicitacoes';
+import HistoricoAcoes from '../../components/HistoricoAcoes';
+import Documentos from '../../components/Documentos';
+import ClientePlanoAcao from '../../components/ClientePlanoAcao';
+import Videos from '../../components/Videos';
 
 const Container = styled.div`
   background: #FFF;
@@ -91,7 +98,12 @@ const HomePainel = () => {
 function PainelPage({ usuario }) {
   const [menuItems, setMenuItems] = useState([
     { id: 101, label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard /> },
-    { id: 102, label: 'Empresas', expanded: false, sections: [], component: <Empresa />, icon: <MdHomeWork /> },
+    {
+      id: 102, label: 'Empresas', expanded: false, sections: [
+        { id: 21, label: 'Grupo', expanded: false, component: <Grupo />, },
+        { id: 22, label: 'Empresa', expanded: false, component: <Empresa />, },
+      ], icon: <MdHomeWork />
+    },
     {
       id: 103,
       label: 'Cadastros',
@@ -115,6 +127,20 @@ function PainelPage({ usuario }) {
     },
 
     { id: 104, label: 'P.G.R', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
+    {
+      id: 108,
+      label: 'Area do Cliente',
+      expanded: false,
+      icon: <MdEdit />,
+      sections: [
+        { id: 15, label: 'Comunicados', expanded: false, component: <Comunicados /> },
+        { id: 16, label: 'Solicitações', expanded: false, component: <Solicitacoes /> },
+        { id: 17, label: 'Histórico de Ações', expanded: false, component: <HistoricoAcoes /> },
+        { id: 18, label: 'Documentos', expanded: false, component: <Documentos /> },
+        { id: 19, label: 'Plano de Ação', expanded: false, component: <ClientePlanoAcao /> },
+        { id: 20, label: 'Vídeos', expanded: false, component: <Videos /> },
+      ],
+    },
     { id: 105, label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
     {
       id: 106, label: 'Segurança', expanded: false,
@@ -123,7 +149,7 @@ function PainelPage({ usuario }) {
       ],
       icon: <MdLock />
     },
-    { id: 106, label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
+    { id: 107, label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
   ]);
   const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems[0]);
 
@@ -152,10 +178,10 @@ function PainelPage({ usuario }) {
 
       <Container>
         <Menu>
-          {menuItems.map((menuItem) => (
+          {menuItems.map((menuItem, index) => (
             <>
               <MenuItem
-                key={menuItem.id}
+                key={index}
                 onClick={(event) => { (menuItem.sections && menuItem.sections.length > 0) ? toggleSection(menuItem.id, event) : handleMenuItemClick(menuItem, event) }}
               >
                 <AreaWidth style={{ width: 20 }}>{menuItem.icon}</AreaWidth>  <AreaFlex>{menuItem.label}</AreaFlex> <AreaWidth style={{ width: 20, justifyContent: 'flex-end' }} >{menuItem.expanded ? <MdKeyboardArrowDown /> : <MdKeyboardArrowRight />}</AreaWidth>
@@ -163,9 +189,9 @@ function PainelPage({ usuario }) {
               {menuItem.sections && menuItem.sections.length > 0 && (
                 <Section>
                   {menuItem.expanded &&
-                    menuItem.sections.sort((a, b) => a.label.localeCompare(b.label)).map((section) => (
-                      <SectionItem key={section.id}>
-                        <div onClick={(event) => handleMenuItemClick(section, event)}>{section.label}</div>
+                    menuItem.sections.sort((a, b) => a.label.localeCompare(b.label)).map((section, index) => (
+                      <SectionItem onClick={(event) => handleMenuItemClick(section, event)} key={index}>
+                        <div key={section.id}>{section.label}</div>
                       </SectionItem>
                     ))}
                 </Section>
