@@ -173,7 +173,7 @@ const Videos = ({ loading, usuario, videos, error, page, listarVideos, criarVide
                       {videoSelected?.video &&
                         <a href={`${API_URL}/images/${videoSelected.video}`} target="_blank" rel="noreferrer"> Arquivo </a>
                       }
-                      
+
                       <Styled.Label>Ativo</Styled.Label>
                       <Styled.Input 
                         type='checkbox'
@@ -210,7 +210,7 @@ const Videos = ({ loading, usuario, videos, error, page, listarVideos, criarVide
                     <Styled.List>
 
                             <React.Fragment >
-                              {videos && videos.map((video, index) => (
+                              {videoState && videoState.length > 0 && videoState.map((video, index) => (
                                 <Styled.ListItem key={video._id}>
 
                                   {
