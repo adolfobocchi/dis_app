@@ -131,7 +131,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addPlanoAcao, updat
 
   const handleClear = () => {
     setGrupoSelected({});
-    setEmpresaSelected({})
+    setEmpresaSelected('')
 
     setPlanoAcaoSelected({ ...formEmpty })
   }
@@ -139,15 +139,23 @@ const Empresas = ({ loading, usuario, empresas, error, page, addPlanoAcao, updat
   const onSubmit = (data) => {
 
     data.usuario = usuario;
-    const formData = new FormData();
-    formData.append("documentoFile", data.documentoFile[0]);
-    formData.append('planoAcao', JSON.stringify(data));
-    if (data._id) {
-      updatePlanoAcao(empresaSelected._id, formData);
-
+    if (!grupoSelected) {
+      informacao('GRUPO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!empresaSelected) {
+      informacao('EMPRESA OBRIGATORIO! VERIFIQUE!');
+      return false
     } else {
-      addPlanoAcao(empresaSelected._id, formData);
+      const formData = new FormData();
+      formData.append("documentoFile", data.documentoFile[0]);
+      formData.append('planoAcao', JSON.stringify(data));
+      if (data._id) {
+        updatePlanoAcao(empresaSelected._id, formData);
 
+      } else {
+        addPlanoAcao(empresaSelected._id, formData);
+
+      }
     }
     if (error === '') {
       handleClear();

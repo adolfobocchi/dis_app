@@ -99,6 +99,18 @@ export const UPDATE_SOLICITACAO_REQUEST = 'UPDATE_SOLICITACAO_REQUEST';
 export const UPDATE_SOLICITACAO_SUCCESS = 'UPDATE_SOLICITACAO_SUCCESS';
 export const UPDATE_SOLICITACAO_FAILURE = 'UPDATE_SOLICITACAO_FAILURE';
 
+export const ADD_RESPOSTASOLICITACAO_REQUEST = 'ADD_RESPOSTASOLICITACAO_REQUEST';
+export const ADD_RESPOSTASOLICITACAO_SUCCESS = 'ADD_RESPOSTASOLICITACAO_SUCCESS';
+export const ADD_RESPOSTASOLICITACAO_FAILURE = 'ADD_RESPOSTASOLICITACAO_FAILURE';
+
+export const REMOVE_RESPOSTASOLICITACAO_REQUEST = 'REMOVE_RESPOSTASOLICITACAO_REQUEST';
+export const REMOVE_RESPOSTASOLICITACAO_SUCCESS = 'REMOVE_RESPOSTASOLICITACAO_SUCCESS';
+export const REMOVE_RESPOSTASOLICITACAO_FAILURE = 'REMOVE_RESPOSTASOLICITACAO_FAILURE';
+
+export const UPDATE_RESPOSTASOLICITACAO_REQUEST = 'UPDATE_RESPOSTASOLICITACAO_REQUEST';
+export const UPDATE_RESPOSTASOLICITACAO_SUCCESS = 'UPDATE_RESPOSTASOLICITACAO_SUCCESS';
+export const UPDATE_RESPOSTASOLICITACAO_FAILURE = 'UPDATE_RESPOSTASOLICITACAO_FAILURE';
+
 export const listarEmpresasRequest = (page, ativo) => ({
   type: LISTAR_EMPRESAS_REQUEST,
   payload: { page, ativo }
@@ -380,6 +392,50 @@ export const updateSolicitacaoSuccess = (empresa) => ({
 
 export const updateSolicitacaoFailure = (error) => ({
   type: UPDATE_SOLICITACAO_FAILURE,
+  payload: { error },
+});
+
+export const addRespostaSolicitacaoRequest = (id, solicitacaoId, respostaSolicitacao) => ({
+  type: ADD_RESPOSTASOLICITACAO_REQUEST,
+  payload: { id, solicitacaoId, respostaSolicitacao },
+});
+
+export const addRespostaSolicitacaoSuccess = (empresa) => ({
+  type: ADD_RESPOSTASOLICITACAO_SUCCESS,
+  payload: { empresa },
+});
+
+export const addRespostaSolicitacaoFailure = (error) => ({
+  type: ADD_RESPOSTASOLICITACAO_FAILURE,
+  payload: { error },
+});
+
+export const removeRespostaSolicitacaoRequest = (id, solicitacaoId, respostaSolicitacaoId) => ({
+  type: REMOVE_RESPOSTASOLICITACAO_REQUEST,
+  payload: { id, solicitacaoId, respostaSolicitacaoId },
+});
+
+export const removeRespostaSolicitacaoSuccess = (empresa) => ({
+  type: REMOVE_RESPOSTASOLICITACAO_SUCCESS,
+  payload: { empresa },
+});
+
+export const removeRespostaSolicitacaoFailure = (error) => ({
+  type: REMOVE_RESPOSTASOLICITACAO_FAILURE,
+  payload: { error },
+});
+export const updateRespostaSolicitacaoRequest = (id, solicitacaoId, respostaSolicitacaoId, respostaSolicitacao) => ({
+  type: UPDATE_RESPOSTASOLICITACAO_REQUEST,
+  payload: { id, solicitacaoId, respostaSolicitacaoId, respostaSolicitacao },
+});
+
+export const updateRespostaSolicitacaoSuccess = (empresa) => ({
+  type: UPDATE_RESPOSTASOLICITACAO_SUCCESS,
+  payload: { empresa },
+});
+
+export const updateRespostaSolicitacaoFailure = (error) => ({
+  type: UPDATE_RESPOSTASOLICITACAO_FAILURE,
   payload: { error },
 });
 

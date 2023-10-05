@@ -7,6 +7,11 @@ import { MdCalendarMonth } from 'react-icons/md';
 import { format  } from 'date-fns';
 registerLocale('pt-BR', ptBR);
 
+const getCurrentDate = () => {
+  const currentDate = new Date();
+  return currentDate;
+};
+
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split('/');
   return new Date(year, month - 1, day);
@@ -23,7 +28,7 @@ const CustomInput = ({ value, onClick }) => {
 )};
 
 const DataPicker = ({ name, control, setValue, defaultValue, showTimeSelect }) => {
-  const [selectedDate, setSelectedDate] = useState(defaultValue || null);
+  const [selectedDate, setSelectedDate] = useState(defaultValue || getCurrentDate());
 
   useEffect(() => {
     if (defaultValue) {
@@ -44,7 +49,7 @@ const DataPicker = ({ name, control, setValue, defaultValue, showTimeSelect }) =
     <Controller
       control={control}
       name={name}
-      defaultValue={defaultValue || ''}
+      defaultValue={getCurrentDate()}
       render={({ field }) => (
         <DatePicker
           {...field}

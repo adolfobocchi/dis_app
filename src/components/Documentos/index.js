@@ -25,6 +25,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addDocumento, updat
     descricao: '',
     observacao: '',
     documento: '',
+    validade: '',
     ativo: true,
     dataDownload: '',
     dataDownloadID: '',
@@ -36,6 +37,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addDocumento, updat
     descricao: 'texto',
     data: 'texto',
     documento: 'link',
+    validade: 'texto',
     dataDownload: 'texto',
     dataDownloadID: 'texto',
     opção: ''
@@ -129,7 +131,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addDocumento, updat
 
   const handleClear = () => {
     setGrupoSelected({});
-    setEmpresaSelected({})
+    setEmpresaSelected('');
 
     setDocumentoSelected({ ...formEmpty })
   }
@@ -137,17 +139,26 @@ const Empresas = ({ loading, usuario, empresas, error, page, addDocumento, updat
   const onSubmit = (data) => {
 
     data.usuario = usuario;
-    const formData = new FormData();
-    formData.append("documentoFile", data.documentoFile[0]);
-    formData.append('documento', JSON.stringify(data));
-
-    if (data._id) {
-      updateDocumento(empresaSelected._id, formData);
-
+    if (!grupoSelected) {
+      informacao('GRUPO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!empresaSelected) {
+      informacao('EMPRESA OBRIGATORIO! VERIFIQUE!');
+      return false
     } else {
-      addDocumento(empresaSelected._id, formData);
+      const formData = new FormData();
+      formData.append("documentoFile", data.documentoFile[0]);
+      formData.append('documento', JSON.stringify(data));
 
+      if (data._id) {
+        updateDocumento(empresaSelected._id, formData);
+
+      } else {
+        addDocumento(empresaSelected._id, formData);
+
+      }
     }
+
     if (error === '') {
       handleClear();
     }
@@ -196,9 +207,12 @@ const Empresas = ({ loading, usuario, empresas, error, page, addDocumento, updat
                         {...register('descricao', { required: true })}
                       />
                       {errors.descricao && <span>Campo obrigatório</span>}
+                      <Styled.Label>Validade do documento: </Styled.Label>
+                      <DataPicker name="validade" control={control} setValue={setValue} defaultValue={documentoSelected?.validade} showTimeSelect={false} />
+                      {errors.validade && <span>Campo obrigatório</span>}
                       <Styled.Label>Observação:</Styled.Label>
                       <Styled.Input
-                        {...register('observacao', { required: true })}
+                        {...register('observacao', { required: false })}
                       />
                       {errors.observacao && <span>Campo obrigatório</span>}
 
@@ -223,7 +237,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addDocumento, updat
                       />
                       {errors.downloadID && <span>Campo obrigatório</span>}
                       <Styled.Label>Ativo</Styled.Label>
-                      <Styled.Input 
+                      <Styled.Input
                         type='checkbox'
                         {...register('ativo')}
                       />
@@ -269,7 +283,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addDocumento, updat
                                   {
                                     Object.keys(listFields).map((field, index) => {
                                       if (field !== '_id' && field !== 'opção') {
-                                        if(field === 'empresa') {
+                                        if (field === 'empresa') {
                                           return (
                                             <Styled.CampoValor key={index}>
                                               {empresa?.nomeFantasia && `${empresa?.nomeFantasia}`}

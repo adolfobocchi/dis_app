@@ -14,6 +14,7 @@ import Paginacao from '../Paginacao';
 import InputSearch from '../InputSearch';
 import DataPicker from '../DataPicker';
 import SelectSearch from '../SelectSearch';
+import ModalSolicitacao from '../ModalSolicitacao';
 
 const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, updateSolicitacao, listarEmpresas, removeSolicitacao, confirmacao, informacao, grupos, listarGrupos }) => {
 
@@ -35,6 +36,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
   }
 
   const listFields = {
+    empresa: 'texto',
     descricao: 'texto',
     abertura: 'texto',
     status: 'texto',
@@ -48,6 +50,8 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
     { id: 2, label: 'Pesquisa', expanded: true, sections: [{ id: 1, label: 'Pesquisa', expanded: false, component: 'search' },], icon: <MdSearch /> },
     { id: 3, label: 'Listagem', expanded: true, sections: [{ id: 1, label: 'Listagem', expanded: false, component: 'listagem' },], icon: <MdViewList /> },
   ]);
+
+  const [showModalState, setShowModalState] = useState(false);
 
   const [gruposState, setGruposState] = useState([]);
   const [grupoSelected, setGrupoSelected] = useState(null);
@@ -130,20 +134,34 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
 
   const handleClear = () => {
     setGrupoSelected({});
-    setEmpresaSelected({})
+    setEmpresaSelected('')
 
     setSolicitacaoSelected({ ...formEmpty })
   }
 
+  const handleShow = (event, empresaIndex, index) => {
+    event.preventDefault();
+    event.stopPropagation();
+    handleSelect(event, empresaIndex, index)
+    setShowModalState(true);
+  }
   const onSubmit = (data) => {
 
     data.usuario = usuario;
-    if (data._id) {
-      updateSolicitacao(empresaSelected._id, data);
-
+    if (!grupoSelected) {
+      informacao('GRUPO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!empresaSelected) {
+      informacao('EMPRESA OBRIGATORIO! VERIFIQUE!');
+      return false
     } else {
-      addSolicitacao(empresaSelected._id, data);
+      if (data._id) {
+        updateSolicitacao(empresaSelected._id, data);
 
+      } else {
+        addSolicitacao(empresaSelected._id, data);
+
+      }
     }
     if (error === '') {
       handleClear();
@@ -151,8 +169,13 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
 
   };
 
+  
   if (loading) {
     return <ModalLoading />
+  }
+
+  if (showModalState) {
+    return <ModalSolicitacao empresa={empresaSelected} dados={solicitacaoSelected} close={setShowModalState} />
   }
   return (
     <Styled.Container>
@@ -254,11 +277,18 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
                           return (
                             <React.Fragment key={empresaIndex}>
                               {solicitacaos.map((solicitacao, index) => (
-                                <Styled.ListItem key={solicitacao._id}>
+                                <Styled.ListItem key={solicitacao._id} onClick={(event) => handleShow(event, empresaIndex, index)} >
 
                                   {
                                     Object.keys(listFields).map((field, index) => {
                                       if (field !== '_id' && field !== 'opção') {
+                                        if (field === 'empresa') {
+                                          return (
+                                            <Styled.CampoValor key={index}>
+                                              {empresa?.nomeFantasia && `${empresa?.nomeFantasia}`}
+                                            </Styled.CampoValor>
+                                          );
+                                        }
                                         if (listFields[field] === 'link') {
                                           return (
                                             <Styled.CampoValor key={index}>

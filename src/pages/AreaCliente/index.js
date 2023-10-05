@@ -45,9 +45,7 @@ const Menu = styled.div`
   color: #FFF;
   position: fixed;
   margin-top: 60px;
-  height:  calc(100vh - 60px);
-  max-height: calc(100vh - 60px);
-  overflow-y: auto;
+  height:  calc(100vw - 60px);
 `;
 
 const MenuItem = styled.div`
@@ -91,97 +89,97 @@ const SectionItem = styled.div`
 `;
 
 
-const HomePainel = () => {
-  return (
-    <><h3>Utilize o menu lateral para navegar no sistema.</h3></>
-  )
-}
+// const HomePainel = () => {
+//   return (
+//     <><h3>Utilize o menu lateral para navegar no sistema.</h3></>
+//   )
+// }
 
-function PainelPage({ usuario }) {
-  const [menuItems, setMenuItems] = useState([
-    { id: 101, label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard /> },
-    {
-      id: 102, label: 'Empresas', expanded: false, sections: [
-        { id: 21, label: 'Grupo', expanded: false, component: <Grupo />, },
-        { id: 22, label: 'Empresa', expanded: false, component: <Empresa />, },
-      ], icon: <MdHomeWork />
-    },
-    {
-      id: 103,
-      label: 'Cadastros',
-      expanded: false,
-      icon: <MdEdit />,
-      sections: [
-        { id: 1, label: 'Ramo de Atividade', expanded: false, component: <Area /> },
-        { id: 2, label: 'Setores', expanded: false, component: <Setor /> },
-        { id: 3, label: 'Funções', expanded: false, component: <Funcao /> },
-        // { id: 4, label: 'Atividades realizadas', expanded: false, component: <Atividade /> },
-        { id: 5, label: 'Fonte ou Circunstância', expanded: false, component: <Perigo /> },
-        { id: 6, label: 'Riscos', expanded: false, component: <Risco /> },
-        { id: 7, label: 'Possíveis lesões', expanded: false, component: <Causa /> },
-        { id: 8, label: 'Medidas de controle ', expanded: false, component: <Medida /> },
-        { id: 9, label: 'Probabilidades', expanded: false, component: <Probabilidade /> },
-        { id: 10, label: 'Severidades', expanded: false, component: <Severidade /> },
-        { id: 11, label: 'Niveis Risco', expanded: false, component: <NivelRisco /> },
-        { id: 12, label: 'Planos de ação', expanded: false, component: <PlanoAcao /> },
-        { id: 13, label: 'Formas de monitoramento', expanded: false, component: <Monitoramento /> },
-      ],
-    },
+function AreaClientePage({ usuario }) {
+  // const [menuItems, setMenuItems] = useState([
+  //   { id: 101, label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard /> },
+  //   {
+  //     id: 102, label: 'Empresas', expanded: false, sections: [
+  //       { id: 21, label: 'Grupo', expanded: false, component: <Grupo />, },
+  //       { id: 22, label: 'Empresa', expanded: false, component: <Empresa />, },
+  //     ], icon: <MdHomeWork />
+  //   },
+  //   {
+  //     id: 103,
+  //     label: 'Cadastros',
+  //     expanded: false,
+  //     icon: <MdEdit />,
+  //     sections: [
+  //       { id: 1, label: 'Ramo de Atividade', expanded: false, component: <Area /> },
+  //       { id: 2, label: 'Setores', expanded: false, component: <Setor /> },
+  //       { id: 3, label: 'Funções', expanded: false, component: <Funcao /> },
+  //       // { id: 4, label: 'Atividades realizadas', expanded: false, component: <Atividade /> },
+  //       { id: 5, label: 'Fonte ou Circunstância', expanded: false, component: <Perigo /> },
+  //       { id: 6, label: 'Riscos', expanded: false, component: <Risco /> },
+  //       { id: 7, label: 'Possíveis lesões', expanded: false, component: <Causa /> },
+  //       { id: 8, label: 'Medidas de controle ', expanded: false, component: <Medida /> },
+  //       { id: 9, label: 'Probabilidades', expanded: false, component: <Probabilidade /> },
+  //       { id: 10, label: 'Severidades', expanded: false, component: <Severidade /> },
+  //       { id: 11, label: 'Niveis Risco', expanded: false, component: <NivelRisco /> },
+  //       { id: 12, label: 'Planos de ação', expanded: false, component: <PlanoAcao /> },
+  //       { id: 13, label: 'Formas de monitoramento', expanded: false, component: <Monitoramento /> },
+  //     ],
+  //   },
 
-    { id: 104, label: 'P.G.R', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
-    {
-      id: 108,
-      label: 'Area do Cliente',
-      expanded: false,
-      icon: <MdEdit />,
-      sections: [
-        { id: 15, label: 'Comunicados', expanded: false, component: <Comunicados /> },
-        { id: 16, label: 'Solicitações', expanded: false, component: <Solicitacoes /> },
-        { id: 17, label: 'Histórico de Ações', expanded: false, component: <HistoricoAcoes /> },
-        { id: 18, label: 'Documentos', expanded: false, component: <Documentos /> },
-        { id: 19, label: 'Plano de Ação', expanded: false, component: <ClientePlanoAcao /> },
-        { id: 20, label: 'Vídeos', expanded: false, component: <Videos /> },
-      ],
-    },
-    { id: 105, label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
-    {
-      id: 106, label: 'Segurança', expanded: false,
-      sections: [
-        { id: 14, label: 'Usuários', expanded: false, component: <Usuario /> },
-      ],
-      icon: <MdLock />
-    },
-    { id: 107, label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
-  ]);
-  const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems[0]);
+  //   { id: 104, label: 'P.G.R', expanded: false, sections: [], component: <Dis />, icon: <MdDocumentScanner /> },
+  //   {
+  //     id: 108,
+  //     label: 'Area do Cliente',
+  //     expanded: false,
+  //     icon: <MdEdit />,
+  //     sections: [
+  //       { id: 15, label: 'Comunicados', expanded: false, component: <Comunicados /> },
+  //       { id: 16, label: 'Solicitações', expanded: false, component: <Solicitacoes /> },
+  //       { id: 17, label: 'Histórico de Ações', expanded: false, component: <HistoricoAcoes /> },
+  //       { id: 18, label: 'Documentos', expanded: false, component: <Documentos /> },
+  //       { id: 19, label: 'Plano de Ação', expanded: false, component: <ClientePlanoAcao /> },
+  //       { id: 20, label: 'Vídeos', expanded: false, component: <Videos /> },
+  //     ],
+  //   },
+  //   { id: 105, label: 'Relatórios', expanded: false, sections: [], component: <Area />, icon: <MdDescription /> },
+  //   {
+  //     id: 106, label: 'Segurança', expanded: false,
+  //     sections: [
+  //       { id: 14, label: 'Usuários', expanded: false, component: <Usuario /> },
+  //     ],
+  //     icon: <MdLock />
+  //   },
+  //   { id: 107, label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
+  // ]);
+  // const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems[0]);
 
-  useEffect(() => {
-  }, [])
+  // useEffect(() => {
+  // }, [])
 
-  const toggleSection = (itemId, event) => {
-    event.stopPropagation();
-    setMenuItems((prevState) =>
-      prevState.map((item) => {
-        if (item.id === itemId) {
-          return { ...item, expanded: !item.expanded };
-        }
-        return item;
-      })
-    );
-  };
+  // const toggleSection = (itemId, event) => {
+  //   event.stopPropagation();
+  //   setMenuItems((prevState) =>
+  //     prevState.map((item) => {
+  //       if (item.id === itemId) {
+  //         return { ...item, expanded: !item.expanded };
+  //       }
+  //       return item;
+  //     })
+  //   );
+  // };
 
-  const handleMenuItemClick = (menuItem, event) => {
-    event.stopPropagation();
-    setSelectedMenuItem(menuItem);
-  };
+  // const handleMenuItemClick = (menuItem, event) => {
+  //   event.stopPropagation();
+  //   setSelectedMenuItem(menuItem);
+  // };
   return (
     <>
-      <NavBar />
+      {/* <NavBar /> */}
 
       <Container>
-        <Menu>
+        {/* <Menu>
           {menuItems.map((menuItem, index) => (
-            <React.Fragment>
+            <>
               <MenuItem
                 key={index}
                 onClick={(event) => { (menuItem.sections && menuItem.sections.length > 0) ? toggleSection(menuItem.id, event) : handleMenuItemClick(menuItem, event) }}
@@ -198,12 +196,11 @@ function PainelPage({ usuario }) {
                     ))}
                 </Section>
               )}
-            </React.Fragment>
+            </>
           ))}
-        </Menu>
+        </Menu> */}
         <Content>
-          <Titulo titulo={selectedMenuItem.label} ></Titulo>
-          {selectedMenuItem.component}
+          
         </Content>
       </Container>
     </>
@@ -222,4 +219,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PainelPage);
+export default connect(mapStateToProps, mapDispatchToProps)(AreaClientePage);

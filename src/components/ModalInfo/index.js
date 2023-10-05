@@ -119,6 +119,7 @@ const ModalInfo = ({ dados, close }) => {
     }
     return 0;
   }
+  const setores = dadosState?.setores.sort((a,b) => compararPorNome(a,b,'setor')) || []
   
   return (
     <ModalWrapper>
@@ -154,14 +155,14 @@ const ModalInfo = ({ dados, close }) => {
         <ContentInfoSeparador />
         <ContentInfoSetorizacao>
           
-        {dadosState?.setores.sort((a,b) => compararPorNome(a,b,'setor')).map((setor, setorIndex) => {
-            //setSetorState(setor?.setor?._id)
-            const funcoesSetor = dadosState?.funcoes.filter(funcao => funcao.setor === setor.setor?._id).sort((a,b) => compararPorNome(a,b,'funcao'))
+        {setores.map((setor, setorIndex) => {
+
+            const funcoesSetor = dadosState?.funcoes.filter(funcao => funcao.setor === setor.setor?._id).sort((a,b) => compararPorNome(a,b,'funcao')) || []
             return (
               funcoesSetor.map((funcao, funcaoIndex) => {
-                console.log(funcao.funcao.nome)
-                const perigosFuncao = dadosState?.perigos.filter(perigo => perigo.funcao === funcao.funcao?._id).sort((a,b) => compararPorNome(a,b,'perigo'))
-                console.log(perigosFuncao);
+                
+                const perigosFuncao = dadosState?.perigos.filter(perigo => perigo.funcao === funcao.funcao?._id).sort((a,b) => compararPorNome(a,b,'perigo')) || []
+                const riscos = dadosState?.riscos.filter(risco => risco.funcao === funcao?.funcao._id).filter(risco => risco.setor === funcao?.setor).sort((a,b) => compararPorNome(a,b,'risco')) || [] 
                 return (
                   <div style={{ display: 'flex', flex: 1, flexDirection: 'column', width: '80%', margin: 20 }}>
                     <div style={{ display: 'flex', flex: 1, width: '100%' }}>
@@ -200,29 +201,34 @@ const ModalInfo = ({ dados, close }) => {
 
                       <ColLabel>riscos: </ColLabel>
                       <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
-                        {dadosState?.riscos.filter(risco => risco.funcao === funcao?.funcao._id).filter(risco => risco.setor === funcao?.setor).sort((a,b) => compararPorNome(a,b,'risco')).map((risco, riscoIndex) => {
-                          return (
+                        {
+                          
+                          
+                          riscos.map((risco, riscoIndex) => 
+                            (
 
-                            <p key={riscoIndex} style={{ display: 'block' }}>
-                              {`${funcaoIndex + 1}.${riscoIndex + 1} ${risco.risco.nome}`}
-                            </p>
+                              <p key={riscoIndex} style={{ display: 'block' }}>
+                                {`${funcaoIndex + 1}.${riscoIndex + 1} ${risco.risco.nome}`}
+                              </p>
 
+                            )
                           )
-                        })
                         } 
                       </div>
 
                     </div>
                     {perigosFuncao.map((perigo, perigoIndex) => {
-                      console.log(perigo.perigo.nome)
                       const riscosPerigo = dadosState?.riscos.filter(risco => risco.funcao === funcao?.funcao._id).sort((a,b) => compararPorNome(a,b,'risco'))
-                      console.log(riscosPerigo)
+                      
                       return (
 
                         riscosPerigo.map((risco, riscoIndex) => 
                         {  
-                          const agentesRisco = dadosState?.agentesRisco.filter(agenteRisco => agenteRisco.risco === risco?.risco._id)
-                          console.log(agentesRisco)
+                          const agentesRisco = dadosState?.agentesRisco.filter(agenteRisco => agenteRisco.risco === risco?.risco._id) || [];
+                          const viasAbsorcao = dadosState?.viasAbsorcao.filter(viaAbsorcao => viaAbsorcao.risco === risco?.risco._id) || [];
+                          const frequenciaExposicao = dadosState?.frequenciaExposicao.filter(frequenciaExposicao => frequenciaExposicao.risco === risco?.risco._id) || [];
+                          const duracaoExposicao = dadosState?.duracaoExposicao.filter(duracaoExposicao => duracaoExposicao.risco === risco?.risco._id) || [];
+                          const causas = dadosState?.causas.filter(causa => causa.risco === risco?.risco._id) || [];
                           return (
                           <div style={{ display: 'flex', flex: 1, flexDirection: 'column', marginTop: 20 }}>
                             <div style={{ display: 'flex', flex: 1, width: '100%' }}>
@@ -269,7 +275,7 @@ const ModalInfo = ({ dados, close }) => {
 
                               <ColLabel>via absorcao: </ColLabel>
                               <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
-                                {dadosState?.viasAbsorcao.filter(viaAbsorcao => viaAbsorcao.risco === risco?.risco._id).map((viaAbsorcao, viaAbsorcaoIndex) => {
+                                {viasAbsorcao.map((viaAbsorcao, viaAbsorcaoIndex) => {
                                   return (
 
                                     <p key={viaAbsorcaoIndex} style={{ display: 'block' }}>
@@ -282,7 +288,7 @@ const ModalInfo = ({ dados, close }) => {
                               </div>
                               <ColLabel>Frequencia Exposicao: </ColLabel>
                               <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
-                                {dadosState?.frequenciaExposicao.filter(frequenciaExposicao => frequenciaExposicao.risco === risco?.risco._id).map((frequenciaExposicao, frequenciaExposicaoIndex) => {
+                                {frequenciaExposicao.map((frequenciaExposicao, frequenciaExposicaoIndex) => {
                                   return (
 
                                     <p key={frequenciaExposicaoIndex} style={{ display: 'block' }}>
@@ -295,7 +301,7 @@ const ModalInfo = ({ dados, close }) => {
                               </div>
                               <ColLabel>Duração Exposicao: </ColLabel>
                               <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
-                                {dadosState?.duracaoExposicao.filter(duracaoExposicao => duracaoExposicao.risco === risco?.risco._id).map((duracaoExposicao, duracaoExposicaoIndex) => {
+                                {duracaoExposicao.map((duracaoExposicao, duracaoExposicaoIndex) => {
                                   return (
 
                                     <p key={duracaoExposicaoIndex} style={{ display: 'block' }}>
@@ -311,7 +317,7 @@ const ModalInfo = ({ dados, close }) => {
 
                               <ColLabel>Possiveis Lesoes: </ColLabel>
                               <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto' }}>
-                                {dadosState?.causas.filter(causa => causa.risco === risco?.risco._id).map((causa, causaIndex) => {
+                                {causas.map((causa, causaIndex) => {
                                   return (
 
                                     <p key={causaIndex} style={{ display: 'block' }}>

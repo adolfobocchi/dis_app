@@ -120,7 +120,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addHistoricoAcao, u
 
   const handleClear = () => {
     setGrupoSelected({});
-    setEmpresaSelected({})
+    setEmpresaSelected('')
 
     setHistoricoAcaoSelected({ ...formEmpty })
   }
@@ -128,13 +128,20 @@ const Empresas = ({ loading, usuario, empresas, error, page, addHistoricoAcao, u
   const onSubmit = (data) => {
 
     data.usuario = usuario;
-
-    if (data._id) {
-      updateHistoricoAcao(empresaSelected._id, data);
-
+    if (!grupoSelected) {
+      informacao('GRUPO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!empresaSelected) {
+      informacao('EMPRESA OBRIGATORIO! VERIFIQUE!');
+      return false
     } else {
-      addHistoricoAcao(empresaSelected._id, data);
+      if (data._id) {
+        updateHistoricoAcao(empresaSelected._id, data);
 
+      } else {
+        addHistoricoAcao(empresaSelected._id, data);
+
+      }
     }
     if (error === '') {
       handleClear();
@@ -235,7 +242,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addHistoricoAcao, u
                                   {
                                     Object.keys(listFields).map((field, index) => {
                                       if (field !== '_id' && field !== 'opção') {
-                                        if(field === 'empresa') {
+                                        if (field === 'empresa') {
                                           return (
                                             <Styled.CampoValor key={index}>
                                               {empresa?.nomeFantasia && `${empresa?.nomeFantasia}`}

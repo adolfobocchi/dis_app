@@ -119,19 +119,26 @@ const Empresas = ({ loading, usuario, empresas, error, page, addComunicado, upda
 
   const handleClear = () => {
     setGrupoSelected({});
-    setEmpresaSelected({})
+    setEmpresaSelected('');
     setComunicadoSelected({ ...formEmpty })
   }
 
   const onSubmit = (data) => {
     data.usuario = usuario;
-
-    if (data._id) {
-      updateComunicado(empresaSelected._id, data);
-
+    if (!grupoSelected) {
+      informacao('GRUPO OBRIGATORIO! VERIFIQUE!');
+      return false
+    } else if (!empresaSelected) {
+      informacao('EMPRESA OBRIGATORIO! VERIFIQUE!');
+      return false
     } else {
-      addComunicado(empresaSelected._id, data);
+      if (data._id) {
+        updateComunicado(empresaSelected._id, data);
 
+      } else {
+        addComunicado(empresaSelected._id, data);
+
+      }
     }
     if (error === '') {
       handleClear();

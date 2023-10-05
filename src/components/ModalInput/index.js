@@ -67,7 +67,7 @@ const ModalInput = ({label, dados, close, setItensSelected }) => {
     
     setInputData(dados[0])
     const maiorId = dadosState.reduce((maxId, obj) => {
-      return obj.id > maxId ? obj.id : maxId;
+      return obj?.id > maxId ? obj?.id : maxId;
     }, -Infinity);
     if(maiorId > 1)
       setMaiorId(maiorId)
