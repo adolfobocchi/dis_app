@@ -18,12 +18,14 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
     nome: '',
     email: '',
     password: '',
+    responsavel: '',
     empresas: [],
     ativo: true,
   }
 
   const listFields = {
     nome: 'texto',
+    responsavel: 'texto',
     ativo: 'boolean',
     opção: ''
   }
@@ -44,6 +46,7 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
         nome: grupoSelected.nome,
         email: grupoSelected.email,
         password: grupoSelected.password,
+        responsavel: grupoSelected.responsavel,
         ativo: grupoSelected.ativo,
       } :
       {}
@@ -168,6 +171,11 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
                         {...register('password', { required: true })}
                       />
                       {errors.password && <span>Campo obrigatório</span>}
+                      <Styled.Label>Responsavel: </Styled.Label>
+                      <Styled.Input type='responsavel'
+                        {...register('responsavel', { required: true })}
+                      />
+                      {errors.responsavel && <span>Campo obrigatório</span>}
                       <Styled.Label>Ativo</Styled.Label>
                       <Styled.Input
                         type='checkbox'
@@ -209,25 +217,28 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
                         <>
                           <Styled.ListItem key={grupo._id} >
                             {
-                              Object.keys(grupo).map((field, index) => {
-                                if (field !== '_id' && listFields.hasOwnProperty(field)) {
-                                  if (listFields[field] === 'boolean') 
+
+
+                              Object.keys(listFields).map((field, index) => {
+                                if (field !== '_id' && field !== 'opção') {
+                                  if (listFields[field] === 'boolean')
                                     return (<>
                                       {listFields[field] ? <Styled.Ativo /> : <Styled.Inativo />}
                                     </>);
-                                  return (<Styled.CampoValor>{`${grupo[field]}`}</Styled.CampoValor>)
+                                  return (<Styled.CampoValor>{grupo[field] && `${grupo[field]}`}</Styled.CampoValor>)
                                 }
-                               
+
+
                               })
                             }
                             <Styled.ColunaValor>
-                              <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
-                                <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, grupo._id)} style={{ height: '1em', width: '1em' }} />
-                              </div>
-                              <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
-                                <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
-                              </div>
-                            </Styled.ColunaValor>
+                                  <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                                    <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, grupo._id)} style={{ height: '1em', width: '1em' }} />
+                                  </div>
+                                  <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
+                                    <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
+                                  </div>
+                                </Styled.ColunaValor>
 
 
                           </Styled.ListItem>

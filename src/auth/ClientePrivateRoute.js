@@ -15,13 +15,13 @@ const PrivateRoute = ({ isAuthenticated, token, children }) => {
             }
       };
       return (
-            (isAuthenticated && token && !isTokenExpired(token)) ? children : <Navigate to="/login" />
+            (isAuthenticated && token && !isTokenExpired(token)) ? children : <Navigate to="/areadocliente/login" />
       );
 }
 
 const mapStateToProps = (state) => ({
-      isAuthenticated: state.usuario.isAuthenticated,
-      token: state.usuario.token,
+      isAuthenticated: state.empresa.isAuthenticated,
+      token: state.empresa.token,
 });
 
 

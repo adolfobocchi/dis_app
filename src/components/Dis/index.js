@@ -758,9 +758,9 @@ const Dis = ({
           //     perigos: update,
           //   }));
           addPerigo([item]);
-          
+
         },
-        onSelected: (event, index) => { setPerigoSelected(disSelected.perigos.find(perigo => perigo?.perigo?._id === index).perigo);  },
+        onSelected: (event, index) => { setPerigoSelected(disSelected.perigos.find(perigo => perigo?.perigo?._id === index).perigo); },
         onDelete: (event, id) => {
           const update = disSelected?.perigos.filter((el) => el?.perigo._id !== id);
           setDisSelected((prevState) => ({
@@ -832,7 +832,7 @@ const Dis = ({
           // handleClearSelecteds();
         },
         selectedIndex: perigoSelected,
-        handleListSelect: () => { setorSelected  && funcaoSelected  && setShowModalPerigosListSelect(true); }
+        handleListSelect: () => { setorSelected && funcaoSelected && setShowModalPerigosListSelect(true); }
       },
 
       {
@@ -944,7 +944,7 @@ const Dis = ({
           // }
           addAgenteRisco([item])
         },
-        onSelected: (event, index) => { console.log(index); setAgenteRiscoSelected(disSelected.agentesRisco.find(el => el?.agenteRisco?._id === index).agenteRisco) },
+        onSelected: (event, index) => { setAgenteRiscoSelected(disSelected.agentesRisco.find(el => el?.agenteRisco?._id === index).agenteRisco) },
         onDelete: (event, id) => {
           const update = disSelected?.agentesRisco.filter((el) => el?.agenteRisco._id !== id);
           setDisSelected((prevState) => ({
@@ -1061,7 +1061,7 @@ const Dis = ({
           // }
           addCausa([item])
         },
-        onSelected: (event, index) => { setCausaSelected(disSelected.causas.find(el => el?.causa?._id === index ).causa); setCausaSelectedIndex(disSelected.causas.findIndex(el => el?.causa?._id === index )) },
+        onSelected: (event, index) => { setCausaSelected(disSelected.causas.find(el => el?.causa?._id === index).causa); setCausaSelectedIndex(disSelected.causas.findIndex(el => el?.causa?._id === index)) },
         onDelete: (event, id) => {
           const update = disSelected?.causas.filter((el) => el?.causa._id !== id);
           setDisSelected((prevState) => ({
@@ -1090,7 +1090,7 @@ const Dis = ({
           // }
           addMedida([item])
         },
-        onSelected: (event, index) => { setMedidaSelected(disSelected.medidas.find(el => el?.medida?._id === index ).medida); setMedidaSelectedIndex(disSelected.medidas.findIndex(el => el?.medida?._id === index )) },
+        onSelected: (event, index) => { setMedidaSelected(disSelected.medidas.find(el => el?.medida?._id === index).medida); setMedidaSelectedIndex(disSelected.medidas.findIndex(el => el?.medida?._id === index)) },
         onDelete: (event, id) => {
           const update = disSelected?.medidas.filter((el) => el?.medida._id !== id);
           setDisSelected((prevState) => ({
@@ -1119,7 +1119,7 @@ const Dis = ({
           // }
           addAvaliacao([item]);
         },
-        onSelected: (event, index) => { setAvaliacaoSelected(disSelected.avaliacao.find(el => el?.avaliacao?._id === index ).avaliacao); setAvaliacaoSelectedIndex(disSelected.avaliacao.findIndex(el => el?.avaliacao?._id === index )) },
+        onSelected: (event, index) => { setAvaliacaoSelected(disSelected.avaliacao.find(el => el?.avaliacao?._id === index).avaliacao); setAvaliacaoSelectedIndex(disSelected.avaliacao.findIndex(el => el?.avaliacao?._id === index)) },
         onDelete: (event, id) => {
           const update = disSelected?.avaliacao.filter((el) => el?.avaliacao._id !== id);
           setDisSelected((prevState) => ({
@@ -1147,7 +1147,7 @@ const Dis = ({
 
           }
         },
-        onSelected: (event, index) => { setProbabilidadeSelected(disSelected.probabilidades.find(el => el?.probabilidade?._id === index ).probabilidade); setProbabilidadeSelectedIndex(disSelected.probabilidades.findIndex(el => el?.probabilidade?._id === index )) },
+        onSelected: (event, index) => { setProbabilidadeSelected(disSelected.probabilidades.find(el => el?.probabilidade?._id === index).probabilidade); setProbabilidadeSelectedIndex(disSelected.probabilidades.findIndex(el => el?.probabilidade?._id === index)) },
         onDelete: (event, id) => {
           const update = disSelected?.probabilidades.filter((el) => el?.probabilidade._id !== id);
           setDisSelected((prevState) => ({
@@ -1509,7 +1509,6 @@ const Dis = ({
     // const newItem = items.filter(item => {
     //   return !disSelected?.agentesRisco.some(el => el.agenteRisco?._id === item._id)
     // });
-    console.log(items)
     const updated = items.map(item => ({
       agenteRisco: item,
       risco: idRisco,
@@ -1518,7 +1517,6 @@ const Dis = ({
       setor: setorSelected?._id,
       funcao: funcaoSelected?._id,
     }));
-    console.log(updated)
     setDisSelected((prevState) => ({
       ...prevState,
       agentesRisco: [...prevState.agentesRisco, ...updated],
@@ -1804,7 +1802,6 @@ const Dis = ({
 
   const addDescricaoSetor = (items) => {
     const setorIndex = disSelected.setores.findIndex(setor => setor?.setor?._id === setorSelected?._id);
-    console.log(disSelected.setores[setorIndex])
     disSelected.setores[setorIndex].descricao = items[0];
 
     setDisSelected((prevState) => ({
@@ -1815,7 +1812,6 @@ const Dis = ({
 
   const addDescricaoFuncao = (items) => {
     const funcaoIndex = disSelected.funcoes.findIndex(funcao => funcao?.funcao?._id === funcaoSelected?._id);
-    console.log(disSelected.funcoes[funcaoIndex])
     disSelected.funcoes[funcaoIndex].descricao = items[0];
 
     setDisSelected((prevState) => ({
@@ -1926,7 +1922,7 @@ const Dis = ({
       data.empresa = empresaSelected;
       data.area = areaSelected;
       const formData = new FormData();
-      if(data.files)
+      if (data.files)
         formData.append("imagens", data?.files[0]);
       formData.append('dis', JSON.stringify(data));
       if (data._id) {
@@ -2242,7 +2238,7 @@ const Dis = ({
                                 </DiagnosticoItemArea>
                                 <DiagnosticoItemArea>
                                   <div style={{ display: 'flex', alignItems: 'center' }}><Titulo3>Descrição</Titulo3><MdAddCircle onClick={diagnosticoItems[0].doublelClick} style={{ height: '2em', width: '2em', cursor: 'pointer' }} /></div>
-                                  <p style={{fontSize: '0.8em'}}>{disSelected.setores[disSelected.setores.findIndex(setor => setor?.setor?._id === setorSelected?._id)]?.descricao ? disSelected.setores[disSelected.setores.findIndex(setor => setor?.setor?._id === setorSelected?._id)]?.descricao?.nome : 'Selecione um setor e adicione uma descricao'}</p>
+                                  <p style={{ fontSize: '0.8em' }}>{disSelected.setores[disSelected.setores.findIndex(setor => setor?.setor?._id === setorSelected?._id)]?.descricao ? disSelected.setores[disSelected.setores.findIndex(setor => setor?.setor?._id === setorSelected?._id)]?.descricao?.nome : 'Selecione um setor e adicione uma descricao'}</p>
                                 </DiagnosticoItemArea>
                                 <DiagnosticoItemArea>
                                   <Titulo3>Imagem Setor: </Titulo3>
@@ -2311,7 +2307,7 @@ const Dis = ({
                                   ))}
                                 </select>
                                 <Titulo3>Função:</Titulo3>
-                                <select style={{ width: '30%', padding: '8px', marginRight: '6px'}} value={funcaoSelected?._id} onChange={handleFuncaoChange} >
+                                <select style={{ width: '30%', padding: '8px', marginRight: '6px' }} value={funcaoSelected?._id} onChange={handleFuncaoChange} >
                                   <option key="0" value={-1}>SELECIONE UMA FUNCAO</option>
                                   {setorSelected && disSelected.funcoes.filter(el => el?.setor === setorSelected?._id).map((funcao, index) => (
                                     <option key={index} value={funcao?.funcao?._id}>{funcao?.funcao?.nome}</option>

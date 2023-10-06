@@ -111,6 +111,13 @@ export const UPDATE_RESPOSTASOLICITACAO_REQUEST = 'UPDATE_RESPOSTASOLICITACAO_RE
 export const UPDATE_RESPOSTASOLICITACAO_SUCCESS = 'UPDATE_RESPOSTASOLICITACAO_SUCCESS';
 export const UPDATE_RESPOSTASOLICITACAO_FAILURE = 'UPDATE_RESPOSTASOLICITACAO_FAILURE';
 
+export const LOGINEMPRESA_REQUEST = 'LOGINEMPRESA_REQUEST';
+export const LOGINEMPRESA_SUCCESS = 'LOGINEMPRESA_SUCCESS';
+export const LOGINEMPRESA_FAILURE = 'LOGINEMPRESA_FAILURE';
+
+export const LOGOUTEMPRESA_REQUEST = 'LOGOUTEMPRESA_REQUEST';
+export const LOGOUTEMPRESA_SUCCESS = 'LOGOUTEMPRESA_SUCCESS';
+
 export const listarEmpresasRequest = (page, ativo) => ({
   type: LISTAR_EMPRESAS_REQUEST,
   payload: { page, ativo }
@@ -489,17 +496,17 @@ export const updateDocumentoFailure = (error) => ({
 
 
 export const updateGruposRequest = (id, grupo) => ({
-  type: UPDATE_EMPRESAS_REQUEST,
+  type: UPDATE_GRUPOS_REQUEST,
   payload: { id, grupo },
 });
 
 export const updateGruposSuccess = (grupo) => ({
-  type: UPDATE_EMPRESAS_SUCCESS,
+  type: UPDATE_GRUPOS_SUCCESS,
   payload: { grupo },
 });
 
 export const updateGruposFailure = (error) => ({
-  type: UPDATE_EMPRESAS_FAILURE,
+  type: UPDATE_GRUPOS_FAILURE,
   payload: { error },
 });
 
@@ -531,4 +538,28 @@ export const deleteGruposSuccess = (id) => ({
 export const deleteGruposFailure = (error) => ({
   type: DELETE_GRUPOS_FAILURE,
   payload: { error },
+});
+
+
+export const loginEmpresaRequest = (email, password, history) => ({
+  type: LOGINEMPRESA_REQUEST,
+  payload: { email, password, history },
+});
+
+export const loginEmpresaSuccess = (grupo, token, history) => ({
+  type: LOGINEMPRESA_SUCCESS,
+  payload: { grupo, token, history },
+});
+
+export const loginEmpresaFailure = (message) => ({
+  type: LOGINEMPRESA_FAILURE,
+  payload: { message },
+});
+
+export const logoutEmpresaRequest = () => ({
+  type: LOGOUTEMPRESA_REQUEST,
+});
+
+export const logoutEmpresaSuccess = () => ({
+  type: LOGOUTEMPRESA_SUCCESS,
 });

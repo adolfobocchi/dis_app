@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./auth/PrivateRoute";
 import LoginPage from "./pages/Login";
+import LoginEmpresaPage from "./pages/LoginEmpresa";
 import PainelPage from "./pages/Painel";
 import AreaClientePage from "./pages/AreaCliente";
 import ClientePrivateRoute from "./auth/ClientePrivateRoute";
@@ -29,6 +30,10 @@ function App() {
               <AreaClientePage />
             </ClientePrivateRoute>
           } />
+          <Route path="login" element={
+            <LoginEmpresaPage />
+          } />
+        
         </Route>
       </Routes>
     </Router>

@@ -94,12 +94,6 @@ const ModalInfo = ({ dados, close }) => {
 
   const [dadosState, setDadosState] = useState(null);
 
-  const [setorState, setSetorState] = useState('');
-  const [funcaoState, setFuncaoState] = useState('');
-  const [perigoState, setPerigoState] = useState('');
-  const [riscoState, setRiscoState] = useState('');
-  const [planoState, setPlanoState] = useState('');
-
   useEffect(() => {
     setDadosState(dados);
   }, [dados])
@@ -119,12 +113,15 @@ const ModalInfo = ({ dados, close }) => {
     }
     return 0;
   }
+  
   const setores = dadosState?.setores.sort((a,b) => compararPorNome(a,b,'setor')) || []
   
   return (
-    <ModalWrapper>
+    <ModalWrapper >
 
-      <ModalContent>
+      <ModalContent >
+        
+      
         <ModalHeader>
 
           <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><h2>DETALHES</h2></div>
@@ -152,8 +149,9 @@ const ModalInfo = ({ dados, close }) => {
         <ContentInfoSeparador />
         <ContentInfoText>{`${dadosState?.observacaoAmbiente}`}</ContentInfoText>
         <h3>Diagnostico</h3>
+
         <ContentInfoSeparador />
-        <ContentInfoSetorizacao>
+        <ContentInfoSetorizacao >
           
         {setores.map((setor, setorIndex) => {
 
