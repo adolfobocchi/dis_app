@@ -15,6 +15,7 @@ import Paginacao from '../Paginacao';
 import InputSearch from '../InputSearch';
 import { listarAreasRequest } from '../../store/modules/Area/actions';
 import { listarUsuariosRequest } from '../../store/modules/Usuario/actions';
+import DataPicker from '../DataPicker';
 
 const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAreas, empresas, error, page, listarEmpresas, criarEmpresas, updateEmpresas, deleteEmpresas, confirmacao, informacao, grupos, listarGrupos }) => {
   const estados = [
@@ -89,7 +90,7 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
   const [empresasState, setEmpresasState] = useState([]);
   const [empresaSelected, setEmpresaselected] = useState(formEmpty);
 
-  const { register, control, formState: { errors }, handleSubmit, reset } = useForm({
+  const { register, control, setValue, formState: { errors }, handleSubmit, reset } = useForm({
     defaultValues: empresaSelected
       ? {
         _id: empresaSelected._id,
@@ -349,6 +350,33 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                       <Styled.Input
                         {...register('funcao', { required: false })}
                       />
+                      <Styled.Label>Tipo de contrato: </Styled.Label>
+                      <Styled.Input
+                        {...register('tipoContrato', { required: false })}
+                      />
+                      <Styled.Label>Inicio do contrato: </Styled.Label>
+                      <DataPicker name="inicioContrato" control={control} setValue={setValue} defaultValue={empresaSelected?.inicioContratoa} showTimeSelect={false} />
+                      {errors.inicioContrato && <span>Campo obrigatório</span>}
+                      <Styled.Label>Vencimento do contrato: </Styled.Label>
+                      <DataPicker name="vencimentoContrato" control={control} setValue={setValue} defaultValue={empresaSelected?.vencimentoContrato} showTimeSelect={false} />
+                      {errors.vencimentoContrato && <span>Campo obrigatório</span>}
+                      <Styled.Label>Numero do contrato: </Styled.Label>
+                      <Styled.Input
+                        {...register('contrato', { required: false })}
+                      />
+                      <Styled.Label>Total de etapas: </Styled.Label>
+                      <Styled.Input
+                        {...register('etapas', { required: false })}
+                      />
+                      <Styled.Label>Etapa Atual: </Styled.Label>
+                      <Styled.Input
+                        {...register('etapaAtual', { required: false })}
+                      />
+                      <Styled.Label>Percentual Plano Ação: </Styled.Label>
+                      <Styled.Input
+                        {...register('planoAcaoDesenvolvido', { required: false })}
+                      />
+
                       <Styled.Label>Telefone: </Styled.Label>
                       <Controller
                         control={control}
@@ -369,6 +397,9 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                       <Styled.Input
                         {...register('observacao', { required: false })}
                       />
+                      <Styled.Label>Logo: </Styled.Label>
+                      <Styled.Input type='file' multiple name='logoFile' {...register('logoFile', { required: false })} />
+
                       <Styled.Label>Ativo</Styled.Label>
                       <Styled.Input
                         type='checkbox'

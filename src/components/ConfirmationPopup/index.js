@@ -51,7 +51,7 @@ const Button = styled.button`
 `;
 
 const ConfirmationPopup = () => {
-  const { title, text, onConfirm, visible } = useSelector(state => state.confirmation);
+  const { title, text, onConfirm,  visible } = useSelector(state => state.confirmation);
   const dispatch = useDispatch();
   const handleCancel = () => {
     dispatch(hideConfirmation());

@@ -50,17 +50,25 @@ export const List = styled.ul`
 
 export const ListItem = styled.li`
   display: flex;
+  height: 70px;
   align-items: center;
   margin-bottom: 10px;
   border-bottom: 4px solid #f8f9fd;
   cursor: pointer;
   width: auto;
+
+  &.par {
+    background-color: #f0f0f0; // Cor de fundo para itens pares
+  }
+
+  &.impar {
+    background-color: #ffffff; // Cor de fundo para itens ímpares
+  }
 `;
 
 export const ListHeader = styled.li`
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
   border-bottom: 4px solid #eceffa;
   width: auto;
 `;
@@ -93,7 +101,7 @@ const InativoItem = styled.div`
 `;
 
 const ColunaHeader = styled.div`
-    color: gray;
+    color: ${props => props.color};
     text-transform: capitalize;
     display: flex;
     align-items: center;
@@ -110,7 +118,8 @@ export const ColunaValor = styled.div`
     justify-content: center;
     font-size: 0.8em;
     font-weight: 400;
-    padding: 20px;
+    padding: 3px;
+    height: 100%;
     flex: 1;
     text-transform: lowercase;
 
@@ -163,9 +172,9 @@ export const Inativo = () => (
     <ColunaValor><InativoItem><MdCircle />Inativo</InativoItem></ColunaValor>
 )
 
-export const Coluna = ({label=''}) => {
+export const Coluna = ({label='', color='gray'}) => {
    return (
-    <ColunaHeader>{label}</ColunaHeader>
+    <ColunaHeader color={color}>{label}</ColunaHeader>
     )
 
 }

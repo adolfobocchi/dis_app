@@ -5,6 +5,7 @@ import LoginPage from "./pages/Login";
 import LoginEmpresaPage from "./pages/LoginEmpresa";
 import PainelPage from "./pages/Painel";
 import AreaClientePage from "./pages/AreaCliente";
+import VideosPage from "./pages/Videos";
 import ClientePrivateRoute from "./auth/ClientePrivateRoute";
 
 function App() {
@@ -28,6 +29,11 @@ function App() {
           <Route index element={
             <ClientePrivateRoute >
               <AreaClientePage />
+            </ClientePrivateRoute>
+          } />
+          <Route path="videos" element={
+            <ClientePrivateRoute >
+              <VideosPage />
             </ClientePrivateRoute>
           } />
           <Route path="login" element={

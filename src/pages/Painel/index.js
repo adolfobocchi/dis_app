@@ -151,6 +151,13 @@ function PainelPage({ usuario }) {
       ],
       icon: <MdLock />
     },
+    {
+      id: 109, label: 'Configurações', expanded: false,
+      sections: [
+        { id: 21, label: 'Lojas', expanded: false, component: <Usuario /> },
+      ],
+      icon: <MdLock />
+    },
     { id: 107, label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
   ]);
   const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems[0]);
