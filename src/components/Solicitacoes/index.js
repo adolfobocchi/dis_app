@@ -143,6 +143,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
     event.preventDefault();
     event.stopPropagation();
     handleSelect(event, empresaIndex, index)
+    console.log(empresaSelected);
     setShowModalState(true);
   }
   const onSubmit = (data) => {

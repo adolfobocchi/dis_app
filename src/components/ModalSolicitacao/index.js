@@ -124,6 +124,8 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
   }
 
   const [dadosState, setDadosState] = useState(null);
+  const [empresasState, setEmpresasState] = useState([]);
+  const [empresaSelected, setEmpresaSelected] = useState(null);
 
   const [sectionCadItems, setSectionCadItems] = useState([
     { id: 0, label: 'Respostas', expanded: true, sections: [{ id: 1, label: 'Respostas', expanded: false, component: 'Respostas' },] },
@@ -142,6 +144,14 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
       } :
       {}
   });
+  
+  useEffect(() => {
+    setEmpresasState(empresas);
+  }, [empresas]);
+
+  useEffect(() => {
+    setEmpresaSelected(empresa);
+  }, [empresa]);
 
   useEffect(() => {
     setDadosState(dados);
@@ -152,8 +162,9 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
   }, [reset, respostaSelected]);
 
   const fetchRespostas = async () => {
-    const empresasFind = await empresas.find(item => empresa?._id === item?._id); 
+    const empresasFind = await empresasState.find(item => empresa?._id === item?._id); 
     const solicitacaoFind = await empresasFind?.solicitacoes.find(item => dadosState?._id === item?._id)
+    console.log(solicitacaoFind);
     setDadosState(solicitacaoFind);
   };
 
@@ -187,20 +198,19 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
 
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
 
     data.usuario = usuario;
     console.log(data)
     if (data._id) {
-      updateRespostaSolicitacao(empresa?._id, dadosState._id, respostaSelected._id, data);
+      await updateRespostaSolicitacao(empresa?._id, dadosState._id, respostaSelected._id, data);
       fetchRespostas();
     } else {
-      addRespostaSolicitacao(empresa?._id, dadosState._id, data);
+      await addRespostaSolicitacao(empresa?._id, dadosState._id, data);
       fetchRespostas();
     }
     if (error === '') {
       handleClear();
-      close(false);
     }
 
   };

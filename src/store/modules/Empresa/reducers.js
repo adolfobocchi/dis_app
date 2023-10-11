@@ -129,11 +129,11 @@ const empresaReducer = (state = initialState, action) => {
       case UPDATE_RESPOSTASOLICITACAO_SUCCESS:
       case UPDATE_EMPRESAS_SUCCESS:
         var index = state.empresas.findIndex((empresa) => empresa._id === action.payload._id);
-        
+        console.log(action.payload)
         state.empresas[index]= action.payload;
 
         var indexGrupoLogado = state.grupoLogado.empresas.findIndex((empresa) => empresa._id === action.payload._id);
-        console.log(indexGrupoLogado);
+        
         
         state.grupoLogado.empresas[indexGrupoLogado] = action.payload;
         return {

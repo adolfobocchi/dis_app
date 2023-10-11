@@ -262,10 +262,7 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                 return (
                   <Styled.FormArea>
                     <Styled.Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
-                      <Styled.Input
-                        hidden
-                        {...register('_id')}
-                      />
+                      
                       <Styled.Label>Grupo: </Styled.Label>
                       <InputSearch items={gruposState} onSelect={(item) => setGrupoSelected(item)} valueSelected={grupoSelected?.nome} field={'nome'} />
                       {errors.grupo && <span>Campo obrigatório</span>}
