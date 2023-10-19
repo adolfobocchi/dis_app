@@ -6,6 +6,7 @@ import SelectSearch from '../../components/SelectSearch';
 import { logoutEmpresaRequest, updateComunicadoRequest, updateDocumentoRequest } from '../../store/modules/Empresa/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { dataAtualFormatada } from '../../utils';
+import TextArea from '../../components/TextArea';
 
 
 const Container = styled.div`
@@ -205,7 +206,7 @@ function AreaClientePage({ grupo, logoutEmpresa, confirmacao, updateComunicado, 
     const formData = new FormData();
     
     formData.append('documento', JSON.stringify(documento));
-    await confirmacao('CONFIRMAÇÃO', 'VOCE CONFIRMA O DOWNLOAD DO DOCUMENTO?', async () => {
+    await confirmacao('CONFIRMAÇÃO', 'VOCE CONFIRMA VISUALIZAÇÃO DO DOCUMENTO?', async () => {
       
       await updateDocumento(empresaSelected?._id, formData )
       const link = document.createElement('a');
@@ -248,27 +249,27 @@ function AreaClientePage({ grupo, logoutEmpresa, confirmacao, updateComunicado, 
             <EmpresaContent>
               <EmpresaContentLeft>
                 <Row>
-                  <Styled.Label>{`Empresa: ${empresaSelected.razaoSocial && empresaSelected.razaoSocial}`}</Styled.Label>
+                  <Styled.Label><TextArea label="Empresa: " fieldData={empresaSelected.razaoSocial} /></Styled.Label>
                 </Row>
                 <Row>
-                  <Styled.Label>{`Tipo contrato: ${empresaSelected.tipoContrato && empresaSelected.tipoContrato}`}</Styled.Label>
+                  <Styled.Label><TextArea label="Tipo contrato: " fieldData={empresaSelected.tipoContrato } /></Styled.Label>
                 </Row>
                 <Row>
-                  <Styled.Label>{`Inicio do contrato: ${empresaSelected.inicioContrato && empresaSelected.inicioContrato}`}</Styled.Label>
-                  <Styled.Label>{`Vencimento do contrato: ${empresaSelected.vencimentoContrato && empresaSelected.vencimentoContrato}`}</Styled.Label>
+                  <Styled.Label><TextArea label="Inicio do contrato: "  fieldData={empresaSelected.inicioContrato } /></Styled.Label>
+                  <Styled.Label><TextArea label="Vencimento do contrato: " fieldData={empresaSelected.vencimentoContrato } /></Styled.Label>
                 </Row>
                 <Row>
-                  <Styled.Label>{`Contrato: ${empresaSelected.contrato && empresaSelected.contrato}`}</Styled.Label>
+                  <Styled.Label><TextArea label="Contrato: " fieldData={empresaSelected.contrato } /></Styled.Label>
                 </Row>
                 <Row>
-                  <Styled.Label>{`Total de etapas: ${empresaSelected.etapas && empresaSelected.etapas}`}</Styled.Label>
-                  <Styled.Label>{`Etapa Atual: ${empresaSelected.etapaAtual && empresaSelected.etapaAtual}`}</Styled.Label>
+                  <Styled.Label><TextArea label="Total de etapas: " fieldData={empresaSelected.etapas } /></Styled.Label>
+                  <Styled.Label><TextArea label="Etapa Atual: "  fieldData={empresaSelected.etapaAtual } /></Styled.Label>
                 </Row>
               </EmpresaContentLeft>
               <EmpresaContentRight>
                 <Styled.Label>Implementação</Styled.Label>
                 <Styled.Label>do Plano de Ação</Styled.Label>
-                <span style={{color: '#F00', fontSize: '2em'}}>{`${empresaSelected.planoAcaoDesenvolvido}%`}</span>
+                <span style={{color: '#F00', fontSize: '2em'}}><TextArea label=""  fieldData={empresaSelected.planoAcaoDesenvolvido } />{`%`}</span>
               </EmpresaContentRight>
             </EmpresaContent>
 
@@ -365,7 +366,7 @@ function AreaClientePage({ grupo, logoutEmpresa, confirmacao, updateComunicado, 
                         if (field === 'opção') {
                           return(  <Styled.ColunaValor>
                               <div style={{ display: 'flex', flex: 1, justifyContent: 'center', cursor: 'pointer', height: '90%' }} >
-                                <button style={{width: '60%', height: '100%', backgroundColor: '#6E65AD'}} onClick={(event) => handleDownloadDocumento(event,documentoIndex )}>DOWNLOAD</button>
+                                <button style={{width: '60%', height: '100%', backgroundColor: '#6E65AD'}} onClick={(event) => handleDownloadDocumento(event,documentoIndex )}>VISUALIZAR</button>
                               </div>
   
                             </Styled.ColunaValor>)

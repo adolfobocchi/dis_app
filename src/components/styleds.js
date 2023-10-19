@@ -20,7 +20,7 @@ export const Form = styled.form`
 
 export const Input = styled.input`
   padding: 8px;
-  text-transform: lowercase;
+  /* text-transform: lowercase; */
   font-size: 0.8em;
 `;
 
@@ -121,11 +121,11 @@ export const ColunaValor = styled.div`
     padding: 3px;
     height: 100%;
     flex: 1;
-    text-transform: lowercase;
+    /* text-transform: lowercase;
 
     p::first-letter {
       text-transform: uppercase;
-    }
+    } */
 `
 
 export const AreaFlex = styled.div`

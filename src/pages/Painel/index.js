@@ -29,6 +29,7 @@ import HistoricoAcoes from '../../components/HistoricoAcoes';
 import Documentos from '../../components/Documentos';
 import ClientePlanoAcao from '../../components/ClientePlanoAcao';
 import Videos from '../../components/Videos';
+import Importador from '../../components/Importador';
 
 const Container = styled.div`
   background: #FFF;
@@ -154,7 +155,8 @@ function PainelPage({ usuario }) {
     {
       id: 109, label: 'Configurações', expanded: false,
       sections: [
-        { id: 21, label: 'Lojas', expanded: false, component: <Usuario /> },
+        { id: 21, label: 'Gerais', expanded: false, component: <Usuario /> },
+        { id: 22, label: 'Importação', expanded: false, component: <Importador /> },
       ],
       icon: <MdLock />
     },

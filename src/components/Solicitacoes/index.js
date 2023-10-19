@@ -31,7 +31,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
     descricao: '',
     status: '',
     encerramento: '',
-    respostas: '',
+    respostas: [],
     usuario: ''
   }
 
@@ -129,12 +129,13 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
   const handleDelete = (event, empresaId, solicitacaoId) => {
     event.preventDefault();
     event.stopPropagation();
-    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR O HISTORICO DE ACAO?', () => { removeSolicitacao(empresaId, solicitacaoId) });
+    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR A SOLICITAÇÃO?', () => { removeSolicitacao(empresaId, solicitacaoId) });
   }
 
   const handleClear = () => {
-    setGrupoSelected({});
-    setEmpresaSelected('')
+    setGrupoSelected(null);
+    setEmpresaSelected(null);
+
 
     setSolicitacaoSelected({ ...formEmpty })
   }
@@ -317,6 +318,19 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
                                     }
                                   })} */}
                                   <Styled.ColunaValor>
+                                    {/* <div
+                                      style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        flex: 1,
+                                      }}
+                                    > */}
+                                      <MdHighlightOff
+                                        color='#F00'
+                                        onClick={(event) => handleDelete(event, empresa._id, solicitacao._id)}
+                                      />
+                                    {/* </div>
                                     <div
                                       style={{
                                         display: 'flex',
@@ -324,30 +338,15 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
                                         cursor: 'pointer',
                                         flex: 1,
                                       }}
-                                    >
-                                      <MdHighlightOff
-                                        color='#F00'
-                                        onClick={(event) => handleDelete(event, empresa._id, solicitacao._id)}
-                                        style={{ height: '1em', width: '1em' }}
-                                      />
-                                    </div>
-                                    <div
-                                      style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        width: '6em',
-                                      }}
-                                    >
+                                    > */}
                                       <MdEditNote
                                         color='#005'
                                         onClick={(event) => {
                                           toggleSectionExpand(1, event);
                                           handleSelect(event, empresaIndex, index);
                                         }}
-                                        style={{ height: '1.2em', width: '1.2em' }}
                                       />
-                                    </div>
+                                    {/* </div> */}
                                   </Styled.ColunaValor>
                                 </Styled.ListItem>
                               ))}
