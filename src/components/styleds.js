@@ -121,6 +121,7 @@ export const ColunaValor = styled.div`
     padding: 3px;
     height: 100%;
     flex: 1;
+    text-align: center;
     /* text-transform: lowercase;
 
     p::first-letter {
