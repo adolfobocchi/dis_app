@@ -30,6 +30,10 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
     opção: ''
   }
 
+  const fieldsSearchData = {
+    nome: ''
+  }
+
   const [sectionItems, setSectionItems] = useState([
     { id: 1, label: 'Cadastro', expanded: false, sections: [{ id: 1, label: 'Cadastro', expanded: false, component: 'formulario' },], icon: <MdEdit /> },
     { id: 2, label: 'Pesquisa', expanded: true, sections: [{ id: 1, label: 'Pesquisa', expanded: false, component: 'search' },], icon: <MdSearch /> },
@@ -38,6 +42,8 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
 
   const [gruposState, setGruposState] = useState([]);
   const [grupoSelected, setGrupoSelected] = useState(formEmpty);
+  
+  const [fieldSearch, setFieldSearch] = useState(fieldsSearchData);
 
   const { register, control, formState: { errors }, handleSubmit, reset } = useForm({
     defaultValues: grupoSelected
@@ -107,6 +113,11 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
     setGrupoSelected({ ...formEmpty })
   }
 
+  const handleSearch = (event) => {
+    setFieldSearch({...fieldSearch, [event.target.name]: event.target.value})
+   
+  
+  };
 
 
   const onSubmit = (data) => {
@@ -194,9 +205,12 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
                 )
               }
               if (section.component === 'search') {
-                return (<Styled.FormArea>
-                  { }
-                </Styled.FormArea>)
+                return (<React.Fragment>
+                  <Styled.Label>Nome:</Styled.Label>
+                      <Styled.Input
+                        type='search' name='nome' onChange={handleSearch} 
+                      />
+                </React.Fragment>)
               }
               if (section.component === 'listagem') {
                 return (<>
@@ -213,7 +227,7 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
                     </Styled.ListHeader>
                     <Styled.List>
 
-                      {gruposState?.length > 0 && gruposState?.map((grupo, index) => (
+                      {gruposState?.length > 0 && gruposState?.filter(grupo => grupo?.nome.includes(fieldSearch.nome)).map((grupo, index) => (
                         <>
                           <Styled.ListItem key={grupo._id} >
                             {

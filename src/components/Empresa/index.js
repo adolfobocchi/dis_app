@@ -71,6 +71,11 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
     opção: ''
   }
 
+  const fieldsSearchData = {
+    nomeFantasia: '',
+    cnpj: ''
+  }
+
   const [sectionItems, setSectionItems] = useState([
     { id: 1, label: 'Cadastro', expanded: false, sections: [{ id: 1, label: 'Cadastro', expanded: false, component: 'formulario' },], icon: <MdEdit /> },
     { id: 2, label: 'Pesquisa', expanded: true, sections: [{ id: 1, label: 'Pesquisa', expanded: false, component: 'search' },], icon: <MdSearch /> },
@@ -89,6 +94,8 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
 
   const [empresasState, setEmpresasState] = useState([]);
   const [empresaSelected, setEmpresaselected] = useState(formEmpty);
+
+  const [fieldSearch, setFieldSearch] = useState(fieldsSearchData);
 
   const { register, control, setValue, formState: { errors }, handleSubmit, reset } = useForm({
     defaultValues: empresaSelected
@@ -197,6 +204,12 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
     setGrupoSelected({});
     setEmpresaselected({ ...formEmpty })
   }
+
+  const handleSearch = (event) => {
+    setFieldSearch({...fieldSearch, [event.target.name]: event.target.value})
+   
+  
+  };
 
   const onSubmit = (data) => {
     data.usuario = usuario;
@@ -416,9 +429,16 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                 )
               }
               if (section.component === 'search') {
-                return (<Styled.FormArea>
-                  { }
-                </Styled.FormArea>)
+                return (<React.Fragment>
+                  <Styled.Label>Nome Fantasia:</Styled.Label>
+                      <Styled.Input
+                        type='search' name='nomeFantasia' onChange={handleSearch} 
+                      />
+                  <Styled.Label>Cnpj:</Styled.Label>
+                      <Styled.Input
+                        type='search' name='cnpj' onChange={handleSearch} 
+                      />
+                </React.Fragment>)
               }
               if (section.component === 'listagem') {
                 return (<>
@@ -435,7 +455,13 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                     </Styled.ListHeader>
                     <Styled.List>
 
-                      {empresasState?.length > 0 && empresasState?.map((empresa, index) => (
+                      {empresasState?.length > 0 && 
+                      empresasState?.filter((empresa) => 
+                        empresa?.nomeFantasia.includes(fieldSearch.nomeFantasia)
+                      
+                      ).filter(empresa => 
+                        empresa?.cnpj.includes(fieldSearch.cnpj)
+                        ).map((empresa, index) => (
                         <>
                           <Styled.ListItem key={empresa._id} >
                             {
