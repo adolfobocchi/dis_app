@@ -11,6 +11,12 @@ import * as Styled from '../styleds';
 import Paginacao from '../Paginacao';
 
 const Area = ({ loading, areas, error, page, listarAreas, criarAreas, updateAreas, deleteAreas, confirmacao }) => {
+
+  const listFields = {
+    nome: 'texto',
+    ativo: 'boolean',
+    opção: ''
+  }
   const formEmpty = {
     _id: '',
     nome: '',
@@ -102,28 +108,25 @@ const Area = ({ loading, areas, error, page, listarAreas, criarAreas, updateArea
       <Styled.ListArea>
 
         <Styled.ListHeader>
-          {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
-            })
-          }
-          <Styled.Coluna label='' />
+        {
+                        Object.keys(listFields).map((key, index) => {
+                          return <Styled.Coluna label={key} key={index} />
+                        })
+                      }
         </Styled.ListHeader>
         <Styled.List>
 
           {areasState?.length > 0 && areasState?.map((area, index) => (
             <>
               <Styled.ListItem key={area._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(area).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (area[field]) === 'boolean') {
+                {
+                Object.keys(listFields).map((field, index) => {
+                  if (field !== '_id' && field !== 'opção') {
+                    if (listFields[field] === 'boolean')
                       return (<>
-                        {area[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
-                      return (<Styled.CampoValor>{area[field]}</Styled.CampoValor>)
-                    }
+                        {listFields[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                      </>);
+                    return (<Styled.CampoValor>{area[field] && `${area[field]}`}</Styled.CampoValor>)
                   }
 
 
