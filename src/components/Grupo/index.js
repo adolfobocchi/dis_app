@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import ModalLoading from '../ModalLoading';
 
 import { useForm } from 'react-hook-form';
 
-import { criarGruposRequest, deleteGruposRequest, listarGruposRequest, updateGruposRequest } from '../../store/modules/Empresa/actions';
+import { criarGruposRequest, deleteGruposRequest, listarGruposRequest, searchGruposRequest, updateGruposRequest } from '../../store/modules/Empresa/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { showInformation } from '../../store/modules/Information/actions';
 import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSearch, MdViewList } from 'react-icons/md';
@@ -12,7 +12,7 @@ import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArro
 import * as Styled from '../styleds';
 import Paginacao from '../Paginacao';
 
-const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupos, updateGrupos, deleteGrupos, confirmacao, informacao }) => {
+const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, searchGrupos, criarGrupos, updateGrupos, deleteGrupos, confirmacao, informacao }) => {
 
   const formEmpty = {
     nome: '',
@@ -119,6 +119,19 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
   
   };
 
+  const searchTimerRef = useRef(null);
+
+  const handleFetchSearch = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    clearTimeout(searchTimerRef.current);
+    searchTimerRef.current = setTimeout(() => {
+      searchGrupos(fieldSearch);
+      setFieldSearch(fieldsSearchData)
+    }, 500);
+    
+  }
+
 
   const onSubmit = (data) => {
 
@@ -210,6 +223,7 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
                       <Styled.Input
                         type='search' name='nome' onChange={handleSearch} 
                       />
+                      <Styled.Button type="button" onClick={(event) => handleFetchSearch(event)}>Pesquisar</Styled.Button>
                 </React.Fragment>)
               }
               if (section.component === 'listagem') {
@@ -227,7 +241,7 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, criarGrupo
                     </Styled.ListHeader>
                     <Styled.List>
 
-                      {gruposState?.length > 0 && gruposState?.filter(grupo => grupo?.nome.includes(fieldSearch.nome)).map((grupo, index) => (
+                      {gruposState?.length > 0 && gruposState?.map((grupo, index) => (
                         <>
                           <Styled.ListItem key={grupo._id} >
                             {
@@ -284,6 +298,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
   return {
     listarGrupos: (page, ativo) => dispatch(listarGruposRequest(page, ativo)),
+    searchGrupos: (query) => dispatch(searchGruposRequest(query)),
     criarGrupos: (grupo) => dispatch(criarGruposRequest(grupo)),
     updateGrupos: (id, grupo) => dispatch(updateGruposRequest(id, grupo)),
     deleteGrupos: (id) => dispatch(deleteGruposRequest(id)),

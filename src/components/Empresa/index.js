@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import ModalLoading from '../ModalLoading';
 
 import { useForm, Controller } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 
-import { criarEmpresasRequest, deleteEmpresasRequest, listarEmpresasRequest, listarGruposRequest, updateEmpresasRequest, updateGruposRequest } from '../../store/modules/Empresa/actions';
+import { criarEmpresasRequest, deleteEmpresasRequest, listarEmpresasRequest, listarGruposRequest, searchEmpresasRequest, updateEmpresasRequest, updateGruposRequest } from '../../store/modules/Empresa/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { showInformation } from '../../store/modules/Information/actions';
 import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSearch, MdViewList } from 'react-icons/md';
@@ -17,7 +17,7 @@ import { listarAreasRequest } from '../../store/modules/Area/actions';
 import { listarUsuariosRequest } from '../../store/modules/Usuario/actions';
 import DataPicker from '../DataPicker';
 
-const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAreas, empresas, error, page, listarEmpresas, criarEmpresas, updateEmpresas, deleteEmpresas, confirmacao, informacao, grupos, listarGrupos }) => {
+const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAreas, searchEmpresas, empresas, error, page, listarEmpresas, criarEmpresas, updateEmpresas, deleteEmpresas, confirmacao, informacao, grupos, listarGrupos }) => {
   const estados = [
     'acre', 'alagoas', 'amapa', 'amazonia', 'bahia', 'ceara', 'distrito federal', 'espirito santo', 'goias', 'maranhão',
     'mato grosso', 'mato grosso do sul', 'minas gerais', 'para', 'paraiba', 'parana', 'pernanbuco', 'piaui', 'rio de janeiro', 'rio grande do norte',
@@ -205,11 +205,26 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
     setEmpresaselected({ ...formEmpty })
   }
 
+  const searchTimerRef = useRef(null);
+
   const handleSearch = (event) => {
-    setFieldSearch({...fieldSearch, [event.target.name]: event.target.value})
-   
+    
+    
+    setFieldSearch({...fieldSearch, [event.target.name]: event.target.value.toUpperCase()})
+    
   
   };
+
+  const handleFetchSearch = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    clearTimeout(searchTimerRef.current);
+    searchTimerRef.current = setTimeout(() => {
+      searchEmpresas(fieldSearch);
+      setFieldSearch(fieldsSearchData)
+    }, 500);
+    
+  }
 
   const onSubmit = (data) => {
     data.usuario = usuario;
@@ -254,7 +269,6 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
   if (loading) {
     return <ModalLoading />
   }
-  console.log(empresaSelected);
   return (
     <Styled.Container>
       {sectionItems.map((sectionItem) => (
@@ -432,12 +446,13 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                 return (<React.Fragment>
                   <Styled.Label>Nome Fantasia:</Styled.Label>
                       <Styled.Input
-                        type='search' name='nomeFantasia' onChange={handleSearch} 
+                        type='text' name='nomeFantasia' onChange={handleSearch} 
                       />
                   <Styled.Label>Cnpj:</Styled.Label>
                       <Styled.Input
-                        type='search' name='cnpj' onChange={handleSearch} 
+                        type='text' name='cnpj' onChange={handleSearch} 
                       />
+                  <Styled.Button type="button" onClick={(event) => handleFetchSearch(event)}>Pesquisar</Styled.Button>
                 </React.Fragment>)
               }
               if (section.component === 'listagem') {
@@ -456,12 +471,14 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                     <Styled.List>
 
                       {empresasState?.length > 0 && 
-                      empresasState?.filter((empresa) => 
-                        empresa?.nomeFantasia.includes(fieldSearch.nomeFantasia)
+                      empresasState?.map((empresa, index) => (
+                      // empresasState?.filter((empresa) => 
+                      //   empresa?.nomeFantasia.includes(fieldSearch.nomeFantasia)
                       
-                      ).filter(empresa => 
-                        empresa?.cnpj.includes(fieldSearch.cnpj)
-                        ).map((empresa, index) => (
+                      // ).filter(empresa => 
+                      //   empresa?.cnpj.includes(fieldSearch.cnpj)
+                      //   ).map((empresa, index) => (
+                        
                         <>
                           <Styled.ListItem key={empresa._id} >
                             {
@@ -497,6 +514,7 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
   );
 };
 
+
 const mapStateToProps = (state) => {
   return {
     loading: state.empresa.loading,
@@ -515,6 +533,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
   return {
     listarEmpresas: (page, ativo) => dispatch(listarEmpresasRequest(page, ativo)),
+    searchEmpresas: (query) => dispatch(searchEmpresasRequest(query)),
     listarGrupos: (page, ativo) => dispatch(listarGruposRequest(page, ativo)),
     criarEmpresas: (empresa) => dispatch(criarEmpresasRequest(empresa)),
     updateEmpresas: (id, empresa) => dispatch(updateEmpresasRequest(id, empresa)),

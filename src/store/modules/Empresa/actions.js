@@ -2,9 +2,17 @@ export const LISTAR_EMPRESAS_REQUEST = 'LISTAR_EMPRESAS_REQUEST';
 export const LISTAR_EMPRESAS_SUCCESS = 'LISTAR_EMPRESAS_SUCCESS';
 export const LISTAR_EMPRESAS_FAILURE = 'LISTAR_EMPRESAS_FAILURE';
 
+export const SEARCH_EMPRESAS_REQUEST = 'SEARCH_EMPRESAS_REQUEST';
+export const SEARCH_EMPRESAS_SUCCESS = 'SEARCH_EMPRESAS_SUCCESS';
+export const SEARCH_EMPRESAS_FAILURE = 'SEARCH_EMPRESAS_FAILURE';
+
 export const LISTAR_GRUPOS_REQUEST = 'LISTAR_GRUPOS_REQUEST';
 export const LISTAR_GRUPOS_SUCCESS = 'LISTAR_GRUPOS_SUCCESS';
 export const LISTAR_GRUPOS_FAILURE = 'LISTAR_GRUPOS_FAILURE';
+
+export const SEARCH_GRUPOS_REQUEST = 'SEARCH_GRUPOS_REQUEST';
+export const SEARCH_GRUPOS_SUCCESS = 'SEARCH_GRUPOS_SUCCESS';
+export const SEARCH_GRUPOS_FAILURE = 'SEARCH_GRUPOS_FAILURE';
 
 export const SHOW_EMPRESAS_REQUEST = 'SHOW_EMPRESAS_REQUEST';
 export const SHOW_EMPRESAS_SUCCESS = 'SHOW_EMPRESAS_SUCCESS';
@@ -133,6 +141,21 @@ export const listarEmpresasFailure = (error) => ({
   payload: { error }
 });
 
+export const searchEmpresasRequest = (query) => ({
+  type: SEARCH_EMPRESAS_REQUEST,
+  payload: { query }
+});
+
+export const searchEmpresasSuccess = (empresas) => ({
+  type: SEARCH_EMPRESAS_SUCCESS,
+  payload: { empresas }
+});
+
+export const searchEmpresasFailure = (error) => ({
+  type: SEARCH_EMPRESAS_FAILURE,
+  payload: { error }
+});
+
 export const listarGruposRequest = (page, ativo) => ({
   type: LISTAR_GRUPOS_REQUEST,
   payload: { page, ativo }
@@ -145,6 +168,21 @@ export const listarGruposSuccess = (grupos) => ({
 
 export const listarGruposFailure = (error) => ({
   type: LISTAR_GRUPOS_FAILURE,
+  payload: { error }
+});
+
+export const searchGruposRequest = (query) => ({
+  type: SEARCH_GRUPOS_REQUEST,
+  payload: { query }
+});
+
+export const searchGruposSuccess = (grupos) => ({
+  type: SEARCH_GRUPOS_SUCCESS,
+  payload: { grupos }
+});
+
+export const searchGruposFailure = (error) => ({
+  type: SEARCH_GRUPOS_FAILURE,
   payload: { error }
 });
 
