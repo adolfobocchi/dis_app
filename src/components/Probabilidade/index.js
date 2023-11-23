@@ -19,7 +19,9 @@ const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilid
   }
 
   const listFields = {
-    nome: 'texto'
+    nome: 'texto',
+    ativo: 'boolean',
+    opção: ''
   }
 
   const [probabilidadesState, setProbabilidadesState] = useState([]);
@@ -117,7 +119,6 @@ const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilid
               return <Styled.Coluna label={key} key={index} />
             })
           }
-          <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
 
@@ -125,16 +126,22 @@ const Probabilidades = ({ loading, probabilidades, error, page, listarProbabilid
             <>
               <Styled.ListItem key={probabilidade._id} onClick={(event) => handleSelect(event, index)}>
                 {
-                  Object.keys(probabilidade).map((field, index) => {
-                    if (field !== '_id' && listFields.hasOwnProperty(field)) {
-                      return (<Styled.CampoValor>{`(${probabilidade.valor}) ${probabilidade[field]}`}</Styled.CampoValor>)
+                  Object.keys(listFields).map((field, index) => {
+                    if (field !== '_id' && field !== 'opção') {
+                      if (listFields[field] === 'boolean')
+                        return (<>
+                          {listFields[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                        </>);
+                      return (<Styled.CampoValor>{probabilidade[field] && `${probabilidade[field]}`}</Styled.CampoValor>)
                     }
+  
+  
                   })
                 }
 
-                <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                <Styled.IconeArea >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, probabilidade._id)} style={{ height: '1em', width: '1em' }} />
-                </div>
+                </Styled.IconeArea>
 
               </Styled.ListItem>
             </>

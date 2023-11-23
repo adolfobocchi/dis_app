@@ -15,9 +15,10 @@ import severidade from './Severidade/reducers';
 import nivelrisco from './NivelRisco/reducers';
 import planoAcao from './PlanoAcao/reducers';
 import dis from './Dis/reducers';
-import atividade from './Atividade/reducers'
-import empresa from './Empresa/reducers'
-import video from './Video/reducers'
+import atividade from './Atividade/reducers';
+import empresa from './Empresa/reducers';
+import video from './Video/reducers';
+import configuracaoGerais from './ConfiguracaoGerais/reducers';
 
 const rootReducer = combineReducers({
     usuario,
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
     atividade,
     empresa,
     video,
+    configuracaoGerais,
 })
 
 export default rootReducer;

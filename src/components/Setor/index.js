@@ -17,6 +17,12 @@ const Setor = ({ loading, setores, error, page, listarSetores, criarSetores, upd
     ativo: true,
   }
 
+  const listFields = {
+    nome: 'texto',
+    ativo: 'boolean',
+    opção: ''
+  }
+
   const [setoresState, setSetoresState] = useState([]);
   const [setorSelected, setSetorSelected] = useState(formEmpty);
   const { register, formState: { errors }, handleSubmit, reset } = useForm({
@@ -99,32 +105,30 @@ const Setor = ({ loading, setores, error, page, listarSetores, criarSetores, upd
       <Styled.ListArea>
         <Styled.ListHeader>
           {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
+             Object.keys(listFields).map((key, index) => {
+              return <Styled.Coluna label={key} key={index} />
             })
           }
-          <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
           {setoresState?.length > 0 && setoresState?.map((setor, index) => (
             <>
               <Styled.ListItem key={setor._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(setor).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (setor[field]) === 'boolean') {
+                {Object.keys(listFields).map((field, index) => {
+                  if (field !== '_id' && field !== 'opção') {
+                    if (listFields[field] === 'boolean')
                       return (<>
-                        {setor[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
-                      return (<Styled.CampoValor>{setor[field]}</Styled.CampoValor>)
-                    }
+                        {listFields[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                      </>);
+                    return (<Styled.CampoValor>{setor[field] && `${setor[field]}`}</Styled.CampoValor>)
                   }
+
+
                 })
                 }
-                <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                <Styled.IconeArea >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, setor._id)} style={{ height: '1em', width: '1em' }} />
-                </div>
+                </Styled.IconeArea>
               </Styled.ListItem>
             </>
           ))}

@@ -17,6 +17,12 @@ const PlanoAcao = ({ loading, planosAcao, error, page, listarPlanosAcao, criarPl
     ativo: true,
   }
 
+  const listFields = {
+    nome: 'texto',
+    ativo: 'boolean',
+    opção: ''
+  }
+
   const [planosAcaoState, setPlanosAcaoState] = useState([]);
   const [planoAcaoSelected, setPlanoAcaoSelected] = useState(formEmpty);
   const { register, formState: { errors }, handleSubmit, reset } = useForm({
@@ -102,36 +108,32 @@ const PlanoAcao = ({ loading, planosAcao, error, page, listarPlanosAcao, criarPl
 
         <Styled.ListHeader>
           {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
+            Object.keys(listFields).map((key, index) => {
+              return <Styled.Coluna label={key} key={index} />
             })
           }
-          <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
 
           {planosAcaoState?.length > 0 && planosAcaoState?.map((planoAcao, index) => (
             <>
               <Styled.ListItem key={planoAcao._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(planoAcao).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (planoAcao[field]) === 'boolean') {
+                {Object.keys(listFields).map((field, index) => {
+                  if (field !== '_id' && field !== 'opção') {
+                    if (listFields[field] === 'boolean')
                       return (<>
-                        {planoAcao[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
-                      return (<Styled.CampoValor>{planoAcao[field]}</Styled.CampoValor>)
-                    }
+                        {listFields[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                      </>);
+                    return (<Styled.CampoValor>{planoAcao[field] && `${planoAcao[field]}`}</Styled.CampoValor>)
                   }
 
 
                 })
                 }
 
-                <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                <Styled.IconeArea >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, planoAcao._id)} style={{ height: '1em', width: '1em' }} />
-                </div>
+                </Styled.IconeArea>
 
               </Styled.ListItem>
             </>

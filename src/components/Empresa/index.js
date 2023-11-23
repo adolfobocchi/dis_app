@@ -489,12 +489,12 @@ const Empresas = ({ loading, usuario, usuarios, listarUsuarios, areas, listarAre
                               })
                             }
                             <Styled.ColunaValor>
-                              <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
-                                <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, empresa._id)} style={{ height: '1em', width: '1em' }} />
-                              </div>
-                              <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
-                                <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
-                              </div>
+                              <Styled.IconeArea >
+                                <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, empresa._id)}  />
+                              </Styled.IconeArea>
+                              <Styled.IconeArea >
+                                <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} />
+                              </Styled.IconeArea>
                             </Styled.ColunaValor>
 
 

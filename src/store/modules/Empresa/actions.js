@@ -2,6 +2,10 @@ export const LISTAR_EMPRESAS_REQUEST = 'LISTAR_EMPRESAS_REQUEST';
 export const LISTAR_EMPRESAS_SUCCESS = 'LISTAR_EMPRESAS_SUCCESS';
 export const LISTAR_EMPRESAS_FAILURE = 'LISTAR_EMPRESAS_FAILURE';
 
+export const LISTAR_SOLICITACAO_REQUEST = 'LISTAR_SOLICITACAO_REQUEST';
+export const LISTAR_SOLICITACAO_SUCCESS = 'LISTAR_SOLICITACAO_SUCCESS';
+export const LISTAR_SOLICITACAO_FAILURE = 'LISTAR_SOLICITACAO_FAILURE';
+
 export const SEARCH_EMPRESAS_REQUEST = 'SEARCH_EMPRESAS_REQUEST';
 export const SEARCH_EMPRESAS_SUCCESS = 'SEARCH_EMPRESAS_SUCCESS';
 export const SEARCH_EMPRESAS_FAILURE = 'SEARCH_EMPRESAS_FAILURE';
@@ -17,6 +21,10 @@ export const SEARCH_GRUPOS_FAILURE = 'SEARCH_GRUPOS_FAILURE';
 export const SHOW_EMPRESAS_REQUEST = 'SHOW_EMPRESAS_REQUEST';
 export const SHOW_EMPRESAS_SUCCESS = 'SHOW_EMPRESAS_SUCCESS';
 export const SHOW_EMPRESAS_FAILURE = 'SHOW_EMPRESAS_FAILURE';
+
+export const SHOW_SOLICITACAO_REQUEST = 'SHOW_SOLICITACAO_REQUEST';
+export const SHOW_SOLICITACAO_SUCCESS = 'SHOW_SOLICITACAO_SUCCESS';
+export const SHOW_SOLICITACAO_FAILURE = 'SHOW_SOLICITACAO_FAILURE';
 
 export const SHOW_GRUPOS_REQUEST = 'SHOW_GRUPOS_REQUEST';
 export const SHOW_GRUPOS_SUCCESS = 'SHOW_GRUPOS_SUCCESS';
@@ -141,6 +149,21 @@ export const listarEmpresasFailure = (error) => ({
   payload: { error }
 });
 
+export const listarSolicitacaoRequest = (page, ativo) => ({
+  type: LISTAR_SOLICITACAO_REQUEST,
+  payload: { page, ativo }
+});
+
+export const listarSolicitacaoSuccess = (solicitacao) => ({
+  type: LISTAR_SOLICITACAO_SUCCESS,
+  payload: { solicitacao }
+});
+
+export const listarSolicitacaoFailure = (error) => ({
+  type: LISTAR_SOLICITACAO_FAILURE,
+  payload: { error }
+});
+
 export const searchEmpresasRequest = (query) => ({
   type: SEARCH_EMPRESAS_REQUEST,
   payload: { query }
@@ -200,6 +223,22 @@ export const showEmpresasFailure = (error) => ({
   type: SHOW_EMPRESAS_FAILURE,
   payload: { error },
 });
+
+export const showSolicitacaoRequest = (solicitacaoId) => ({
+  type: SHOW_SOLICITACAO_REQUEST,
+  payload: solicitacaoId,
+});
+
+export const showSolicitacaoSuccess = (solicitacao) => ({
+  type: SHOW_SOLICITACAO_SUCCESS,
+  payload: { solicitacao },
+});
+
+export const showSolicitacaoFailure = (error) => ({
+  type: SHOW_SOLICITACAO_FAILURE,
+  payload: { error },
+});
+
 
 export const showGruposRequest = (grupoId) => ({
   type: SHOW_GRUPOS_REQUEST,

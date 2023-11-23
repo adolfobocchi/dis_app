@@ -317,27 +317,15 @@ const Empresas = ({ loading, usuario, empresas, error, page, addDocumento, updat
                                     }
                                   })} */}
                                   <Styled.ColunaValor>
-                                    <div
-                                      style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        flex: 1,
-                                      }}
+                                    <Styled.IconeArea
                                     >
                                       <MdHighlightOff
                                         color='#F00'
                                         onClick={(event) => handleDelete(event, empresa._id, documento._id, documento.documento)}
                                         style={{ height: '1em', width: '1em' }}
                                       />
-                                    </div>
-                                    <div
-                                      style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        width: '6em',
-                                      }}
+                                    </Styled.IconeArea>
+                                    <Styled.IconeArea
                                     >
                                       <MdEditNote
                                         color='#005'
@@ -347,7 +335,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addDocumento, updat
                                         }}
                                         style={{ height: '1.2em', width: '1.2em' }}
                                       />
-                                    </div>
+                                    </Styled.IconeArea>
                                   </Styled.ColunaValor>
                                 </Styled.ListItem>
                               ))}

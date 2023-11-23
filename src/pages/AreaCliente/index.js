@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import * as Styled from '../../components/styleds';
 import SelectSearch from '../../components/SelectSearch';
-import { logoutEmpresaRequest, updateComunicadoRequest, updateDocumentoRequest } from '../../store/modules/Empresa/actions';
+import { logoutEmpresaRequest, showSolicitacaoSuccess, updateComunicadoRequest, updateDocumentoRequest } from '../../store/modules/Empresa/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { dataAtualFormatada } from '../../utils';
 import TextArea from '../../components/TextArea';
+import ModalSolicitacao from '../../components/ModalSolicitacao';
 
 
 const Container = styled.div`
@@ -118,7 +119,7 @@ const NavSection = styled.nav`
 `
 
 
-function AreaClientePage({ grupo, logoutEmpresa, confirmacao, updateComunicado, updateDocumento}) {
+function AreaClientePage({ grupo, logoutEmpresa, setSolicitacao, confirmacao, updateComunicado, updateDocumento}) {
   const API_URL = process.env.REACT_APP_URL_VIDEOS;
 
   const [grupoState, setGrupoState] = useState(null);
@@ -128,6 +129,9 @@ function AreaClientePage({ grupo, logoutEmpresa, confirmacao, updateComunicado, 
   const [empresaSelected, setEmpresaSelected] = useState('');
   
   const [comunicados, setComunicados] = useState([]);
+
+  const [showModalState, setShowModalState] = useState(false);
+
 
   const comunicadoListFields = {
     data: 'texto',
@@ -214,10 +218,15 @@ function AreaClientePage({ grupo, logoutEmpresa, confirmacao, updateComunicado, 
       link.href = `${API_URL}/images/${documento.documento}`;
       link.click();
     });
-   
-      
     
-    
+  }
+
+  const handleShow = (event, index) => {
+    event.preventDefault();
+    event.stopPropagation();
+    //handleSelect(event, empresaIndex)
+    setSolicitacao(solicitacoes[index]);
+    setShowModalState(true);
   }
 
 
@@ -226,6 +235,10 @@ function AreaClientePage({ grupo, logoutEmpresa, confirmacao, updateComunicado, 
   const solicitacoes = empresaSelected?.solicitacoes || [];
   const historicoAcoes = empresaSelected?.historicoAcao || [];
   const planosAcoes = empresaSelected?.planoAcao || [];
+
+  if (showModalState) {
+    return <ModalSolicitacao empresa={empresaSelected} close={setShowModalState} />
+  }
 
   return (
     <React.Fragment>
@@ -395,7 +408,7 @@ function AreaClientePage({ grupo, logoutEmpresa, confirmacao, updateComunicado, 
               <Styled.List>
 
                 {solicitacoes.map((solicitacao, index) => (
-                  <Styled.ListItem key={solicitacao._id} className={index % 2 === 0 ? 'par' : 'impar'}>
+                  <Styled.ListItem key={solicitacao._id} className={index % 2 === 0 ? 'par' : 'impar'} onClick={(event) => handleShow(event, index)} >
                     {
                       Object.keys(solicitacaoListFields).map((field, index) => {
                         if (field !== '_id' && field !== 'opção') {
@@ -440,9 +453,9 @@ function AreaClientePage({ grupo, logoutEmpresa, confirmacao, updateComunicado, 
                 {historicoAcoes.map((historico, index) => (
                   <Styled.ListItem key={historico._id} className={index % 2 === 0 ? 'par' : 'impar'}>
                     {
-                      Object.keys(solicitacaoListFields).map((field, index) => {
+                      Object.keys(historicoAcaoListFields).map((field, index) => {
                         if (field !== '_id' && field !== 'opção') {
-                          if (solicitacaoListFields[field] === 'link') {
+                          if (historicoAcaoListFields[field] === 'link') {
                             return (
                               <Styled.CampoValor key={index}>
                                 <a href={`${API_URL}/images/${historico[field]}`} target="_blank" rel="noreferrer"> Arquivo </a>
@@ -523,6 +536,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    setSolicitacao: (solicitacao) => dispatch(showSolicitacaoSuccess(solicitacao)),
     logoutEmpresa: () => dispatch(logoutEmpresaRequest()),
     updateComunicado: (id, comunicado) => dispatch(updateComunicadoRequest(id, comunicado)),
     updateDocumento: (id, documento) => dispatch(updateDocumentoRequest(id, documento)),

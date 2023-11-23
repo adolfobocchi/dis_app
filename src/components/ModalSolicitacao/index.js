@@ -111,9 +111,9 @@ const ContentComentariosArea = styled.div``;
 
 const API_URL = process.env.REACT_APP_URL_API;
 
-const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao, informacao, usuario, addRespostaSolicitacao, updateRespostaSolicitacao, removeRespostaSolicitacao }) => {
+const ModalSolicitacao = ({ solicitacao, empresa, close, error, confirmacao, informacao, usuario, addRespostaSolicitacao, updateRespostaSolicitacao, removeRespostaSolicitacao }) => {
   const formEmpty = {
-    data: '',
+    data: format(new Date(), 'dd/MM/yyyy hh:mm:ss'),
     descricao: '',
     usuario: ''
   }
@@ -124,7 +124,6 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
   }
 
   const [dadosState, setDadosState] = useState(null);
-  const [empresasState, setEmpresasState] = useState([]);
   const [empresaSelected, setEmpresaSelected] = useState(null);
 
   const [sectionCadItems, setSectionCadItems] = useState([
@@ -145,30 +144,20 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
       {}
   });
   
-  useEffect(() => {
-    setEmpresasState(empresas);
-  }, [empresas]);
 
   useEffect(() => {
     setEmpresaSelected(empresa);
   }, [empresa]);
 
   useEffect(() => {
-    setDadosState(dados);
-  }, [dados])
+    setDadosState(solicitacao);
+  }, [solicitacao])
 
   useEffect(() => {
     reset({ ...respostaSelected });
   }, [reset, respostaSelected]);
 
-  const fetchRespostas = async () => {
-    const empresasFind = await empresasState.find(item => empresa?._id === item?._id); 
-    const solicitacaoFind = await empresasFind?.solicitacoes.find(item => dadosState?._id === item?._id)
-    console.log(solicitacaoFind);
-    setDadosState(solicitacaoFind);
-  };
-
-
+  
   const toggleSectionCad = (itemId, event) => {
     event.stopPropagation();
     setSectionCadItems((prevState) =>
@@ -193,31 +182,41 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
   const handleDelete = (event, respostaSolicitacaoId) => {
     event.preventDefault();
     event.stopPropagation();
-    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR O HISTORICO DE ACAO?', () => { removeRespostaSolicitacao(empresa?._id, dadosState._id, respostaSolicitacaoId) });
-    close(false);
+    confirmacao('DELETAR REGISTRO', 'VOCE REALMENTE DESEJA EXCLUIR A RESPOSTA DA SOLICITAÇÃO?', () => { removeRespostaSolicitacao(empresa?._id, dadosState._id, respostaSolicitacaoId) });
+    // close(false);
 
   }
 
   const onSubmit = async (data) => {
 
     data.usuario = usuario;
-    console.log(data)
-    if (data._id) {
-      await updateRespostaSolicitacao(empresa?._id, dadosState._id, respostaSelected._id, data);
-      fetchRespostas();
-    } else {
-      await addRespostaSolicitacao(empresa?._id, dadosState._id, data);
-      fetchRespostas();
-    }
-    if (error === '') {
+  if (data._id) {
+    await updateRespostaSolicitacao(empresa?._id, dadosState._id, respostaSelected._id, data);
+  } else {
+    const novaResposta = await addRespostaSolicitacao(empresa?._id, dadosState._id, data);
+   
+      setDadosState((prevDados) => {
+        console.log(novaResposta.payload.respostaSolicitacao)
+        return {
+          ...prevDados,
+          respostas: [...prevDados.respostas, novaResposta.payload.respostaSolicitacao],
+        };
+      });
+      
       handleClear();
-    }
+      // close(false);
+    
+  }
 
   };
+  const currentDate = new Date(); // Obtém a data atual
+  const formattedCurrentDate = format(new Date(), 'dd/MM/yyyy');
+
+  console.log(solicitacao);
+  console.log(dadosState);
 
   const handleClear = () => {
-    console.log('aqui')
-    setRespostaSelected({ ...formEmpty })
+    setRespostaSelected({ ...formEmpty });
   }
 
   if (!dadosState) {
@@ -229,7 +228,7 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
       <ModalContent>
         <ModalHeader>
           <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><h2>SOLICITAÇÃO</h2></div>
-          <MdClose onClick={() => close(false)} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em', marginRight: 8 }} />
+          <MdClose onClick={() => {close(false)}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em', marginRight: 8 }} />
         </ModalHeader>
         <ContentInfoBasic>
           <ContentHeaderArea>
@@ -239,21 +238,35 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
             <ContentHeaderDetalhesArea>
               <ContentHeaderDetalhesLeft>
                 <div style={{ display: 'flex', flexDirection: 'column' }} >
-                  <label>Status</label>
+                  <label>Empresa:</label>
+                  <span>{empresaSelected?.nomeFantasia}</span>
+                </div>
+              </ContentHeaderDetalhesLeft>
+              <ContentHeaderDetalhesRight>
+              <div style={{ display: 'flex', flexDirection: 'column' }} >
+                  <label>Encerramento:</label>
+                  <span>{dadosState.encerramento}</span>
+                </div>
+              </ContentHeaderDetalhesRight>
+            </ContentHeaderDetalhesArea>
+            <ContentHeaderDetalhesArea>
+              <ContentHeaderDetalhesLeft>
+                <div style={{ display: 'flex', flexDirection: 'column' }} >
+                  <label>Status:</label>
                   <span>{dadosState.status}</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }} >
-                  <label>Descrição</label>
+                  <label>Descrição:</label>
                   <span>{dadosState.descricao}</span>
                 </div>
               </ContentHeaderDetalhesLeft>
               <ContentHeaderDetalhesRight>
                 <div style={{ display: 'flex', flexDirection: 'column' }} >
-                  <label>Abertura</label>
+                  <label>Abertura:</label>
                   <span>{dadosState.abertura}</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }} >
-                  <label>Responsavel</label>
+                  <label>Responsavel:</label>
                   <span>{dadosState.responsavel}</span>
                 </div>
               </ContentHeaderDetalhesRight>
@@ -281,22 +294,28 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
             <div style={{ display: 'flex', flexDirection: 'column', border: '2px solid #DDD' }}>
               {activeTab === 'Respostas' && (<React.Fragment>
                 <Styled.FormArea>
-                  <Styled.Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+                  <Styled.Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data' disabled={dadosState.encerramento ? true : false}>
                     <Styled.Label>Data: </Styled.Label>
-                    <DataPicker name="data" control={control} setValue={setValue} defaultValue={respostaSelected?.data} showTimeSelect={false} />
+                    {/* <DataPicker name="data" control={control} setValue={setValue} defaultValue={respostaSelected?.data} showTimeSelect={false} /> */}
+                    <Styled.Input
+                        disabled
+                        defaultValue={formattedCurrentDate}
+                        {...register('data', { required: true })}
+                      />
                     {errors.data && <span>Campo obrigatório</span>}
                     <Styled.Label>Descricao:</Styled.Label>
-                    <textarea rows={5}
+                    <textarea disabled={dadosState.encerramento ? true : false} rows={5}
                       {...register('descricao', { required: false })}
                     />
                     {errors.descricao && <span>Campo obrigatório</span>}
                     <Styled.Label>Encerrar?</Styled.Label>
-                    <Styled.Input
+                    <Styled.Input disabled={dadosState.encerramento ? true : false}
                       type='checkbox'
                       {...register('encerrar')}
                     />
-                    <Styled.Button type="submit">Salvar</Styled.Button>
-                    <Styled.Button type="button" style={{ background: '#FBAF3A' }} onClick={(event) => handleClear(event)}>Limpar</Styled.Button>
+
+                    <Styled.Button type="submit" disabled={dadosState.encerramento ? true : false} >Salvar</Styled.Button>
+                    <Styled.Button type="button" disabled={dadosState.encerramento ? true : false}  style={{ background: '#FBAF3A' }} onClick={(event) => handleClear(event)}>Limpar</Styled.Button>
                   </Styled.Form>
                 </Styled.FormArea>
                 <Styled.ListArea>
@@ -332,14 +351,17 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
                                 <div
                                   style={{
                                     display: 'flex',
-                                    justifyContent: 'center',
                                     cursor: 'pointer',
                                     flex: 1,
                                   }}
                                 >
                                   <MdHighlightOff
+                                  
                                     color='#F00'
-                                    onClick={(event) => handleDelete(event, resposta._id)}
+                                    onClick={(event) => 
+                                      dadosState.encerramento ? informacao('SOLICITACAO ENCERRADA!\n Operação não permitida') : handleDelete(event, resposta._id)
+                                      
+                                    }
                                     style={{ height: '1em', width: '1em' }}
                                   />
                                 </div>
@@ -352,9 +374,10 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
                                   }}
                                 >
                                   <MdEditNote
+                                    
                                     color='#005'
                                     onClick={(event) => {
-                                      handleSelect(event, index);
+                                      dadosState.encerramento ? informacao('SOLICITACAO ENCERRADA!\n Operação não permitida') : handleSelect(event, index)
                                     }}
                                     style={{ height: '1.2em', width: '1.2em' }}
                                   />
@@ -380,10 +403,10 @@ const ModalSolicitacao = ({ dados, empresa, empresas, close, error, confirmacao,
 const mapStateToProps = (state) => {
   return {
     loading: state.empresa.loading,
-    empresas: state.empresa.empresas,
     error: state.empresa.error,
     page: state.empresa.page,
     usuario: state.usuario.usuario,
+    solicitacao: state.empresa.solicitacao,
   };
 };
 

@@ -17,6 +17,12 @@ const Perigo = ({ loading, perigos, error, page, listarPerigos, criarPerigos, up
     ativo: true,
   }
 
+  const listFields = {
+    nome: 'texto',
+    ativo: 'boolean',
+    opção: ''
+  }
+
   const [perigosState, setPerigosState] = useState([]);
   const [perigoSelected, setPerigoSelected] = useState(formEmpty);
   const { register, formState: { errors }, handleSubmit, reset } = useForm({
@@ -102,36 +108,32 @@ const Perigo = ({ loading, perigos, error, page, listarPerigos, criarPerigos, up
 
         <Styled.ListHeader>
           {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
+            Object.keys(listFields).map((key, index) => {
+              return <Styled.Coluna label={key} key={index} />
             })
           }
-          <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
 
           {perigosState?.length > 0 && perigosState?.map((perigo, index) => (
             <>
               <Styled.ListItem key={perigo._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(perigo).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (perigo[field]) === 'boolean') {
+                {Object.keys(listFields).map((field, index) => {
+                  if (field !== '_id' && field !== 'opção') {
+                    if (listFields[field] === 'boolean')
                       return (<>
-                        {perigo[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
-                      return (<Styled.CampoValor>{perigo[field]}</Styled.CampoValor>)
-                    }
+                        {listFields[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                      </>);
+                    return (<Styled.CampoValor>{perigo[field] && `${perigo[field]}`}</Styled.CampoValor>)
                   }
 
 
                 })
                 }
 
-                <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                <Styled.IconeArea>
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, perigo._id)} style={{ height: '1em', width: '1em' }} />
-                </div>
+                </Styled.IconeArea>
 
               </Styled.ListItem>
             </>

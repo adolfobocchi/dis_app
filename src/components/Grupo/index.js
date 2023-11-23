@@ -192,7 +192,7 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, searchGrup
                       {errors.email && <span>Campo obrigatório</span>}
                       <Styled.Label>Senha: </Styled.Label>
                       <Styled.Input type='password'
-                        {...register('password', { required: true })}
+                        {...register('password', { required: false })}
                       />
                       {errors.password && <span>Campo obrigatório</span>}
                       <Styled.Label>Responsavel: </Styled.Label>
@@ -260,12 +260,12 @@ const Grupo = ({ loading, usuario, grupos, error, page, listarGrupos, searchGrup
                               })
                             }
                             <Styled.ColunaValor>
-                                  <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                                  <Styled.IconeArea >
                                     <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, grupo._id)} style={{ height: '1em', width: '1em' }} />
-                                  </div>
-                                  <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
+                                  </Styled.IconeArea>
+                                  <Styled.IconeArea >
                                     <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
-                                  </div>
+                                  </Styled.IconeArea>
                                 </Styled.ColunaValor>
 
 

@@ -17,6 +17,12 @@ const Atividade = ({ loading, atividades, error, page, listarAtividades, criarAt
     ativo: true,
   }
 
+  const listFields = {
+    nome: 'texto',
+    ativo: 'boolean',
+    opção: ''
+  }
+
   const [atividadesState, setAtividadesState] = useState([]);
   const [atividadeSelected, setAtividadeSelected] = useState(formEmpty);
   const { register, formState: { errors }, handleSubmit, reset } = useForm({
@@ -102,9 +108,8 @@ const Atividade = ({ loading, atividades, error, page, listarAtividades, criarAt
 
         <Styled.ListHeader>
           {
-            Object.keys(formEmpty).map((key, index) => {
-              if (key !== '_id' && key !== '__v')
-                return <Styled.Coluna label={key} />
+            Object.keys(listFields).map((key, index) => {
+              return <Styled.Coluna label={key} key={index} />
             })
           }
           <Styled.Coluna label='' />
@@ -114,24 +119,22 @@ const Atividade = ({ loading, atividades, error, page, listarAtividades, criarAt
           {atividadesState?.length > 0 && atividadesState?.map((atividade, index) => (
             <>
               <Styled.ListItem key={atividade._id} onClick={(event) => handleSelect(event, index)}>
-                {Object.keys(atividade).map((field, index) => {
-                  if (field !== '_id' && field !== '__v') {
-                    if (typeof (atividade[field]) === 'boolean') {
+                {Object.keys(listFields).map((field, index) => {
+                  if (field !== '_id' && field !== 'opção') {
+                    if (listFields[field] === 'boolean')
                       return (<>
-                        {atividade[field] ? <Styled.Ativo /> : <Styled.Inativo />}
-                      </>)
-                    } else {
-                      return (<Styled.CampoValor>{atividade[field]}</Styled.CampoValor>)
-                    }
+                        {listFields[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                      </>);
+                    return (<Styled.CampoValor>{atividade[field] && `${atividade[field]}`}</Styled.CampoValor>)
                   }
 
 
                 })
                 }
 
-                <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                <Styled.IconeArea >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, atividade._id)} style={{ height: '1em', width: '1em' }} />
-                </div>
+                </Styled.IconeArea>
 
               </Styled.ListItem>
             </>

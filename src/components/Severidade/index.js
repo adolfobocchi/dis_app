@@ -19,7 +19,9 @@ const Severidades = ({ loading, severidades, error, page, listarSeveridades, cri
   }
 
   const listFields = {
-    nome: 'texto'
+    nome: 'texto',
+    ativo: 'boolean',
+    opção: ''
   }
 
   const [severidadesState, setSeveridadesState] = useState([]);
@@ -113,11 +115,10 @@ const Severidades = ({ loading, severidades, error, page, listarSeveridades, cri
 
         <Styled.ListHeader>
           {
-            Object.keys(listFields).map((key, index) => {
+             Object.keys(listFields).map((key, index) => {
               return <Styled.Coluna label={key} key={index} />
             })
           }
-          <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
 
@@ -125,17 +126,23 @@ const Severidades = ({ loading, severidades, error, page, listarSeveridades, cri
             <>
               <Styled.ListItem key={severidade._id} onClick={(event) => handleSelect(event, index)}>
                 {
-                  Object.keys(severidade).map((field, index) => {
-                    if (field !== '_id' && listFields.hasOwnProperty(field)) {
-                      return (<Styled.CampoValor>{`(${severidade.valor}) ${severidade[field]}`}</Styled.CampoValor>)
+                  Object.keys(listFields).map((field, index) => {
+                    if (field !== '_id' && field !== 'opção') {
+                      if (listFields[field] === 'boolean')
+                        return (<>
+                          {listFields[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                        </>);
+                      return (<Styled.CampoValor>{severidade[field] && `${severidade[field]}`}</Styled.CampoValor>)
                     }
+  
+  
                   })
                 }
                 
 
-                <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                <Styled.IconeArea >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, severidade._id)} style={{ height: '1em', width: '1em' }} />
-                </div>
+                </Styled.IconeArea>
 
               </Styled.ListItem>
             </>

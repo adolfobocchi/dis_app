@@ -20,7 +20,7 @@ export const Form = styled.form`
 
 export const Input = styled.input`
   padding: 8px;
-  /* text-transform: lowercase; */
+  text-transform: ${props => props.type === 'password' ? 'none' : 'uppercase'};
   font-size: 0.8em;
 `;
 
@@ -102,7 +102,7 @@ const InativoItem = styled.div`
 
 const ColunaHeader = styled.div`
     color: ${props => props.color};
-    text-transform: capitalize;
+    text-transform: uppercase;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,11 +122,11 @@ export const ColunaValor = styled.div`
     height: 100%;
     flex: 1;
     text-align: center;
-    /* text-transform: lowercase;
-
+    text-transform: uppercase;
+/* 
     p::first-letter {
       text-transform: uppercase;
-    } */
+    }  */
 `
 
 export const AreaFlex = styled.div`
@@ -164,6 +164,14 @@ export const SectionArea = styled.div`
   padding: 6px;
 `;
 
+
+export const IconeArea = styled.div`
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  flex: 1;
+  font-size: 1.5em;
+`;
 
 export const Ativo = () => (
     <ColunaValor><AtivoItem><MdCircle />Ativo</AtivoItem></ColunaValor>

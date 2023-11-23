@@ -49,7 +49,7 @@ const DataPicker = ({ name, control, setValue, defaultValue, showTimeSelect }) =
     <Controller
       control={control}
       name={name}
-      defaultValue={getCurrentDate()}
+      defaultValue={defaultValue || getCurrentDate()}
       render={({ field }) => (
         <DatePicker
           {...field}

@@ -16,6 +16,7 @@ import dis from './Dis/sagas';
 import atividade from './Atividade/sagas';
 import empresa from './Empresa/sagas';
 import video from './Video/sagas';
+import configuracaoGerais from './ConfiguracaoGerais/sagas';
 
 export default function* rootSaga() {
     return yield all([
@@ -36,5 +37,6 @@ export default function* rootSaga() {
         atividade,
         empresa,
         video,
+        configuracaoGerais
     ]);
 };

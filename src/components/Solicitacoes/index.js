@@ -4,7 +4,7 @@ import ModalLoading from '../ModalLoading';
 
 import { Controller, useForm } from 'react-hook-form';
 
-import { addSolicitacaoRequest, listarEmpresasRequest, listarGruposRequest, removeSolicitacaoRequest, updateSolicitacaoRequest } from '../../store/modules/Empresa/actions';
+import { addSolicitacaoRequest, listarGruposRequest, listarSolicitacaoRequest, removeSolicitacaoRequest, showSolicitacaoSuccess, updateSolicitacaoRequest } from '../../store/modules/Empresa/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 import { showInformation } from '../../store/modules/Information/actions';
 import { MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSearch, MdViewList } from 'react-icons/md';
@@ -16,7 +16,7 @@ import DataPicker from '../DataPicker';
 import SelectSearch from '../SelectSearch';
 import ModalSolicitacao from '../ModalSolicitacao';
 
-const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, updateSolicitacao, listarEmpresas, removeSolicitacao, confirmacao, informacao, grupos, listarGrupos }) => {
+const Empresas = ({ loading, usuario, solicitacoes, solicitacao, setSolicitacao, error, page, addSolicitacao, updateSolicitacao, listarSolicitacao, removeSolicitacao, confirmacao, informacao, grupos, listarGrupos }) => {
 
   const API_URL = process.env.REACT_APP_URL_API;
 
@@ -36,6 +36,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
   }
 
   const listFields = {
+    codigo: 'texto',
     empresa: 'texto',
     descricao: 'texto',
     abertura: 'texto',
@@ -78,17 +79,25 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
   });
 
   useEffect(() => {
-    listarEmpresas(0, 1);
+    listarSolicitacao(0, 1);
     listarGrupos(0, 1);
   }, []);
 
   useEffect(() => {
-    setEmpresasState(empresas);
-  }, [empresas]);
+    setEmpresasState(grupoSelected?.empresas);
+  }, [grupoSelected]);
 
   useEffect(() => {
     setGruposState(grupos);
   }, [grupos]);
+
+  useEffect(() => {
+    setSolicitacaoState(solicitacoes);
+  }, [solicitacoes]);
+
+  useEffect(() => {
+    setSolicitacaoSelected(solicitacao);
+  }, [solicitacao])
 
 
   useEffect(() => {
@@ -118,12 +127,12 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
       })
     );
   };
-  const handleSelect = (event, empresaIndex, index) => {
+  const handleSelect = (event, empresaIndex) => {
     event.preventDefault();
     event.stopPropagation();
-    setGrupoSelected(empresasState[empresaIndex]?.grupo)
-    setEmpresaSelected(empresasState[empresaIndex]);
-    setSolicitacaoSelected(empresasState[empresaIndex]?.solicitacoes[index])
+    setGrupoSelected(solicitacaoState[empresaIndex]?.grupo)
+    setEmpresaSelected(solicitacaoState[empresaIndex]);
+    setSolicitacao(solicitacaoState[empresaIndex]?.solicitacao)
   }
 
   const handleDelete = (event, empresaId, solicitacaoId) => {
@@ -135,16 +144,16 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
   const handleClear = () => {
     setGrupoSelected(null);
     setEmpresaSelected(null);
-
-
+    setSolicitacao(null);
     setSolicitacaoSelected({ ...formEmpty })
   }
 
-  const handleShow = (event, empresaIndex, index) => {
+  const handleShow = (event, empresaIndex) => {
     event.preventDefault();
     event.stopPropagation();
-    handleSelect(event, empresaIndex, index)
-    console.log(empresaSelected);
+    //handleSelect(event, empresaIndex)
+    setSolicitacao(solicitacaoState[empresaIndex]?.solicitacao);
+    setEmpresaSelected(solicitacaoState[empresaIndex]);
     setShowModalState(true);
   }
   const onSubmit = (data) => {
@@ -177,7 +186,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
   }
 
   if (showModalState) {
-    return <ModalSolicitacao empresa={empresaSelected} dados={solicitacaoSelected} close={setShowModalState} />
+    return <ModalSolicitacao empresa={empresaSelected} close={setShowModalState} />
   }
   return (
     <Styled.Container>
@@ -205,7 +214,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
                       {errors.grupo && <span>Campo obrigatório</span>}
 
                       <Styled.Label>Empresa: </Styled.Label>
-                      <SelectSearch items={empresasState.filter(el => el.grupo?._id === grupoSelected?._id) || []} onSelect={(item) => setEmpresaSelected(item)} valueSelected={empresaSelected} field={'nomeFantasia'} />
+                      <SelectSearch items={empresasState || []} onSelect={(item) => setEmpresaSelected(item)} valueSelected={empresaSelected} field={'nomeFantasia'} />
 
                       {errors.empresa && <span>Campo obrigatório</span>}
 
@@ -259,7 +268,7 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
               }
               if (section.component === 'listagem') {
                 return (<>
-                  <Paginacao page={page} ativo={0} listagem={listarEmpresas} />
+                  <Paginacao page={page} ativo={0} listagem={listarSolicitacao} />
                   <Styled.ListArea>
 
                     <Styled.ListHeader>
@@ -272,14 +281,15 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
                     </Styled.ListHeader>
                     <Styled.List>
 
-                      {empresasState?.length > 0 &&
-                        empresasState?.map((empresa, empresaIndex) => {
-                          const solicitacaos = empresa?.solicitacoes || [];
-
-                          return (
-                            <React.Fragment key={empresaIndex}>
-                              {solicitacaos.map((solicitacao, index) => (
-                                <Styled.ListItem key={solicitacao._id} onClick={(event) => handleShow(event, empresaIndex, index)} >
+                    {solicitacaoState?.length > 0 &&
+                        solicitacaoState?.map((empresa, empresaIndex) => {
+                          const solicitacao = empresa?.solicitacao || {};
+                          return(
+                            <React.Fragment>
+                              {/* {solicitacoes?.map((solicitacao, index) => ( */}
+                                <Styled.ListItem key={solicitacao._id} 
+                                  onClick={(event) => handleShow(event, empresaIndex)} 
+                                >
 
                                   {
                                     Object.keys(listFields).map((field, index) => {
@@ -318,38 +328,26 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
                                     }
                                   })} */}
                                   <Styled.ColunaValor>
-                                    {/* <div
-                                      style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        flex: 1,
-                                      }}
-                                    > */}
+                                    <Styled.IconeArea
+                                    >
                                       <MdHighlightOff
                                         color='#F00'
                                         onClick={(event) => handleDelete(event, empresa._id, solicitacao._id)}
                                       />
-                                    {/* </div>
-                                    <div
-                                      style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        flex: 1,
-                                      }}
-                                    > */}
+                                    </Styled.IconeArea>
+                                    <Styled.IconeArea
+                                    >
                                       <MdEditNote
                                         color='#005'
                                         onClick={(event) => {
                                           toggleSectionExpand(1, event);
-                                          handleSelect(event, empresaIndex, index);
+                                          handleSelect(event, empresaIndex);
                                         }}
                                       />
-                                    {/* </div> */}
+                                    </Styled.IconeArea>
                                   </Styled.ColunaValor>
                                 </Styled.ListItem>
-                              ))}
+                              
                             </React.Fragment>
                           );
                         })}
@@ -369,18 +367,19 @@ const Empresas = ({ loading, usuario, empresas, error, page, addSolicitacao, upd
 const mapStateToProps = (state) => {
   return {
     loading: state.empresa.loading,
-    empresas: state.empresa.empresas,
+    solicitacoes: state.empresa.solicitacoes,
+    solicitacao: state.empresa.solicitacao,
     grupos: state.empresa.grupos,
     error: state.empresa.error,
     page: state.empresa.page,
     usuario: state.usuario.usuario,
-
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    listarEmpresas: (page, ativo) => dispatch(listarEmpresasRequest(page, ativo)),
+    setSolicitacao: (solicitacao) => dispatch(showSolicitacaoSuccess(solicitacao)),
+    listarSolicitacao: (page, ativo) => dispatch(listarSolicitacaoRequest(page, ativo)),
     listarGrupos: (page, ativo) => dispatch(listarGruposRequest(page, ativo)),
     addSolicitacao: (id, solicitacao) => dispatch(addSolicitacaoRequest(id, solicitacao)),
     updateSolicitacao: (id, solicitacao) => dispatch(updateSolicitacaoRequest(id, solicitacao)),

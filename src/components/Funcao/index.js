@@ -35,7 +35,6 @@ const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, up
       {}
   });
 
-  console.log(page);
 
   useEffect(() => {
     listarFuncoes(page, 0);
@@ -142,9 +141,9 @@ const Funcao = ({ loading, funcoes, error, page, listarFuncoes, criarFuncoes, up
                   })
                 }
 
-                <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                <Styled.IconeArea >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, funcao._id)} style={{ height: '1em', width: '1em' }} />
-                </div>
+                </Styled.IconeArea>
 
               </Styled.ListItem>
             </>

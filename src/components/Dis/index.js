@@ -7,7 +7,7 @@ import ModalLoading from '../ModalLoading';
 import { updateDisRequest, criarDisRequest, deleteDisRequest, listarDisRequest, setDis } from '../../store/modules/Dis/actions';
 import { showConfirmation } from '../../store/modules/Confirmation/actions';
 
-import { MdAddCircle, MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdList, MdSearch, MdViewList } from 'react-icons/md';
+import { MdAdd, MdAddCircle, MdEdit, MdEditNote, MdHighlightOff, MdKeyboardArrowDown, MdKeyboardArrowUp, MdList, MdSearch, MdViewList } from 'react-icons/md';
 
 import * as Styled from '../styleds';
 import styled from 'styled-components';
@@ -114,7 +114,9 @@ const Dis = ({
   listarEmpresas,
   listarAreas,
   listarSetores,
+  criarSetores,
   listarFuncoes,
+  criarFuncoes,
   listarAtividades,
   listarPerigos,
   listarRiscos,
@@ -292,6 +294,8 @@ const Dis = ({
   const [statusSelectedIndex, setStatusSelectedIndex] = useState(-1);
 
   const [quantidadeFuncaoState, setQuantidadeFuncaoState] = useState(0);
+
+  const [inputValue, setInputValue] = useState({nome: '', ativo: 1});
 
   const [disSelected, setDisSelected] = useState(formEmpty);
   const { register, control, setValue, formState: { errors }, handleSubmit, reset } = useForm({
@@ -543,7 +547,9 @@ const Dis = ({
         },
         selectedIndex: setorSelected,
         handleListSelect: () => { setShowModalSetoresListSelect(true); },
-        doublelClick: () => { setorSelected && setShowModalDescricaoSetorSelect(true); }
+        doublelClick: () => { setorSelected && setShowModalDescricaoSetorSelect(true); },
+        setValueChange: (value) => { setInputValue({nome: value})},
+        addItem: () => {console.log(inputValue); criarSetores(inputValue)}
       },
       {
         id: 2,
@@ -646,7 +652,9 @@ const Dis = ({
         },
         selectedIndex: funcaoSelected,
         handleListSelect: () => { setorSelected && setShowModalFuncoesListSelect(true); },
-        doublelClick: () => { setorSelected && funcaoSelected && setShowModalDescricaoFuncaoSelect(true); }
+        doublelClick: () => { setorSelected && funcaoSelected && setShowModalDescricaoFuncaoSelect(true); },
+        setValueChange: (value) => { setInputValue({nome: value})},
+        addItem: () => {console.log(inputValue); criarFuncoes(inputValue)}
       },
       // {
       //   id: 3,
@@ -2221,7 +2229,9 @@ const Dis = ({
                                   <Titulo3>{diagnosticoItems[0].label}</Titulo3>
                                   <DiagnosticoItem  >
                                     <DiagnosticoSearchArea>
-                                      <InputSearch items={diagnosticoItems[0].list} onSelect={diagnosticoItems[0].onSelect} /> <MdList onClick={diagnosticoItems[0].handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
+                                      <InputSearch items={diagnosticoItems[0].list} onSelect={diagnosticoItems[0].onSelect} setValueChange={diagnosticoItems[0].setValueChange} /> 
+                                      <MdList onClick={diagnosticoItems[0].handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
+                                      <MdAdd onClick={diagnosticoItems[0].addItem} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
                                     </DiagnosticoSearchArea >
                                     {
                                       diagnosticoItems[0].items && diagnosticoItems[0].items.map((item, index) =>
@@ -2403,12 +2413,12 @@ const Dis = ({
                             })
                           }
                           <Styled.ColunaValor>
-                            <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
+                            <Styled.IconeArea >
                               <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, dis._id)} style={{ height: '1.2em', width: '1.2em' }} />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', width: '6em' }} >
+                            </Styled.IconeArea>
+                            <Styled.IconeArea >
                               <MdEditNote color='#005' onClick={(event) => { toggleSectionExpand(1, event); handleSelect(event, index) }} style={{ height: '1.2em', width: '1.2em' }} />
-                            </div>
+                            </Styled.IconeArea>
                           </Styled.ColunaValor>
 
 

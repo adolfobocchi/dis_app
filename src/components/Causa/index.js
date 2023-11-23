@@ -17,6 +17,7 @@ const Causas = ({ loading, causas, error, page, listarCausas, criarCausas, updat
   const listFields = {
     nome: 'texto',
     ativo: 'boolean',
+    opção: ''
   }
   const formEmpty = {
     _id: '',
@@ -114,29 +115,27 @@ const Causas = ({ loading, causas, error, page, listarCausas, criarCausas, updat
               return <Styled.Coluna label={key} key={index} />
             })
           }
-          <Styled.Coluna label='' />
         </Styled.ListHeader>
         <Styled.List>
           {causasState?.length > 0 && causasState?.map((causa, index) => (
             <>
               <Styled.ListItem key={causa._id} onClick={(event) => handleSelect(event, index)}>
                 {
-                  Object.keys(causa).map((field, index) => {
-                    if (field !== '_id' && listFields.hasOwnProperty(field)) {
-                      if (listFields[field] === 'json')
-                        return (<Styled.CampoValor>{causa[field].nome}</Styled.CampoValor>);
-                      if (listFields[field] === 'boolean') 
+                  Object.keys(listFields).map((field, index) => {
+                    if (field !== '_id' && field !== 'opção') {
+                      if (listFields[field] === 'boolean')
                         return (<>
-                          {causa[field] ? <Styled.Ativo /> : <Styled.Inativo />}
+                          {listFields[field] ? <Styled.Ativo /> : <Styled.Inativo />}
                         </>);
-                      return (<Styled.CampoValor>{causa[field]}</Styled.CampoValor>)
-
+                      return (<Styled.CampoValor>{causa[field] && `${causa[field]}`}</Styled.CampoValor>)
                     }
+  
+  
                   })
                 }
-                <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                <Styled.IconeArea >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, causa._id)} style={{ height: '1em', width: '1em' }} />
-                </div>
+                </Styled.IconeArea>
               </Styled.ListItem>
             </>
           ))}

@@ -539,9 +539,9 @@ const Riscos = ({ loading, riscos, error, page, listarRiscos, criarRiscos, updat
                     }
                   })
                 }
-                <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', flex: 1 }} >
+                <Styled.IconeArea >
                   <MdHighlightOff color='#F00' onClick={(event) => handleDelete(event, risco._id)} style={{ height: '1em', width: '1em' }} />
-                </div>
+                </Styled.IconeArea>
 
               </Styled.ListItem>
             </>

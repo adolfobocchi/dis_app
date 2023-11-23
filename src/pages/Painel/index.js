@@ -30,6 +30,7 @@ import Documentos from '../../components/Documentos';
 import ClientePlanoAcao from '../../components/ClientePlanoAcao';
 import Videos from '../../components/Videos';
 import Importador from '../../components/Importador';
+import ConfiguracaoGerais from '../../components/ConfiguracaoGerais';
 
 const Container = styled.div`
   background: #FFF;
@@ -99,8 +100,9 @@ const HomePainel = () => {
 }
 
 function PainelPage({ usuario }) {
+  const [reloadComponentKey, setReloadComponentKey] = useState(0);
   const [menuItems, setMenuItems] = useState([
-    { id: 101, label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard /> },
+    { id: 101, label: 'Painel', expanded: false, sections: [], component: <HomePainel />, icon: <MdDashboard />, },
     {
       id: 102, label: 'Empresas', expanded: false, sections: [
         { id: 21, label: 'Grupo', expanded: false, component: <Grupo />, },
@@ -155,7 +157,7 @@ function PainelPage({ usuario }) {
     {
       id: 109, label: 'Configurações', expanded: false,
       sections: [
-        { id: 21, label: 'Gerais', expanded: false, component: <Usuario /> },
+        { id: 21, label: 'Gerais', expanded: false, component: <ConfiguracaoGerais /> },
         { id: 22, label: 'Importação', expanded: false, component: <Importador /> },
       ],
       icon: <MdLock />
@@ -163,6 +165,7 @@ function PainelPage({ usuario }) {
     { id: 107, label: 'Sair', expanded: false, sections: [], component: <Logout />, icon: <MdLogout /> },
   ]);
   const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems[0]);
+  
 
   useEffect(() => {
   }, [])
@@ -182,7 +185,10 @@ function PainelPage({ usuario }) {
   const handleMenuItemClick = (menuItem, event) => {
     event.stopPropagation();
     setSelectedMenuItem(menuItem);
+    setReloadComponentKey(prevKey => prevKey + 1);
   };
+
+
   return (
     <>
       <NavBar />
@@ -211,9 +217,10 @@ function PainelPage({ usuario }) {
           ))}
         </Menu>
         <Content>
-          <Titulo titulo={selectedMenuItem.label} ></Titulo>
-          {selectedMenuItem.component}
-        </Content>
+  <Titulo titulo={selectedMenuItem.label} />
+  {selectedMenuItem.component }
+</Content>
+
       </Container>
     </>
   );
