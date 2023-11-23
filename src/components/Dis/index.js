@@ -548,8 +548,8 @@ const Dis = ({
         selectedIndex: setorSelected,
         handleListSelect: () => { setShowModalSetoresListSelect(true); },
         doublelClick: () => { setorSelected && setShowModalDescricaoSetorSelect(true); },
-        setValueChange: (value) => { setInputValue({nome: value})},
-        addItem: () => {console.log(inputValue); criarSetores(inputValue)}
+        // setValueChange: (value) => { setInputValue({nome: value})},
+        // addItem: () => {console.log(inputValue); criarSetores(inputValue)}
       },
       {
         id: 2,
@@ -652,9 +652,7 @@ const Dis = ({
         },
         selectedIndex: funcaoSelected,
         handleListSelect: () => { setorSelected && setShowModalFuncoesListSelect(true); },
-        doublelClick: () => { setorSelected && funcaoSelected && setShowModalDescricaoFuncaoSelect(true); },
-        setValueChange: (value) => { setInputValue({nome: value})},
-        addItem: () => {console.log(inputValue); criarFuncoes(inputValue)}
+        doublelClick: () => { setorSelected && funcaoSelected && setShowModalDescricaoFuncaoSelect(true); }
       },
       // {
       //   id: 3,
@@ -1400,7 +1398,7 @@ const Dis = ({
       }
     ]);
   },
-    [agenteRiscoSelected, causaSelected, medidaSelected, duracaoExposicaoSelected, agenteRiscoSelectedIndex, agentesRiscoState, atividadeSelected, atividadeSelectedIndex, atividadesState, avaliacaoSelectedIndex, avaliacoesState, causaSelectedIndex, causasState, disSelected, duracaoExposicaoSelectedIndex, duracaoExposicaoState, frequenciaExposicaoSelected, frequenciaExposicaoSelectedIndex, frequenciasExposicaoState, funcaoSelected, funcaoSelectedIndex, funcoesState, intencaoSelectedIndex, intencoesState, medidaSelectedIndex, medidasState, monitoramentoSelectedIndex, monitoramentoState, niveisRiscoState, nivelSelectedIndex, perigoSelected, perigoSelectedIndex, perigosState, planoAcaoSelected, planoAcaoSelectedIndex, planosAcaoState, prazoSelectedIndex, prazosState, prioridadeSelectedIndex, prioridadesState, probabilidadeSelectedIndex, probabilidadesState, riscoSelected, riscoSelectedIndex, riscosState, setorSelected, setorSelectedIndex, setoresState, severidadeSelectedIndex, severidadesState, statusSelectedIndex, statusState, viaAbsorcaoSelected, viaAbsorcaoSelectedIndex, viasAbsorcaoState, avaliacaoSelected, probabilidadeSelected, severidadeSelected, intencaoSelected, prioridadeSelected, prazoSelected, monitoramentoSelected, statusSelected, nivelSelected]);
+    [agenteRiscoSelected, causaSelected, medidaSelected, duracaoExposicaoSelected, agenteRiscoSelectedIndex, agentesRiscoState, atividadeSelected, atividadeSelectedIndex, atividadesState, avaliacaoSelectedIndex, avaliacoesState, causaSelectedIndex, causasState, disSelected, duracaoExposicaoSelectedIndex, duracaoExposicaoState, frequenciaExposicaoSelected, frequenciaExposicaoSelectedIndex, frequenciasExposicaoState, funcaoSelected, funcaoSelectedIndex, funcoesState, intencaoSelectedIndex, intencoesState, medidaSelectedIndex, medidasState, monitoramentoSelectedIndex, monitoramentoState, niveisRiscoState, nivelSelectedIndex, perigoSelected, perigoSelectedIndex, perigosState, planoAcaoSelected, planoAcaoSelectedIndex, planosAcaoState, prazoSelectedIndex, prazosState, prioridadeSelectedIndex, prioridadesState, probabilidadeSelectedIndex, probabilidadesState, riscoSelected, riscoSelectedIndex, riscosState, setorSelected, setorSelectedIndex, setoresState, severidadeSelectedIndex, severidadesState, statusSelectedIndex, statusState, viaAbsorcaoSelected, viaAbsorcaoSelectedIndex, viasAbsorcaoState, avaliacaoSelected, probabilidadeSelected, severidadeSelected, intencaoSelected, prioridadeSelected, prazoSelected, monitoramentoSelected, statusSelected, nivelSelected, inputValue, criarSetores]);
 
   useEffect(() => {
     reset({ ...disSelected });
@@ -2112,6 +2110,7 @@ const Dis = ({
     return <ModalInput label={'Descrição da Função'} dados={[disSelected.funcoes.map(funcao => funcao.funcao._id === funcaoSelected._id)[0].descricao]} close={setShowModalDescricaoFuncaoSelect}
       setItensSelected={(items) => addDescricaoFuncao(items)} />
   }
+
   return (
     <Styled.Container>
       {sectionItems.map((sectionItem) => (
@@ -2231,12 +2230,12 @@ const Dis = ({
                                     <DiagnosticoSearchArea>
                                       <InputSearch items={diagnosticoItems[0].list} onSelect={diagnosticoItems[0].onSelect} setValueChange={diagnosticoItems[0].setValueChange} /> 
                                       <MdList onClick={diagnosticoItems[0].handleListSelect} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
-                                      <MdAdd onClick={diagnosticoItems[0].addItem} style={{ height: '2em', width: '2em', cursor: 'pointer' }} />
+                                      {/* <MdAdd onClick={diagnosticoItems[0].addItem} style={{ height: '2em', width: '2em', cursor: 'pointer' }} /> */}
                                     </DiagnosticoSearchArea >
                                     {
                                       diagnosticoItems[0].items && diagnosticoItems[0].items.map((item, index) =>
                                       (
-                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[0].onSelected(event, item._id)} style={{ background: item._id === diagnosticoItems[0].selectedIndex?._id ? '#CCC' : '#FFF' }}   >
+                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[0].onSelected(event, item?._id)} style={{ background: item?._id === diagnosticoItems[0].selectedIndex?._id ? '#CCC' : '#FFF' }}   >
                                           <p>{item?.nome}</p>
                                           <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[0].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
                                         </DignosticoItemSelectedArea>
@@ -2284,7 +2283,7 @@ const Dis = ({
                                       diagnosticoItems[1].items && diagnosticoItems[1].items.map((item, index) =>
                                       (
 
-                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[1].onSelected(event, item._id)} style={{ background: item._id === diagnosticoItems[1].selectedIndex?._id ? '#CCC' : '#FFF' }}   >
+                                        <DignosticoItemSelectedArea key={index} onClick={(event) => diagnosticoItems[1].onSelected(event, item?._id)} style={{ background: item?._id === diagnosticoItems[1].selectedIndex?._id ? '#CCC' : '#FFF' }}   >
                                           <p>{item?.nome}</p>
                                           <MdHighlightOff color='#F00' onClick={(event) => diagnosticoItems[1].onDelete(event, item._id)} style={{ height: '1em', width: '1em' }} />
                                         </DignosticoItemSelectedArea>
