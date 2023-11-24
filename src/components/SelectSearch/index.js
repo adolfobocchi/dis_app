@@ -30,6 +30,7 @@ const SelectSearch = ({
   }, [valueSelected, itemSelected]);
 
   const handleSelectChange = (event) => {
+    console.log(event.target.value);
     const selectedValue = event.target.value;
     setItemSelected(selectedValue);
     const selectedItem = items.find((item) => item[field] === selectedValue);
@@ -38,8 +39,8 @@ const SelectSearch = ({
 
   return (
     <Container>
-      <Select value={itemSelected} onChange={handleSelectChange}>
-        <Option value="" disabled selected>
+      <Select value={itemSelected?.nomeFantasia && itemSelected[field]} onChange={handleSelectChange}>
+        <Option value="0" selected>
           Selecione uma opção
         </Option>
         {items.map((item, index) => (

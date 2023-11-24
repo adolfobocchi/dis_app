@@ -341,28 +341,28 @@ const Dis = ({
     listarNivelriscos(0, 1);
     listarPlanosAcao(0, 1);
     listarMonitoramentos(0, 1);
-    const handleClickOutside = (event) => {
-      // if (!event.target.closest('.element-to-keep-selected')) {
-      //   setSetorSelected(null);
-      //   setSetorSelectedIndex(-1);
-      //   setFuncaoSelected(null);
-      //   setFuncaoSelectedIndex(-1);
-      //   setAtividadeSelected(null);
-      //   setAtividadeSelectedIndex(-1)
-      //   setPerigoSelected(null);
-      //   setPerigoSelectedIndex(-1)
-      //   setRiscoSelected(null);
-      //   setRiscoSelectedIndex(-1)
-      //   setPlanoAcaoSelected(null);
-      //   setPlanoAcaoSelectedIndex(-1);
-      // }
-    };
+    // const handleClickOutside = (event) => {
+    //   // if (!event.target.closest('.element-to-keep-selected')) {
+    //   //   setSetorSelected(null);
+    //   //   setSetorSelectedIndex(-1);
+    //   //   setFuncaoSelected(null);
+    //   //   setFuncaoSelectedIndex(-1);
+    //   //   setAtividadeSelected(null);
+    //   //   setAtividadeSelectedIndex(-1)
+    //   //   setPerigoSelected(null);
+    //   //   setPerigoSelectedIndex(-1)
+    //   //   setRiscoSelected(null);
+    //   //   setRiscoSelectedIndex(-1)
+    //   //   setPlanoAcaoSelected(null);
+    //   //   setPlanoAcaoSelectedIndex(-1);
+    //   // }
+    // };
 
-    document.body.addEventListener('click', handleClickOutside);
+    // document.body.addEventListener('click', handleClickOutside);
 
-    return () => {
-      document.body.removeEventListener('click', handleClickOutside);
-    };
+    // return () => {
+    //   document.body.removeEventListener('click', handleClickOutside);
+    // };
   }, []);
 
   useEffect(() => {
@@ -429,19 +429,14 @@ const Dis = ({
     setMonitoramentosState(monitoramentos);
   }, [monitoramentos]);
 
+
   useEffect(() => {
     if(empresaSelected) {
       setAreaSelected(empresaSelected.area);
     }
   }, [empresaSelected])
 
-  useEffect(() => {
-    console.log(grupoSelected?.empresas[0]);
-    if(grupoSelected) {
-      setEmpresaSelected(grupoSelected?.empresas[0]);
-    }
-  }, [grupoSelected])
-
+  
 
   useEffect(() => {
     if (empresaSelected && Object.keys(empresaSelected).length > 0) {
@@ -469,7 +464,7 @@ const Dis = ({
           // }
           addSetor([item]);
         },
-        onSelected: (event, index) => { handleClearSelecteds(); setSetorSelected(disSelected.setores.find(setor => setor?.setor?._id === index)?.setor); },
+        onSelected: (event, index) => { setSetorSelected(disSelected.setores.find(setor => setor?.setor?._id === index)?.setor); },
         onDelete: (event, id) => {
           const update = disSelected?.setores.filter((el) => el?.setor?._id !== id);
           setDisSelected((prevState) => ({
