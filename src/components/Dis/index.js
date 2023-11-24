@@ -429,6 +429,12 @@ const Dis = ({
     setMonitoramentosState(monitoramentos);
   }, [monitoramentos]);
 
+  useEffect(() => {
+    if(empresaSelected) {
+      setAreaSelected(empresaSelected.area);
+    }
+  }, [empresaSelected])
+
 
   useEffect(() => {
     if (empresaSelected && Object.keys(empresaSelected).length > 0) {
@@ -2163,7 +2169,7 @@ const Dis = ({
                               {...register('_id')}
                             />
                             <Styled.Label>Grupo: </Styled.Label>
-                            <InputSearch items={gruposState} onSelect={(item) => setGrupoSelected(item)} valueSelected={grupoSelected?.nome} field={'nome'} />
+                            <InputSearch items={gruposState} onSelect={(item) => setGrupoSelected(item)} valueSelected={grupoSelected?.nome} field={'nome'}/>
                             {errors.grupo && <span>Campo obrigatório</span>}
 
                             <Styled.Label>Empresa: </Styled.Label>

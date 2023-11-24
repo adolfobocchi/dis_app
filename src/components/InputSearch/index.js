@@ -42,7 +42,7 @@ const InputSearch = ({
   onSelect,
   valueSelected,
   field = 'nome',
-  setValueChange
+  // setValueChange = ''
 }) => {
   const searchTimerRef = useRef(null);
   const [searchResults, setSearchResults] = useState([]);
@@ -53,7 +53,7 @@ const InputSearch = ({
   const handleSearch = (event) => {
     
     setItemSelected(event.target.value);
-    setValueChange(event.target.value);
+    // setValueChange(event.target.value);
     const searchTerm = event.target.value.toLowerCase();
     if(searchTerm=== '') {
       setSearchResults([]);
