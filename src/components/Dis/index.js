@@ -435,6 +435,13 @@ const Dis = ({
     }
   }, [empresaSelected])
 
+  useEffect(() => {
+    console.log(grupoSelected?.empresas[0]);
+    if(grupoSelected) {
+      setEmpresaSelected(grupoSelected?.empresas[0]);
+    }
+  }, [grupoSelected])
+
 
   useEffect(() => {
     if (empresaSelected && Object.keys(empresaSelected).length > 0) {
