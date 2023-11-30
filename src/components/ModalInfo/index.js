@@ -125,10 +125,10 @@ const ModalInfo = ({ dados, close }) => {
     const content = document.getElementById('modal-content');
 
     const pdfOptions = {
-      margin: 10,
+      margin: [10,10,20,10],
       filename: 'relatorio.pdf',
-      image: { type: 'jpeg', quality: 1 },
-      html2canvas: { dpi: 192, letterRendering: true, useCORS: true, logging: true, scale: 0.99 },
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { dpi: 192, letterRendering: true, useCORS: true, logging: true, scale: 0.8 },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     };
 
@@ -801,7 +801,8 @@ const ModalInfo = ({ dados, close }) => {
                                   </div>
                                   <div style={{ display: 'flex', flex: 1, flexDirection: 'column', marginTop: 20 }}>
                                     <div style={{ backgroundColor: '#CCC', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto', padding: 5 }}>PLANO DE ACAO</div>
-                                    {dadosState?.planosAcao.filter(planoAcao => planoAcao.setor === setor?.setor._id &&
+                                    {dadosState?.planosAcao.filter(planoAcao => 
+                                    planoAcao.setor === setor?.setor._id &&
                                       planoAcao.funcao === funcao?.funcao._id && planoAcao.risco === risco?.risco._id).map((planoAcao, planoAcaoIndex) => (
 
                                         <>
@@ -846,7 +847,10 @@ const ModalInfo = ({ dados, close }) => {
 
                                             }}>intenção: </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto', padding: 5 }}>
-                                              {dadosState?.intencao.filter(intencao => intencao.planoAcao === planoAcao?.planoAcao._id).map((intencao, intencaoIndex) => {
+                                              {dadosState?.intencao.filter(intencao => 
+                                               intencao.risco === planoAcao?.risco &&
+                                              intencao.planoAcao === planoAcao?.planoAcao._id
+                                              ).map((intencao, intencaoIndex) => {
                                                 return (
 
                                                   <p key={intencaoIndex} style={{ display: 'block' }}>
@@ -871,7 +875,9 @@ const ModalInfo = ({ dados, close }) => {
 
                                             }}>prioridade: </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto', padding: 5 }}>
-                                              {dadosState?.prioridade.filter(prioridade => prioridade.planoAcao === planoAcao?.planoAcao._id).map((prioridade, prioridadeIndex) => {
+                                              {dadosState?.prioridade.filter(prioridade =>
+                                              prioridade.risco === planoAcao?.risco &&
+                                               prioridade.planoAcao === planoAcao?.planoAcao._id).map((prioridade, prioridadeIndex) => {
                                                 return (
 
                                                   <p key={prioridadeIndex} style={{ display: 'block' }}>
@@ -896,7 +902,9 @@ const ModalInfo = ({ dados, close }) => {
 
                                             }}>prazo: </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto', padding: 5 }}>
-                                              {dadosState?.prazo.filter(prazo => prazo.planoAcao === planoAcao?.planoAcao._id).map((prazo, prazoIndex) => {
+                                              {dadosState?.prazo.filter(prazo => 
+                                               prazo.risco === planoAcao?.risco &&
+                                              prazo.planoAcao === planoAcao?.planoAcao._id).map((prazo, prazoIndex) => {
                                                 return (
 
                                                   <p key={prazoIndex} style={{ display: 'block' }}>
@@ -922,7 +930,9 @@ const ModalInfo = ({ dados, close }) => {
 
                                             }}>monitoramento: </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto', padding: 5 }}>
-                                              {dadosState?.monitoramentos.filter(monitoramento => monitoramento.planoAcao === planoAcao?.planoAcao._id).map((monitoramento, monitoramentoIndex) => {
+                                              {dadosState?.monitoramentos.filter(monitoramento => 
+                                               monitoramento.risco === planoAcao?.risco &&
+                                              monitoramento.planoAcao === planoAcao?.planoAcao._id).map((monitoramento, monitoramentoIndex) => {
                                                 return (
 
                                                   <p key={monitoramentoIndex} style={{ display: 'block' }}>
@@ -947,7 +957,9 @@ const ModalInfo = ({ dados, close }) => {
 
                                             }}>Status: </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', border: '1px solid #000', height: 'auto', padding: 5 }}>
-                                              {dadosState?.status.filter(status => status.planoAcao === planoAcao?.planoAcao._id).map((status, statusIndex) => {
+                                              {dadosState?.status.filter(status => 
+                                               status.risco === planoAcao?.risco &&
+                                              status.planoAcao === planoAcao?.planoAcao._id).map((status, statusIndex) => {
                                                 return (
 
                                                   <p key={statusIndex} style={{ display: 'block' }}>
