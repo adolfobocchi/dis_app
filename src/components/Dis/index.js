@@ -293,6 +293,8 @@ const Dis = ({
   const [monitoramentoSelectedIndex, setMonitoramentoSelectedIndex] = useState(-1);
   const [statusSelectedIndex, setStatusSelectedIndex] = useState(-1);
 
+  const [scrollPosition, setScrollPosition] = useState(0);
+
   const [quantidadeFuncaoState, setQuantidadeFuncaoState] = useState(0);
 
   const [inputValue, setInputValue] = useState({nome: '', ativo: 1});
@@ -2073,8 +2075,13 @@ const Dis = ({
     return <ModalInput dados={avaliacoesState} close={setShowModalAvaliacoesListSelect}
       setItensSelected={(items) => addAvaliacao(items)} />
   }
+  const closeModal = () => {
+    window.scrollTo(0, scrollPosition);
+    setShowModalProbabilidadesListSelect(false);
+  }
   if (showModalProbabilidadesListSelect) {
-    return <ModalListSelect dados={probabilidadesState} close={setShowModalProbabilidadesListSelect}
+    setScrollPosition(window.scrollY);
+    return <ModalListSelect dados={probabilidadesState} close={closeModal}
       setItensSelected={(items) => addProbabilidade(items)} />
   }
   if (showModalSeveridadesListSelect) {

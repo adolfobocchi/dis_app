@@ -1,0 +1,20 @@
+.print {
+    background-color: rgba(255, 255,255, 0.9);
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+    width: 210mm; /* Tamanho da página A4 em largura */
+    height: 297mm; /* Tamanho da página A4 em altura */
+    page-break-inside: avoid; /* Evitar quebras de página dentro do conteúdo */
+    page-break-before: always; /* Forçar quebra de página antes do conteúdo */
+    page-break-after: always; /* Forçar quebra de página após o conteúdo */
+    
+    }
+
+.a4 {
+    width: 210mm;
+}

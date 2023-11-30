@@ -86,7 +86,7 @@ const ModalListSelect = ({ dados, close, setItensSelected }) => {
 
         <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}><h2>SELECIONAR ITENS DA LISTA</h2></div>
         
-        <MdClose onClick={(event ) => {event.stopPropagation(); event.preventDefault(); setItensSelected(selectedItems); close(false)}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em', marginRight: 8 }} />
+        <MdClose onClick={(event ) => {event.stopPropagation(); event.preventDefault(); setItensSelected(selectedItems); close()}} color='#F00' style={{ cursor: 'pointer', height: '3em', width: '3em', marginRight: 8 }} />
       </ModalHeader>
       <ModalContent >
       {dadosState && dadosState.length > 0 && dadosState.map((item, index) => {
